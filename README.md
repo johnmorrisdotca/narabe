@@ -276,11 +276,13 @@ no build step beyond the package's own.
 
 ## Roadmap
 
-- **Yomi 読み**, the computer players, as a companion package: graded players
-  from a random mover to a threat-space search, and specialists for Reversi,
-  Go, draughts and the races
+- **narabe-bots**, the computer players, as a companion package beside this
+  one (`@johnmorrisdotca/narabe-bots`): graded players from a random mover to
+  a threat-space search, and specialists for Reversi, Go, draughts and the
+  races. Apart, so that a project that wants only the rules never downloads a
+  search
 - Seeded choices through [Tane](https://github.com/johnmorrisdotca/tane), the
-  shared seeded-random package, once it is published
+  family's seeded-random package
 - Standard notations in and out: SGF for Go, PDN for draughts, RIF records for
   renju
 - A board component for React on top of `turnChoices`
