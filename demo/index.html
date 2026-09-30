@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Narabe 並べ: forty-eight board games, one rules engine</title>
+    <meta name="description" content="Pick any of forty-eight abstract board games and play it on one screen: gomoku, renju, Connect Four, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and draughts. Every rule runs on Narabe, a TypeScript rules engine." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%23dcb67a%27/%3E%3Ccircle cx=%2711%27 cy=%2716%27 r=%277%27 fill=%27%231d1b19%27/%3E%3Ccircle cx=%2722%27 cy=%2716%27 r=%277%27 fill=%27%23fbfaf6%27 stroke=%27%231d1b19%27/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <h1>Narabe <span lang="ja">並べ</span></h1>
+      <p>Forty-eight board games, one rules engine. Pick a game and play it here, two to a screen or against a random mover.</p>
+      <nav>
+        <a href="https://github.com/johnmorrisdotca/narabe">GitHub</a>
+        <a href="https://github.com/johnmorrisdotca/narabe#api">API</a>
+        <a href="https://www.npmjs.com/package/@johnmorrisdotca/narabe">npm</a>
+      </nav>
+    </header>
+
+    <main class="table">
+      <section class="setup" aria-label="Choose a game">
+        <label>Game
+          <select id="game"></select>
+        </label>
+        <p id="rule" class="rule"></p>
+        <div class="row">
+          <label>Board
+            <select id="size"></select>
+          </label>
+          <label>Opponent
+            <select id="opponent">
+              <option value="friend">A friend</option>
+              <option value="random">Random mover</option>
+            </select>
+          </label>
+        </div>
+        <div class="row buttons">
+          <button id="new" type="button" class="primary">New game</button>
+          <button id="undo" type="button">Undo</button>
+          <button id="pass" type="button">Pass</button>
+          <button id="hint" type="button">Random move</button>
+        </div>
+        <fieldset id="colour" class="colour" hidden>
+          <legend>Colour to place</legend>
+          <label><input type="radio" name="colour" value="black" checked /> Black</label>
+          <label><input type="radio" name="colour" value="white" /> White</label>
+        </fieldset>
+      </section>
+
+      <section class="play" aria-label="Board">
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <div id="board" class="board"></div>
+        <p id="score" class="score"></p>
+      </section>
+
+      <section class="record" aria-label="Moves">
+        <h2>Moves</h2>
+        <ol id="moves" class="moves"></ol>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>
+        <code>pnpm add @johnmorrisdotca/narabe</code> · MIT ·
+        made by <a href="https://johnmorris.ca">John Morris</a> for <a href="https://itsutsu.com">Itsutsu</a>
+      </p>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

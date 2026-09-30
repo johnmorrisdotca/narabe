@@ -1,0 +1,99 @@
+{
+  "name": "@johnmorrisdotca/narabe",
+  "version": "1.0.0",
+  "description": "One rules engine for forty-eight abstract board games: gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and five draughts rule sets. Pure TypeScript, every move a new state, no dependencies.",
+  "keywords": [
+    "board-game",
+    "game-engine",
+    "rules-engine",
+    "gomoku",
+    "renju",
+    "connect-four",
+    "tic-tac-toe",
+    "reversi",
+    "othello",
+    "hex",
+    "go",
+    "baduk",
+    "weiqi",
+    "halma",
+    "chinese-checkers",
+    "checkers",
+    "draughts",
+    "abstract-strategy",
+    "typescript",
+    "react"
+  ],
+  "homepage": "https://johnmorrisdotca.github.io/narabe/",
+  "bugs": {
+    "url": "https://github.com/johnmorrisdotca/narabe/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnmorrisdotca/narabe.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "John Morris",
+    "email": "john@johnmorris.ca",
+    "url": "https://johnmorris.ca"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "test": "vitest run",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "site": "pnpm build && node scripts/site.mjs",
+    "prepublishOnly": "pnpm check && pnpm build"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/react": "^19.0.0",
+    "eslint": "^9.0.0",
+    "react": "^19.0.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.11.0"
+}
