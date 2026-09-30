@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "es2022"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2022"
+    ],
     "module": "esnext",
     "moduleResolution": "bundler",
     "strict": true,
@@ -14,6 +18,18 @@
     "skipLibCheck": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
-  "exclude": ["src/**/*.test.ts", "src/simulation", "src/test-support.ts"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/simulation/checkers.ts",
+    "src/simulation/checks.ts",
+    "src/simulation/chineseCheckers.ts",
+    "src/simulation/connections.ts",
+    "src/simulation/flips.ts",
+    "src/simulation/go.ts",
+    "src/simulation/headStart.ts",
+    "src/simulation/support.ts"
+  ]
 }

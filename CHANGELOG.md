@@ -30,6 +30,10 @@ All notable changes to this project are written here. The format follows
 - A simulator that plays every game to its end and re-checks each move against
   the rules restated by hand.
 - A demo that plays any of the games on one screen, published to GitHub Pages.
+- Every module is its own entry point (`@johnmorrisdotca/narabe/rules/lines`
+  and so on), `test-support` builds positions for tests, `simulation/headStartDecides`
+  measures whether a head start settles a game, and the source and its tests
+  ship in the package beside the build.
 
 [Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/johnmorrisdotca/narabe/releases/tag/v1.0.0
