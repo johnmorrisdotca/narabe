@@ -1,15 +1,19 @@
 name: Release
-# A version tag builds the package and attaches its tarball to a GitHub release.
-# A project depends on that file at a pinned version, e.g. in package.json:
-#   "@johnmorrisdotca/narabe": "https://github.com/johnmorrisdotca/narabe/releases/download/v1.0.0/johnmorrisdotca-narabe-1.0.0.tgz"
-# A manual run releases the version package.json names, creating its tag at the
-# commit it runs on.
+# A version tag builds the package, attaches its tarball to a GitHub release,
+# and publishes that version to npm.
+# Run by hand (Actions → Release → Run workflow) from main, it tags the commit
+# with package.json's version itself: for a checkout that cannot push tags.
+#
+# npm trusts this workflow by name (npmjs.com → the package → Settings →
+# Trusted Publisher), so publishing needs no token and no secret: GitHub proves
+# which repository and workflow is asking.
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
 permissions:
   contents: write
+  id-token: write
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -20,20 +24,32 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+          registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build
       - name: The tag is the version in package.json
-        if: github.event_name == 'push'
-        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then test "v$VERSION" = "$GITHUB_REF_NAME"; fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "TAG=v$VERSION" >> "$GITHUB_ENV"
+          echo "NAME=$(node -p "require('./package.json').name")" >> "$GITHUB_ENV"
       - run: pnpm pack
       - name: Attach the tarball to the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-            gh release create "$GITHUB_REF_NAME" ./*.tgz --title "$GITHUB_REF_NAME" --notes "See CHANGELOG.md." --verify-tag
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" ./*.tgz --clobber
           else
-            TAG="v$(node -p "require('./package.json').version")"
             gh release create "$TAG" ./*.tgz --title "$TAG" --notes "See CHANGELOG.md." --target "$GITHUB_SHA"
+          fi
+      - name: Publish to npm, unless this version is already there
+        run: |
+          npm install -g npm@latest
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "$NAME@$VERSION is already on npm."
+          else
+            npm publish --access public --provenance --ignore-scripts
           fi
