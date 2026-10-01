@@ -13,6 +13,28 @@
 //
 // The page's own words are a table { en: { pitch, name, nameLink, foot, … }, ja: { … } }; every
 // element with data-say="key" is given words[lang][key] as text, never as HTML.
+//
+// THE HELP SWITCH. The header carries a "Help" / 「説明」 switch beside the language chooser. Off (the
+// default), a demo looks as it always did. On, every OPTION ROW shows one short plain line under it,
+// saying what the row does and how to use it. A page marks a row with the words for it in both
+// languages, and the template does the rest:
+//
+//   <div class="fam-row" data-help-en="Pick how many dice." data-help-ja="ダイスの数を選びます。">…</div>
+//
+// - The line is a <p class="fam-help"> the template adds as the row's last child, or right after the
+//   element when that is a `.fam-seg` pill (a pill cannot hold a line) or says data-help-after (a
+//   container the page's own script fills and walks the children of). It is one full line under the
+//   options. It asks for no width of its own, so a row that sits beside others keeps its size, and it
+//   takes no room while the switch is off. A page draws nothing itself. Rows a page draws later are
+//   found too (a MutationObserver), so a row that is re-rendered keeps its line.
+// - Every button inside a marked row that has no title of its own gets the row's line as its hover
+//   text, in either state of the switch. A control that deserves its own words says them with
+//   data-tip-en / data-tip-ja, which set `title` on any element, marked row or not.
+// - The choice is kept on the device (localStorage "johnmorrisdotca.help", one key for the whole family
+//   because the demos share an origin) and may be asked for in the address (?help=on or ?help=off).
+// - <html data-help="on|off"> says which; a "family-help" event ({ detail: { on } }) fires on each change,
+//   for a component that draws its own rows (it keeps its own words and shows its own lines).
+// - `familyHelp.refresh()` re-reads the rows now; `familyHelp.on` and `familyHelp.set(true|false)` read and change it.
 
 const OWNER = "johnmorrisdotca";
 
@@ -49,8 +71,8 @@ export const FAMILY_CLOTHS = {
 
 /** The words the shared header and footer say themselves, in both languages. A page's own table is laid over these. */
 export const FAMILY_WORDS = {
-  en: { family: "The family:", licence: "MIT", cloth: "Table cloth", cloth_green: "Green", cloth_blue: "Blue", cloth_red: "Red", cloth_black: "Black", cloth_wood: "Wood" },
-  ja: { family: "姉妹パッケージ:", licence: "MIT", cloth: "テーブルの色", cloth_green: "緑", cloth_blue: "青", cloth_red: "赤", cloth_black: "黒", cloth_wood: "木目" },
+  en: { family: "The family:", licence: "MIT", help: "Help", helpTip: "Show a short note under each option, saying what it does", cloth: "Table cloth", cloth_green: "Green", cloth_blue: "Blue", cloth_red: "Red", cloth_black: "Black", cloth_wood: "Wood" },
+  ja: { family: "姉妹パッケージ:", licence: "MIT", help: "説明", helpTip: "各項目の下に、その使い方を短く表示します", cloth: "テーブルの色", cloth_green: "緑", cloth_blue: "青", cloth_red: "赤", cloth_black: "黒", cloth_wood: "木目" },
 };
 
 const escape = (text) => String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -80,7 +102,7 @@ export function familyHead({ id, title, description, ogTitle, ogDescription }) {
 /**
  * The header: the name with its kana, the pitch (data-say="pitch"), a line on the name
  * (data-say="name", and a link to the README's "The name", data-say="nameLink"), the
- * "English · 日本語" chooser, and the GitHub and npm pills. `links` adds pills before those
+ * "English · 日本語" chooser, the Help switch, the cloth patches, and the GitHub and npm pills. `links` adds pills before those
  * two: [{ href, say }] where `say` is a key in the page's words.
  */
 export function familyHeader({ id, links = [] }) {
@@ -95,6 +117,9 @@ export function familyHeader({ id, links = [] }) {
           <div class="lang" role="group" aria-label="Language / 言語">
             <button type="button" data-lang="en" lang="en">English</button>
             <button type="button" data-lang="ja" lang="ja">日本語</button>
+          </div>
+          <div class="lang" role="group" data-say-label="help">
+            <button type="button" data-help-switch aria-pressed="false" data-say="help" data-say-title="helpTip"></button>
           </div>${links.map((link) => `\n          <a href="${escape(link.href)}" data-say="${escape(link.say)}"></a>`).join("")}
           <div class="cloth" role="radiogroup" data-say-label="cloth" style="display:inline-flex;gap:0;align-items:center">${Object.entries(FAMILY_CLOTHS)
             .map(([name, cloth]) => `<button type="button" role="radio" data-cloth="${name}" data-say-label="cloth_${name}" style="width:44px;height:44px;min-width:44px;padding:8px;border:0;border-radius:12px;cursor:pointer;background:radial-gradient(120% 90% at 30% 20%, ${cloth.felt} 0%, ${cloth.deep} 100%) content-box;box-shadow:inset 0 0 0 8px transparent"></button>`)
@@ -128,9 +153,85 @@ export function familyFooter({ id }) {
  * language. `familyLanguage({ id, words, onChange })` fills every [data-say], sets <html lang>,
  * presses the right button, shows the not-yet-reviewed line in Japanese only, and returns
  * { lang, asked, say(), set(lang) }. `onChange(lang)` runs after each switch, not on the first fill.
- * [data-say-label] sets aria-label and [data-say-placeholder] sets placeholder, the same way.
+ * [data-say-label] sets aria-label, [data-say-placeholder] sets placeholder and [data-say-title] sets title, the same way.
+ * Each switch of language also re-reads the rows marked for the Help switch (see the top of this file).
  */
-export const FAMILY_SCRIPT = `(function familyCloth() {
+export const FAMILY_SCRIPT = `var familyHelp = (function familyHelpSwitch() {
+  var KEY = "johnmorrisdotca.help";
+  var STYLE = ".fam-help{display:none;flex:1 1 100%;grid-column:1/-1;width:0;min-width:100%;margin:0;font-size:.8rem;line-height:1.35;font-weight:400;letter-spacing:0;text-transform:none;text-align:left;color:var(--muted)}html[data-help=on] .fam-help{display:block}.fam-felt .fam-help{color:inherit;opacity:.85}";
+  var style = document.createElement("style");
+  style.id = "family-help-style";
+  style.textContent = STYLE;
+  document.head.appendChild(style);
+  var root = document.documentElement;
+  var asked = new URLSearchParams(location.search).get("help");
+  var kept = null;
+  try { kept = localStorage.getItem(KEY); } catch (error) { /* A browser that keeps nothing starts with Help off. */ }
+  var state = { on: asked === "on" || asked === "1" ? true : asked === "off" || asked === "0" ? false : kept === "on" };
+  var japanese = function () { return root.lang === "ja"; };
+  // The words of an element in the page's language, the other language's when this one has none.
+  var words = function (el, name) {
+    var en = el.getAttribute("data-" + name + "-en");
+    var ja = el.getAttribute("data-" + name + "-ja");
+    return japanese() ? (ja !== null ? ja : en) : (en !== null ? en : ja);
+  };
+  var nearestRow = function (el) { return el.closest("[data-help-en],[data-help-ja]"); };
+  var refresh = function () {
+    document.querySelectorAll("[data-help-en],[data-help-ja]").forEach(function (row) {
+      var text = words(row, "help");
+      var line = null;
+      // A segmented choice is a pill, so its line goes under it; so does a container a page's own script fills
+      // and counts the children of, which says data-help-after. Any other row holds its line as its last child.
+      var under = row.classList.contains("fam-seg") || row.hasAttribute("data-help-after");
+      if (under) {
+        if (row.nextElementSibling !== null && row.nextElementSibling.classList.contains("fam-help")) line = row.nextElementSibling;
+      } else {
+        for (var at = 0; at < row.children.length; at += 1) if (row.children[at].classList.contains("fam-help")) line = row.children[at];
+      }
+      if (line === null) {
+        line = document.createElement("p");
+        line.className = "fam-help";
+        if (under) row.insertAdjacentElement("afterend", line); else row.appendChild(line);
+      }
+      if (line.textContent !== text) line.textContent = text;
+      // Every button of the row says what the row does on hover, unless it has words of its own.
+      row.querySelectorAll("button, [role=button]").forEach(function (button) {
+        if (nearestRow(button) !== row || button.hasAttribute("data-tip-en") || button.hasAttribute("data-tip-ja")) return;
+        if (button.hasAttribute("title") && !button.hasAttribute("data-help-title")) return;
+        if (button.getAttribute("title") !== text) button.setAttribute("title", text);
+        button.setAttribute("data-help-title", "");
+      });
+    });
+    document.querySelectorAll("[data-tip-en],[data-tip-ja]").forEach(function (el) {
+      var text = words(el, "tip");
+      if (el.getAttribute("title") !== text) el.setAttribute("title", text);
+    });
+  };
+  var pending = false;
+  new MutationObserver(function () {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function () { pending = false; refresh(); });
+  }).observe(document.body, { childList: true, subtree: true });
+  var show = function (on, keep) {
+    state.on = on;
+    root.dataset.help = on ? "on" : "off";
+    document.querySelectorAll("[data-help-switch]").forEach(function (button) { button.setAttribute("aria-pressed", String(on)); });
+    if (keep) {
+      try { localStorage.setItem(KEY, on ? "on" : "off"); } catch (error) { /* Not remembered; still shown. */ }
+    }
+    document.dispatchEvent(new CustomEvent("family-help", { detail: { on: on } }));
+  };
+  document.querySelectorAll("[data-help-switch]").forEach(function (button) {
+    button.addEventListener("click", function () { show(!state.on, true); });
+  });
+  state.refresh = refresh;
+  state.set = function (on) { show(Boolean(on), true); };
+  show(state.on, false);
+  refresh();
+  return state;
+})();
+(function familyCloth() {
   var CLOTHS = ${JSON.stringify(FAMILY_CLOTHS)};
   var KEY = "johnmorrisdotca.cloth";
   var asked = new URLSearchParams(location.search).get("cloth");
@@ -185,6 +286,8 @@ function familyLanguage(options) {
     document.querySelectorAll("[data-say]").forEach(function (el) { var text = word(el.dataset.say); if (text !== undefined) el.textContent = text; });
     document.querySelectorAll("[data-say-label]").forEach(function (el) { var text = word(el.dataset.sayLabel); if (text !== undefined) el.setAttribute("aria-label", text); });
     document.querySelectorAll("[data-say-placeholder]").forEach(function (el) { var text = word(el.dataset.sayPlaceholder); if (text !== undefined) el.setAttribute("placeholder", text); });
+    document.querySelectorAll("[data-say-title]").forEach(function (el) { var text = word(el.dataset.sayTitle); if (text !== undefined) el.setAttribute("title", text); });
+    familyHelp.refresh();
     document.querySelectorAll("[data-lang]").forEach(function (button) { button.setAttribute("aria-pressed", String(button.dataset.lang === state.lang)); });
     var note = document.getElementById("unreviewed");
     if (note !== null) note.hidden = state.lang !== "ja";

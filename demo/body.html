@@ -2,9 +2,9 @@
         <section class="fam-panels setup-panel" aria-label="Set up">
           <div class="fam-panel">
             <label class="fam-label" for="game" data-say="game"></label>
-            <select id="game" class="fam-field" data-testid="game"></select>
+            <select id="game" class="fam-field" data-testid="game" data-help-en="Choose which of the games to play. Its rule is written just below." data-help-ja="遊ぶゲームを選びます。ルールはすぐ下に書かれています。" data-help-after></select>
             <p id="rule" class="rule fam-muted" data-testid="rule"></p>
-            <div class="row">
+            <div class="row" data-help-en="Board is how big the board is. Opponent is a friend who takes turns on this screen, or a computer that plays random moves. Changing either starts a new game." data-help-ja="「盤」は盤の大きさです。「相手」は、この画面で交代して打つ友だちか、ランダムに打つコンピューターです。どちらを変えても新しいゲームになります。">
               <label class="fam-label">
                 <span data-say="board"></span>
                 <select id="size" class="fam-field" data-testid="size"></select>
@@ -17,13 +17,13 @@
                 </select>
               </label>
             </div>
-            <div class="row buttons">
+            <div class="row buttons" data-help-en="New game starts again. Undo takes back a move. Pass gives up your turn where the rules allow it. Random move plays a random move for you." data-help-ja="「新しいゲーム」で最初からやり直します。「一手戻す」で一手戻します。「パス」は、ルールで許されるときに番を譲ります。「ランダムに打つ」は、あなたの代わりにランダムな手を打ちます。">
               <button id="new" type="button" class="fam-button" data-primary="true" data-say="newGame" data-testid="new"></button>
               <button id="undo" type="button" class="fam-button" data-say="undo" data-testid="undo"></button>
               <button id="pass" type="button" class="fam-button" data-say="pass" data-testid="pass"></button>
               <button id="hint" type="button" class="fam-button" data-say="hint" data-testid="hint"></button>
             </div>
-            <fieldset id="colour" class="colour" hidden>
+            <fieldset id="colour" class="colour" hidden data-help-en="Some games let you place either colour. Choose the colour of the next stone." data-help-ja="どちらの色も置けるゲームでは、次に置く石の色を選びます。">
               <legend class="fam-label" data-say="colour"></legend>
               <label><input type="radio" name="colour" value="black" checked /> <span data-say="black"></span></label>
               <label><input type="radio" name="colour" value="white" /> <span data-say="white"></span></label>
