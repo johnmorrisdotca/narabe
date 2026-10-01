@@ -12,7 +12,7 @@ Gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Ch
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
 </p>
 
-<p align="center"><a href="https://johnmorrisdotca.github.io/narabe/"><strong>Play any of them →</strong></a></p>
+<p align="center"><a href="https://johnmorrisdotca.github.io/narabe/"><strong>Play any of them →</strong></a> · <a href="https://johnmorrisdotca.github.io/narabe/api.html">API reference</a></p>
 
 <p align="center">
   <img src="docs/games.gif" alt="Fourteen of the games mid-play, one after another: gomoku, Drop Four, Reversi, Go, Hex, checkers, Chinese Checkers, Honeycomb, Twist Five, Block Five, Halma, tic-tac-toe, International Draughts and Obstacle Five" width="400">
@@ -152,6 +152,8 @@ ones [Itsutsu](https://itsutsu.com/games) uses.
 
 ## API
 
+The [API reference](https://johnmorrisdotca.github.io/narabe/api.html) lists every export of every entry point with its signature and its doc comment. It is made from the source by `pnpm site`, so it cannot fall behind the code.
+
 Everything below is exported from the package root, and every type is
 exported too. Deeper modules are reachable by path, such as
 `@johnmorrisdotca/narabe/rules/go`, for the pieces the root leaves out.
@@ -273,6 +275,88 @@ useNarabe(settings?): {
 Any browser from the last few years: the engine needs ES2020 and nothing else.
 It also runs in Node 20 and later, Deno and Bun. The demo is a static page with
 no build step beyond the package's own.
+
+## Architecture
+
+Every game is a row of data in the variants table, and the engine reads the
+row, never the game's name, so games that share a mechanism share its code.
+The engine itself (`engine.ts`) is small: it asks one module under `rules/`
+for each mechanic (lines, captures, flips, checkers, Go and the rest) and
+every function returns a new game. The rules are checked a second way by
+`simulation/`, which plays whole games and restates each family's rules by
+hand, so a wrong row cannot agree with itself.
+
+```text
+src/
+├── board.constants.ts    the board's geometry: line directions, star points and column letters
+├── constants.ts          the table of variants, the choices they are made from, and every number the rules use
+├── engine.ts             the engine: create a game, ask what is legal, play a move, pass, forfeit
+├── index.ts              the main entry: the engine, the variants table, notation, replay and everything the rules modules export
+├── length.ts             how long a game can get, and what stops one that would never end
+├── notation.ts           points written as column letters and row numbers, and read back
+├── obstacles.ts          the rocks and hotspots laid on an obstacle board, from the game's seed
+├── react.ts              the "/react" entry: useNarabe, a hook over one game's state and its moves
+├── replay.ts             the stored shape of a game, and playing a stored game again
+├── spec.types.ts         the words a rule set is written in: the closed choices each game makes
+├── test-support.ts       helpers the tests share, such as drawing a position from a diagram
+├── types.ts              the engine's domain types: stones, points, settings, and the game state
+├── variantSpec.types.ts  one rule set as data, a row of the table the engine consults
+├── rules/  the rules, one module per mechanic, each delegated to by the engine
+│   ├── board.ts             board geometry shared by the engine and the rules, kept apart so a rule need not import the engine
+│   ├── camps.ts             the race games: pieces start in one corner and the aim is to fill the far one
+│   ├── captures.ts          the enemy stones a placed stone would capture, in the pair and triple capture games
+│   ├── checkers.ts          the checkers family: pieces on the board from the start, moving diagonally, with forced captures
+│   ├── checkers.types.ts    one jump of a capture: the piece taken and the square landed on
+│   ├── checkersCaptures.ts  how men and kings take in every game of the checkers family
+│   ├── checkersDraws.ts     the draws the checkers family writes down: a repeated position, and endings that must be won in time
+│   ├── chineseCheckers.ts   Chinese Checkers: the star board, stepping and jumping to the opposite point
+│   ├── choices.ts           what the colour to move may do this turn, and whether a rule narrowed it
+│   ├── creation.ts          the settings a game starts from, and the empty board laid out for them
+│   ├── drawLimit.ts         calling a game that could run for ever a draw
+│   ├── drop.ts              gravity: a stone played in a column comes to rest on its lowest empty cell
+│   ├── farCamp.ts           whether a game is a race to fill the opposite camp
+│   ├── flips.ts             the flipping games, Reversi and Othello: a stone goes where it brackets the other side's discs
+│   ├── forbidden.ts         forbidden moves as Renju and Omok define them, which need reading ahead
+│   ├── forcedPass.ts        the pass nobody should have to click for: skipped when no move exists
+│   ├── go.ts                Go: liberties, capture, the ko rule and the area count
+│   ├── growth.ts            changing the board's size in the middle of a game
+│   ├── handicap.ts          the rules a colour plays under: its variant's spec with the handicap laid over it
+│   ├── headStart.ts         head starts: handicap stones, free turns and the komi that goes with them
+│   ├── hex.ts               the connection game Hex: a rhombus of hexagons with a side each
+│   ├── hexagon.ts           a hexagon of hexagons embedded in a square grid
+│   ├── lines.ts             the line rule: runs of stones, wrapping edges and what wins
+│   ├── mechanics.ts         the extras some games add to placing a stone: drops, arrival effects, quarter turns and slides
+│   ├── noProgress.ts        a game nobody is getting anywhere in is a draw
+│   ├── opening.ts           opening protocols: placement limits and swap openings
+│   ├── pieces.ts            games with a fixed handful of pieces that move once all are down
+│   ├── queue.ts             the piece games: dominoes and tetrominoes drawn from one seeded queue
+│   ├── random.ts            a small seeded random, so anything left to chance replays the same
+│   ├── record.ts            what a game's record says about clocks and forfeits
+│   ├── rockfall.ts          rocks that land part way through a game
+│   ├── rocks.constants.ts   how an obstacle game's rocks are laid out
+│   ├── rocks.ts             the obstacle games' furniture as numbers to tune
+│   ├── rocks.types.ts       the types of those numbers
+│   ├── seats.ts             who sits where: seats are separate from colours because a swap can move a colour
+│   ├── stoneless.ts         whether a recorded move put nothing on the board, such as a pass
+│   ├── turns.ts             how many stones the colour to move has already placed this turn
+│   └── twist.ts             quadrant rotation: a turn ends by turning one quarter of the board
+└── simulation/  whole games played end to end by the tests, and the rules restated by hand to check them
+    ├── checkers.ts          the checkers family checked move by move against its hand-written rules
+    ├── checkersByHand.ts    the checkers family restated by hand, never read from the variants table
+    ├── checks.ts            the invariants checked after every kind of move, and an independent win scan
+    ├── chineseCheckers.ts   Chinese Checkers restated by hand
+    ├── connections.ts       the connection game restated by hand
+    ├── flips.ts             the flipping games restated by hand
+    ├── go.ts                Go restated by hand: liberties, capture, suicide, ko and the area count
+    ├── headStart.ts         each game's traditional head start, written out rather than read from the spec
+    ├── headStartBounds.ts   whether the favoured colour has made a turn of its own yet
+    ├── headStartDecides.ts  the replies from the other side after the free turns
+    ├── scan.ts              an independent reading of the board that knows nothing of the engine's checks
+    └── support.ts           the whole-game simulation harness the simulation tests share
+```
+
+Tests sit beside the code they test (`*.test.ts`). `scripts/` builds the demo
+and its API reference page, and `demo/` is the page published on GitHub Pages.
 
 ## Roadmap
 
