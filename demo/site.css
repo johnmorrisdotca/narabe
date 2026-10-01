@@ -1,0 +1,61 @@
+/* Narabe's own: the setup, the board and its record, and the API reference. Everything shared is in family.css, loaded before this. */
+:root {
+  --intro-room: 9.5rem; --intro-room-wide: 5.5rem;
+  --wood: #dcb67a; --wood-deep: #b88a4a; --line: #3b2f22; --cell-dark: #7a5a36; --cell-light: #e9d3a8;
+  --black: #1d1b19; --white: #fbfaf6; --hot: #e07b24; --worm: #7a4bb3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --wood: #b98d4f; --wood-deep: #8a6330; --line: #2a1f13; }
+}
+:root[data-theme="dark"] { --wood: #b98d4f; --wood-deep: #8a6330; --line: #2a1f13; }
+
+.narabe-layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.narabe-layout > * { min-width: 0; }
+@media (min-width: 960px) {
+  .narabe-layout { grid-template-columns: 290px minmax(0, 1fr) 200px; }
+}
+.setup-panel .fam-panel { gap: 12px; }
+.setup-panel label.fam-label { display: grid; gap: 4px; }
+.setup-panel select.fam-field { width: 100%; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.row.buttons .fam-button { min-width: 0; }
+/* Room for three lines of a rule, in either language, so choosing a game never moves the board. */
+.rule { margin: 0; min-height: 4.8em; font-size: .9rem; line-height: 1.6; }
+.colour { border: 1px solid var(--rule); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; padding: 4px 12px 8px; }
+.colour[hidden] { display: none; }
+.colour label { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+.colour input { width: 20px; height: 20px; }
+
+.play { display: grid; gap: 10px; padding: 14px; align-content: start; }
+.status { margin: 0; min-height: 3em; font-weight: 700; font-size: 1.05rem; }
+.score { margin: 0; min-height: 3em; font-size: .9rem; opacity: .9; }
+.board { width: 100%; display: grid; place-items: center; user-select: none; -webkit-user-select: none; }
+.board svg { width: 100%; height: auto; max-height: max(320px, calc(100vh - 260px)); display: block; touch-action: manipulation; }
+.hit { fill: transparent; cursor: pointer; }
+.hit:hover { fill: rgb(255 255 255 / .18); }
+@media (prefers-reduced-motion: no-preference) { .fresh { animation: land 160ms ease-out; } }
+@keyframes land { from { opacity: 0; } }
+
+.record h2 { margin: 0 0 6px; }
+.moves { margin: 0; padding-left: 2.4em; max-height: 60vh; min-height: 8em; overflow: auto; font-variant-numeric: tabular-nums; color: var(--muted); }
+@media (max-width: 959px) { .moves { max-height: 14em; } }
+.moves li.black::marker, .moves li.white::marker { color: var(--ink); }
+
+/* The API reference: one page, a section for each entry point. */
+.api-contents ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 0 12px; font-size: .9rem; }
+.api-contents li a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
+.api-contents p { margin: 0 0 4px; }
+.api-entry { margin-top: 28px; min-width: 0; }
+.api-entry h2 { font-size: 1.15rem; margin: 0 0 6px; overflow-wrap: anywhere; }
+.api-names { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 12px; font-size: .85rem; }
+.api-names a { font-family: var(--mono); display: inline-flex; align-items: center; min-height: 32px; }
+.api-entry article { border-top: 1px solid var(--rule); padding: 12px 0; display: grid; gap: 8px; min-width: 0; }
+.api-entry article > * { min-width: 0; max-width: 100%; }
+.api-entry h3 { margin: 0; font-size: 1rem; font-family: var(--mono); overflow-wrap: anywhere; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.api-entry h3 .fam-badge { font-family: var(--font); font-weight: 600; }
+.api-entry p { margin: 0; line-height: 1.5; max-width: 72ch; }
+.api-entry p.api-names { max-width: none; }
+.api-entry pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* A select drawn by the page, so that it is 44px to the touch in every browser. */
+select.fam-field { -webkit-appearance: none; appearance: none; padding-right: 28px; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }

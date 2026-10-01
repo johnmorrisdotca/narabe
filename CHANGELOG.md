@@ -6,6 +6,15 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The demo is on the family's standard: the shared header and footer, English
+  and Japanese (the Japanese, including the rule of each of the forty-eight
+  games, not yet read by a native reader), the family's cloth patches behind
+  the board, and an API reference page in the same frame. It is tested in a
+  real browser on a phone and a desk (`pnpm test:demo`). The package itself
+  is unchanged.
+
 ## [1.0.0] - 2026-09-30
 
 ### Added

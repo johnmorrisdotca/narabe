@@ -7,19 +7,118 @@ import { GAMES, GROUPS } from "./games.js";
 const SVG = "http://www.w3.org/2000/svg";
 const SQRT3_2 = Math.sqrt(3) / 2;
 
-const REASONS = {
-  line: "a line",
-  captures: "captures",
-  time: "time",
-  resign: "resignation",
-  trap: "the other side completing the losing line",
-  square: "a square",
-  full: "a full board",
-  count: "the count",
-  camp: "reaching the far camp",
-  connection: "joining both sides",
-  blocked: "leaving the other side no move",
-  territory: "territory",
+
+// The page's own words, in the two languages the family speaks. The Japanese has not yet been read by a native
+// reader: the page says so in Japanese only. Set as text, never as HTML.
+const WORDS = {
+  en: {
+    pitch: "Forty-eight board games, one rules engine. Pick a game and play it here, two to a screen or against a random mover.",
+    name: "Narabe is Japanese for “line them up”: the verb in gomoku-narabe, five in a row.",
+    nameLink: "About the name",
+    pageApi: "API reference",
+    pageBack: "The games",
+    pageApiIntro: "Every export of every entry point, with its signature and its doc comment. Made from the source when the site is built, so it cannot fall behind the code.",
+    game: "Game",
+    board: "Board",
+    opponent: "Opponent",
+    friend: "A friend",
+    random: "Random mover",
+    newGame: "New game",
+    undo: "Undo",
+    pass: "Pass",
+    hint: "Random move",
+    colour: "Colour to place",
+    black: "Black",
+    white: "White",
+    moves: "Moves",
+    boardLabel: "{game} board, {size} by {size}",
+    turnLabel: "Turn quarter {n} {way}",
+    clockwise: "clockwise",
+    anticlockwise: "anticlockwise",
+    wins: "{who} wins by {reason}.",
+    draw: "A draw.",
+    twist: "{who}: now turn a quarter of the board.",
+    jumping: "{who} keeps jumping.",
+    mustPass: "{who} has no move, and must pass.",
+    first: "First player to place.",
+    second: "Second player to place.",
+    toPlay: "{who} to play.",
+    toPlayThinking: "{who} to play (thinking).",
+    discs: "Discs: Black {black}, White {white}.",
+    area: "Area: Black {black}, White {white} + {komi} komi.",
+    captured: "Captured: Black {black}, White {white}, of {win} to win.",
+    next: "Next piece: {cells}. Hover to see where it goes.",
+    moveBy: "{who} {text}",
+    pass_word: "pass",
+    forfeit_word: "timed out",
+    reason_line: "a line",
+    reason_captures: "captures",
+    reason_time: "time",
+    reason_resign: "resignation",
+    reason_trap: "the other side completing the losing line",
+    reason_square: "a square",
+    reason_full: "a full board",
+    reason_count: "the count",
+    reason_camp: "reaching the far camp",
+    reason_connection: "joining both sides",
+    reason_blocked: "leaving the other side no move",
+    reason_territory: "territory",
+    foot: "Made by John Morris for Itsutsu. Nothing here is stored or sent anywhere.",
+  },
+  ja: {
+    pitch: "48種類の盤上ゲームを、ひとつのルールエンジンで。ゲームを選んで、ここで遊べます。ひとつの画面で二人で、またはランダムに打つ相手と。",
+    name: "「並べ」は、五目並べの「並べ」。石を並べる、という意味です。",
+    nameLink: "名前について（英語）",
+    pageApi: "API リファレンス",
+    pageBack: "ゲーム",
+    pageApiIntro: "すべてのエントリポイントのすべてのエクスポートを、シグネチャとドキュメントコメントつきで載せています。サイトをビルドするときにソースから作るので、コードとずれません。",
+    game: "ゲーム",
+    board: "盤",
+    opponent: "相手",
+    friend: "友だち",
+    random: "ランダムに打つ相手",
+    newGame: "新しいゲーム",
+    undo: "一手戻す",
+    pass: "パス",
+    hint: "ランダムに打つ",
+    colour: "置く色",
+    black: "黒",
+    white: "白",
+    moves: "棋譜",
+    boardLabel: "{game}の盤、{size}×{size}",
+    turnLabel: "{n}番目の区画を{way}に回す",
+    clockwise: "右回り",
+    anticlockwise: "左回り",
+    wins: "{who}の勝ち（{reason}）。",
+    draw: "引き分け。",
+    twist: "{who}: 盤の4分の1を回してください。",
+    jumping: "{who}は続けてジャンプします。",
+    mustPass: "{who}は打てる手がないので、パスします。",
+    first: "先手が置きます。",
+    second: "後手が置きます。",
+    toPlay: "{who}の番です。",
+    toPlayThinking: "{who}の番です（考え中）。",
+    discs: "石の数: 黒 {black}、白 {white}。",
+    area: "地: 黒 {black}、白 {white} + コミ {komi}。",
+    captured: "取った数: 黒 {black}、白 {white}（{win}で勝ち）。",
+    next: "次の駒: {cells}。盤の上にカーソルを置くと、置く場所が見えます。",
+    moveBy: "{who} {text}",
+    pass_word: "パス",
+    forfeit_word: "時間切れ",
+    reason_line: "並び",
+    reason_captures: "取り",
+    reason_time: "時間",
+    reason_resign: "投了",
+    reason_trap: "相手が負けの並びを作ったため",
+    reason_square: "正方形",
+    reason_full: "盤が埋まったため",
+    reason_count: "数",
+    reason_camp: "向かいの陣に着いたため",
+    reason_connection: "両側をつないだため",
+    reason_blocked: "相手の打つ手がなくなったため",
+    reason_territory: "陣地",
+    foot: "John Morris が Itsutsu のために作りました。ここでは何も保存せず、どこにも送りません。",
+  },
 };
 
 const el = {
@@ -47,18 +146,44 @@ let turning = false;
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const same = (a, b) => a !== null && b !== null && a.row === b.row && a.col === b.col;
 const specOf = (s) => N.VARIANT_SPECS[s.settings.variant];
-const colourName = (stone) => (stone === N.STONES.black ? "Black" : "White");
+const gameName = (variant) => {
+  const game = GAMES.find((one) => one.key === variant);
+  return japanese() ? game?.kanji : game?.name;
+};
+const colourName = (stone) => t(stone === N.STONES.black ? "black" : "white");
+
+// ---------- words ----------
+
+let page;
+const t = (key, values = {}) => page.word(key).replace(/\{(\w+)\}/g, (whole, name) => (name in values ? String(values[name]) : whole));
+const japanese = () => page.lang === "ja";
+page = familyLanguage({
+  id: "narabe",
+  words: WORDS,
+  onChange: () => {
+    fillGames();
+    fillSizes();
+    render();
+  },
+});
 
 // ---------- setting up ----------
 
-for (const group of GROUPS) {
-  const optgroup = document.createElement("optgroup");
-  optgroup.label = group.name;
-  for (const game of group.games) optgroup.append(new Option(`${game.name}  ${game.kanji}`, game.key));
-  el.game.append(optgroup);
+/** The game chooser, drawn again in the language: each game by its name, and its kanji. */
+function fillGames() {
+  const chosen = el.game.value;
+  el.game.replaceChildren();
+  for (const group of GROUPS) {
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = japanese() ? group.nameJa : group.name;
+    for (const game of group.games) optgroup.append(new Option(japanese() ? `${game.kanji}  ${game.name}` : `${game.name}  ${game.kanji}`, game.key));
+    el.game.append(optgroup);
+  }
+  if (chosen !== "") el.game.value = chosen;
 }
 
 const params = new URLSearchParams(location.search);
+fillGames();
 el.game.value = GAMES.some((game) => game.key === params.get("game")) ? params.get("game") : "freestyle";
 
 function fillSizes() {
@@ -68,7 +193,8 @@ function fillSizes() {
   const wanted = Number(params.get("size"));
   el.size.value = String(sizes.includes(wanted) ? wanted : variant === N.RULE_VARIANTS.go ? 9 : N.defaultBoardFor(variant));
   el.size.disabled = sizes.length < 2;
-  el.rule.textContent = GAMES.find((game) => game.key === variant)?.rule ?? "";
+  const game = GAMES.find((one) => one.key === variant);
+  el.rule.textContent = (japanese() ? game?.ruleJa : game?.rule) ?? "";
   el.colour.hidden = !N.VARIANT_SPECS[variant].anyColour;
 }
 
@@ -243,7 +369,7 @@ function render() {
   const svg = node("svg", {
     viewBox: `${box.left - pad} ${box.top - pad} ${box.right - box.left + pad * 2} ${box.bottom - box.top + pad * 2}`,
     role: "img",
-    "aria-label": `${GAMES.find((game) => game.key === s.settings.variant)?.name} board, ${size} by ${size}`,
+    "aria-label": t("boardLabel", { game: gameName(s.settings.variant), size }),
   });
   const wood = node("rect", { x: box.left - pad, y: box.top - pad, width: box.right - box.left + pad * 2, height: box.bottom - box.top + pad * 2, rx: 0.3, fill: "var(--wood)" }, svg);
   wood.setAttribute("stroke", "var(--wood-deep)");
@@ -360,7 +486,7 @@ function render() {
       const cy = origin.row + (q - 1) / 2;
       for (const clockwise of [false, true]) {
         const bx = cx + (clockwise ? 0.42 : -0.42);
-        const button = node("g", { class: "turn", role: "button", "aria-label": `Turn quarter ${quadrant + 1} ${clockwise ? "clockwise" : "anticlockwise"}`, style: "cursor:pointer" }, svg);
+        const button = node("g", { class: "turn", role: "button", "aria-label": t("turnLabel", { n: quadrant + 1, way: t(clockwise ? "clockwise" : "anticlockwise") }), style: "cursor:pointer" }, svg);
         node("circle", { cx: bx, cy, r: 0.36, fill: "var(--accent)", opacity: 0.92 }, button);
         const text = node("text", { x: bx, y: cy + 0.15, "text-anchor": "middle", "font-size": 0.44, fill: "#fff", "font-weight": 700 }, button);
         text.textContent = clockwise ? "↻" : "↺";
@@ -381,13 +507,13 @@ function renderText() {
   const spec = specOf(s);
   const playing = s.status === N.GAME_STATUS.playing;
   let status;
-  if (s.status === N.GAME_STATUS.won) status = `${colourName(s.winner)} wins by ${REASONS[s.winBy] ?? s.winBy}.`;
-  else if (s.status === N.GAME_STATUS.draw) status = "A draw.";
-  else if (N.canTwist(s)) status = `${colourName(s.toPlay)}: now turn a quarter of the board.`;
-  else if (s.chainAt !== null) status = `${colourName(s.toPlay)} keeps jumping.`;
-  else if (N.mustPass(s)) status = `${colourName(s.toPlay)} has no move, and must pass.`;
-  else if (spec.singleColour) status = `${s.toPlay === N.STONES.black ? "First" : "Second"} player to place.`;
-  else status = `${colourName(s.toPlay)} to play${computersTurn() ? " (thinking)" : ""}.`;
+  if (s.status === N.GAME_STATUS.won) status = t("wins", { who: colourName(s.winner), reason: t(`reason_${s.winBy}`) === `reason_${s.winBy}` ? s.winBy : t(`reason_${s.winBy}`) });
+  else if (s.status === N.GAME_STATUS.draw) status = t("draw");
+  else if (N.canTwist(s)) status = t("twist", { who: colourName(s.toPlay) });
+  else if (s.chainAt !== null) status = t("jumping", { who: colourName(s.toPlay) });
+  else if (N.mustPass(s)) status = t("mustPass", { who: colourName(s.toPlay) });
+  else if (spec.singleColour) status = t(s.toPlay === N.STONES.black ? "first" : "second");
+  else status = t(computersTurn() ? "toPlayThinking" : "toPlay", { who: colourName(s.toPlay) });
   el.status.textContent = status;
   el.status.classList.toggle("over", !playing);
 
@@ -395,15 +521,15 @@ function renderText() {
   let score = "";
   if (spec.flips) {
     const discs = N.discCount(s.board);
-    score = `Discs: Black ${discs.black}, White ${discs.white}.`;
+    score = t("discs", { black: discs.black, white: discs.white });
   } else if (spec.go) {
     const area = N.scoreArea(s.board, size);
-    score = `Area: Black ${area.black}, White ${area.white} + ${N.KOMI} komi.`;
+    score = t("area", { black: area.black, white: area.white, komi: N.KOMI });
   } else if (spec.captures) {
-    score = `Captured: Black ${s.captures.black}, White ${s.captures.white}, of ${s.settings.capturesToWin} to win.`;
+    score = t("captured", { black: s.captures.black, white: s.captures.white, win: s.settings.capturesToWin });
   } else if (spec.queue !== null) {
     const next = N.queuedPiece(s);
-    score = next ? `Next piece: ${next.cells.map((c) => (c.stone === N.STONES.black ? "●" : "○")).join("")}. Hover to see where it goes.` : "";
+    score = next ? t("next", { cells: next.cells.map((c) => (c.stone === N.STONES.black ? "●" : "○")).join("") }) : "";
   }
   el.score.textContent = score;
 
@@ -415,11 +541,12 @@ function renderText() {
     ...s.moves.map((move) => {
       const item = document.createElement("li");
       item.className = move.by ?? move.stone;
-      const word = N.stonelessWord(move.kind);
+      const stoneless = N.stonelessWord(move.kind);
+      const word = stoneless === null ? null : t(stoneless === "pass" ? "pass_word" : "forfeit_word");
       const where = word ?? (move.kind === N.MOVE_KINDS.piece && move.cells ? move.cells.map((c) => N.pointName(size, c)).join(" ") : N.pointName(size, move));
       const from = move.from ? `${N.pointName(size, move.from)}${move.captured?.length ? "×" : "–"}` : "";
       const twist = move.twist ? ` ${move.twist.clockwise ? "↻" : "↺"}${move.twist.quadrant + 1}` : "";
-      item.textContent = `${colourName(move.by ?? move.stone)} ${from}${where}${twist}`;
+      item.textContent = t("moveBy", { who: colourName(move.by ?? move.stone), text: `${from}${where}${twist}` });
       return item;
     }),
   );
@@ -428,3 +555,4 @@ function renderText() {
 
 fillSizes();
 newGame();
+document.documentElement.dataset.ready = "true";

@@ -1,0 +1,47 @@
+      <div class="narabe-layout">
+        <section class="fam-panels setup-panel" aria-label="Set up">
+          <div class="fam-panel">
+            <label class="fam-label" for="game" data-say="game"></label>
+            <select id="game" class="fam-field" data-testid="game"></select>
+            <p id="rule" class="rule fam-muted" data-testid="rule"></p>
+            <div class="row">
+              <label class="fam-label">
+                <span data-say="board"></span>
+                <select id="size" class="fam-field" data-testid="size"></select>
+              </label>
+              <label class="fam-label">
+                <span data-say="opponent"></span>
+                <select id="opponent" class="fam-field" data-testid="opponent">
+                  <option value="friend" data-say="friend"></option>
+                  <option value="random" data-say="random"></option>
+                </select>
+              </label>
+            </div>
+            <div class="row buttons">
+              <button id="new" type="button" class="fam-button" data-primary="true" data-say="newGame" data-testid="new"></button>
+              <button id="undo" type="button" class="fam-button" data-say="undo" data-testid="undo"></button>
+              <button id="pass" type="button" class="fam-button" data-say="pass" data-testid="pass"></button>
+              <button id="hint" type="button" class="fam-button" data-say="hint" data-testid="hint"></button>
+            </div>
+            <fieldset id="colour" class="colour" hidden>
+              <legend class="fam-label" data-say="colour"></legend>
+              <label><input type="radio" name="colour" value="black" checked /> <span data-say="black"></span></label>
+              <label><input type="radio" name="colour" value="white" /> <span data-say="white"></span></label>
+            </fieldset>
+          </div>
+        </section>
+
+        <section class="play fam-felt" aria-label="Board">
+          <p id="status" class="status" role="status" aria-live="polite" data-testid="status"></p>
+          <div id="board" class="board" data-testid="board"></div>
+          <p id="score" class="score" data-testid="score"></p>
+        </section>
+
+        <section class="record fam-panels" aria-labelledby="moves-title">
+          <div class="fam-panel">
+            <h2 id="moves-title" data-say="moves"></h2>
+            <ol id="moves" class="moves" data-testid="moves"></ol>
+          </div>
+        </section>
+      </div>
+      __UNREVIEWED__

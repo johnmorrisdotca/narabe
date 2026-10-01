@@ -383,6 +383,7 @@ short:
 pnpm install
 pnpm check   # lint, types and tests
 pnpm site    # build the demo into ./site, then serve it
+pnpm test:demo   # build the demo and tap through it in a real browser
 ```
 
 Please follow the [code of conduct](./CODE_OF_CONDUCT.md).
