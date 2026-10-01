@@ -3,6 +3,13 @@
 Thank you for helping. Bug reports, new games, ideas and pull requests are all
 welcome.
 
+## Before you start
+
+Open an issue first for anything bigger than a typo, so we can agree on the
+shape before you spend time on it. This file says what is particular to
+Narabe; the family's shared guidance is at
+[github.com/johnmorrisdotca/.github](https://github.com/johnmorrisdotca/.github/blob/main/CONTRIBUTING.md).
+
 ## Reporting a bug
 
 Open an issue with the game, the settings and the moves that led to the
@@ -19,7 +26,16 @@ pnpm install
 pnpm check            # lint, types and tests: the same as CI
 pnpm site             # builds the demo into ./site
 pnpm dlx serve site   # or any static server
+pnpm test:demo        # the demo, tapped through in a real browser
+pnpm test:cli         # the command line, as a child process
+pnpm test:package     # packed, installed from the tarball, and used as published
 ```
+
+Narabe is the rules engine of a live site, which installs a released version of
+it: a change to a rule or to a result is a release the site has to take on
+purpose. A change that is only a new file beside the engine (the command line,
+the SVG board, the documents) must leave every rule and every result exactly as
+it is, and says so in its changelog line.
 
 - **The engine is pure.** Every function takes a `GameState` and returns a new
   one, and never changes the one it was given. No DOM, no clock, no
@@ -43,6 +59,20 @@ pnpm dlx serve site   # or any static server
   that shows them. The engine speaks in constants (`RULE_VARIANTS.renju`,
   `WIN_REASONS.captures`), so every app can say them its own way and in its
   own language.
+- **The command line and the drawing decide nothing.** `src/cli.ts` makes
+  random moves through the engine and prints what it answers; `src/draw.ts`
+  draws a state it is given. Neither holds a rule.
+- Source files import only each other and `node:` modules, because the site's
+  own tests read this package's source and refuse anything else.
+- Words a player reads come in English and Japanese; the command line's are in
+  `src/cli.ts` and listed in `docs/strings-ja.md` (`pnpm docs:make` rewrites
+  it). If you cannot write the Japanese, say so in the pull request.
+- Option values and names are kebab case where they are new.
+- Art and sound are CC0 or public domain only, checked at the source. No GPL
+  or LGPL code.
+- A README table or count is held to the code by `src/docs.test.js`: change both
+  together, and never type in a number a test can hold.
+- Node 22 or later.
 - One change per pull request, with a line in `CHANGELOG.md` under
   *Unreleased*.
 
@@ -60,5 +90,7 @@ pnpm dlx serve site   # or any static server
 
 ## Releasing
 
-Maintainers bump the version in `package.json`, move *Unreleased* to the new
-version in `CHANGELOG.md`, tag `vX.Y.Z` and run `pnpm publish`.
+Maintainers bump the version in `package.json` and `src/version.ts`, move
+*Unreleased* to the new version in `CHANGELOG.md`, push, wait for CI and tag
+`vX.Y.Z`. The Release workflow checks the package, attaches the tarball and
+publishes to npm with provenance.

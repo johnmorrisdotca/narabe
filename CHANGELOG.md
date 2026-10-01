@@ -6,6 +6,26 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-01
+
+Nothing about play changed: every rule, every legal move and every result is exactly as in 1.0.0. These are additions beside the engine.
+
+### Added
+
+- **A command line**, `narabe`: `games`, `board`, `play`, `replay` and
+  `simulate`, in English and Japanese. It plays random moves through the
+  engine and decides nothing itself, and a game it plays can be saved with
+  `--record` and read back with `replay`. The same seed plays the same game on
+  every machine. The Japanese has not yet been read by a native reader
+  (`docs/strings-ja.md`).
+- **`boardSvg`**, from `@johnmorrisdotca/narabe/draw`: a position as one SVG
+  string, drawn the way its game is traditionally drawn, in colours a page can
+  restyle with `--nb-` variables.
+- `NARABE_VERSION` (`@johnmorrisdotca/narabe/version`), `test:package` and a
+  three-system package check in CI and in the release, issue templates, a
+  SECURITY policy, and a `docs.test.js` that holds the README's counts, tables
+  and examples to the code.
+
 ### Changed
 
 - The demo is on the family's standard: the shared header and footer, English
@@ -46,5 +66,6 @@ All notable changes to this project are written here. The format follows
   measures whether a head start settles a game, and the source and its tests
   ship in the package beside the build.
 
-[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/johnmorrisdotca/narabe/releases/tag/v1.0.0

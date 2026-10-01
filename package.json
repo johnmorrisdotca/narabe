@@ -1,28 +1,74 @@
 {
   "name": "@johnmorrisdotca/narabe",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "One rules engine for forty-eight abstract board games: gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and five draughts rule sets. Pure TypeScript, every move a new state, no dependencies.",
   "keywords": [
-    "board-game",
-    "game-engine",
-    "rules-engine",
-    "gomoku",
-    "renju",
-    "connect-four",
-    "tic-tac-toe",
-    "reversi",
-    "othello",
-    "hex",
-    "go",
-    "baduk",
-    "weiqi",
-    "halma",
-    "chinese-checkers",
-    "checkers",
-    "draughts",
+    "abstract-board-games",
     "abstract-strategy",
+    "baduk",
+    "board-game",
+    "board-game-engine",
+    "board-game-rules",
+    "board-svg",
+    "browser",
+    "bun",
+    "checkers",
+    "checkers-engine",
+    "chinese-checkers",
+    "cli",
+    "command-line",
+    "connect-4",
+    "connect-five",
+    "connect-four",
+    "deno",
+    "draughts",
+    "draughts-engine",
+    "english",
+    "esm",
+    "five-in-a-row",
+    "functional",
+    "game-ai-ready",
+    "game-engine",
+    "game-rules",
+    "go",
+    "go-game",
+    "gobang",
+    "gomoku",
+    "gomoku-narabe",
+    "halma",
+    "hex",
+    "hex-game",
+    "i18n",
+    "immutable",
+    "japanese",
+    "legal-moves",
+    "move-generation",
+    "move-list",
+    "naraberu",
+    "nine-men",
+    "no-dependencies",
+    "node",
+    "othello",
+    "pure-functions",
+    "random-play",
+    "react",
+    "record-replay",
+    "renju",
+    "replayable",
+    "reversi",
+    "reversi-engine",
+    "rules-engine",
+    "seeded-random",
+    "simulator",
+    "svg-board",
+    "tic-tac-toe",
+    "tictactoe",
+    "turn-based",
+    "two-player-games",
     "typescript",
-    "react"
+    "web-games",
+    "weiqi",
+    "zero-dependencies"
   ],
   "homepage": "https://johnmorrisdotca.github.io/narabe/",
   "bugs": {
@@ -53,6 +99,11 @@
       "import": "./dist/react.js",
       "default": "./dist/react.js"
     },
+    "./draw": {
+      "types": "./dist/draw.d.ts",
+      "import": "./dist/draw.js",
+      "default": "./dist/draw.js"
+    },
     "./*": {
       "types": "./dist/*.d.ts",
       "import": "./dist/*.js",
@@ -62,6 +113,7 @@
   "files": [
     "dist",
     "src",
+    "bin",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -79,7 +131,10 @@
     "site": "pnpm build && node scripts/site.mjs",
     "pictures": "pnpm site && node scripts/readme-pictures.mjs",
     "prepublishOnly": "pnpm check && pnpm build",
-    "test:demo": "pnpm site && playwright test"
+    "test:demo": "pnpm site && playwright test",
+    "test:cli": "pnpm build && node scripts/check-cli.mjs",
+    "test:package": "pnpm build && node scripts/check-package.mjs",
+    "docs:make": "node scripts/docs.mjs"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -102,5 +157,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.11.0",
+  "bin": {
+    "narabe": "bin/narabe.mjs"
+  }
 }

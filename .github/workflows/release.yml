@@ -28,6 +28,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build
+      - name: The command line, as a child process
+        run: node scripts/check-cli.mjs
+      - name: The package as npm packs it installs, imports and runs
+        run: node scripts/check-package.mjs
       - name: The tag is the version in package.json
         run: |
           VERSION="$(node -p "require('./package.json').version")"
@@ -35,7 +39,7 @@ jobs:
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "TAG=v$VERSION" >> "$GITHUB_ENV"
           echo "NAME=$(node -p "require('./package.json').name")" >> "$GITHUB_ENV"
-      - run: pnpm pack
+      - run: npm pack --ignore-scripts
       - name: Attach the tarball to the release
         env:
           GH_TOKEN: ${{ github.token }}

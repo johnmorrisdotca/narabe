@@ -24,9 +24,42 @@ site where people play all of these games against each other and against
 graded computer players, and it is the same code the site runs.
 
 <p align="center">
-  <img src="docs/desktop.jpg" alt="Renju on a 15 by 15 board sixteen moves in, under the demo's header with its language chooser and five cloth patches: the game chooser and its rule on the left, the move list on the right" width="620">
+  <img src="docs/desktop.jpg" alt="Renju on a 15 by 15 board sixteen moves in, under the demo's header with its language chooser, five cloth patches and Help switch: the game chooser and its rule on the left, the move list on the right" width="620">
   <img src="docs/phone.jpg" alt="Hex on an 11 by 11 rhombus on a phone in dark mode, in Japanese: Black and White each part way along a chain, with the move list under the board" width="200">
 </p>
+
+## In 30 seconds
+
+```sh
+npm install @johnmorrisdotca/narabe    # or pnpm add, or yarn add
+```
+
+```ts
+import { createGame, playMove, RULE_VARIANTS } from "@johnmorrisdotca/narabe";
+
+let game = createGame({ variant: RULE_VARIANTS.renju, size: 15 });
+game = playMove(game, { row: 7, col: 7 });   // Black takes the centre
+game.toPlay;                                 // "white"
+```
+
+Or, with nothing to install:
+
+```sh
+npx @johnmorrisdotca/narabe play hex --size 11 --seed 7
+```
+
+## Who it is for
+
+- **Anybody building a board-game site or app.** The rules, legal moves,
+  results and records of forty-eight games are done behind one set of
+  functions, and `turnChoices` tells a board what to highlight without knowing
+  a rule. You draw the board, or take the SVG one.
+- **Computer players and research.** Pure functions over plain data, so a
+  search can copy a state freely and play a million games in a loop. A bot is
+  yours to write; this is what it plays on.
+- **Teaching and rulebooks.** Each game's rules are a row of data and a few
+  modules, with tests beside them, and a second hand-written statement of the
+  rules that the simulator checks them against.
 
 ## Features
 
@@ -56,21 +89,28 @@ graded computer players, and it is the same code the site runs.
   a draw limit.
 - **Checked twice.** Every game is played to its end, over and over, by a
   simulator that re-checks each move against the rules written out a second
-  way, by hand. 587 tests in all.
+  way, by hand. Hundreds of tests in all.
 - **Small, typed and dependency-free.** ES modules with full TypeScript types,
   a plain-function core that runs in any browser, Node, Deno or Bun, and an
   optional React hook.
+- **A picture of any position.** `boardSvg(state)` draws it as one SVG string,
+  the way its game is traditionally drawn, in colours a page can restyle.
+- **A command line**, `narabe`, that lists the games, draws a starting board,
+  plays a game out at random and reads a saved game back through the engine.
 
 ## Install
 
 ```sh
-pnpm add @johnmorrisdotca/narabe
+npm install @johnmorrisdotca/narabe
+# or: pnpm add @johnmorrisdotca/narabe
 ```
 
 ES modules with TypeScript types. The engine has no dependencies; the React
 hook needs React 18 or later.
 
-## Quick start
+## Use it in your project
+
+### The engine alone
 
 ```ts
 import { createGame, playMove, pointName, RULE_VARIANTS } from "@johnmorrisdotca/narabe";
@@ -115,6 +155,20 @@ export function Reversi() {
 }
 ```
 
+### Drawing a board
+
+```ts
+import { boardSvg } from "@johnmorrisdotca/narabe/draw";
+
+element.innerHTML = boardSvg(game, { width: 400, title: "Renju, move 2" });
+```
+
+The string is one `<svg>` element, so it can be a file, an `innerHTML` or part
+of a server-rendered page. Lines games are drawn on the crossings, checkers and
+Reversi in squares, Hex and Chinese Checkers on the hexagon lattice. It draws a
+state it is given and decides nothing. Or draw your own: `VARIANT_SPECS[variant].grid`
+says how a game is traditionally drawn, and `turnChoices` says what to mark.
+
 ### Saving and replaying a game
 
 A game is stored as its settings and a list of moves. Nothing else is needed
@@ -127,6 +181,16 @@ const record = game.moves.map(({ row, col, kind }) => ({ row, col, kind }));
 const positions = replayMoves(createGame(game.settings), record);
 positions.at(-1);   // the game as it stands, rebuilt from its record
 ```
+
+## Where it comes from, and where it is used
+
+It is the rules behind [Itsutsu](https://itsutsu.com), a site where people play
+all of these games against each other and against graded computer players, and
+it is the same code the site runs: Itsutsu installs this package at a released
+version. The [demo](https://johnmorrisdotca.github.io/narabe/) plays any of
+them in the browser.
+
+**Using it somewhere? [Tell us](https://github.com/johnmorrisdotca/narabe/issues/new?template=add-my-project.md).**
 
 ## The games
 
@@ -149,6 +213,72 @@ them all, `boardSizesFor(variant)` says which boards each is played on, and
 The engine holds no names or rules text, on purpose: those belong to the app
 that shows the games, in its own words and languages. The names above are the
 ones [Itsutsu](https://itsutsu.com/games) uses.
+
+## Limits
+
+| Limit | Value | Constant |
+| --- | --- | --- |
+| Games | 48 | `RULE_VARIANT_LIST` |
+| Players | two colours, Black and White | `STONES` |
+| Board sides | 3 to 19; each game offers some of them | `ALL_BOARD_SIZES`, `boardSizesFor(variant)` |
+| Rule sets of checkers and draughts | 6 | `VARIANT_SPECS[…].checkers` |
+| Opening protocols besides none | 7 | `OPENING_RULE_LIST` |
+| A seed | a whole number below 2,147,483,648, when the engine draws one | `SEED_RANGE` |
+| The command line's seed | a whole number from 0 to 2,147,483,647 | |
+| The command line's `--games` | 1 to 10,000 | |
+
+`createGame` brings settings that disagree with their game into line (a pinned
+line length wins over the player's choice, an opening the game does not offer
+falls back to free) rather than refusing them, and every move function returns
+the state it was given when a move is not allowed.
+
+## Languages
+
+The engine speaks in constants, never in words: `RULE_VARIANTS.renju`,
+`WIN_REASONS.captures`. Names, rules text and pictures belong to the app that
+shows the games, in its own languages; the names in the table above are the
+ones [Itsutsu](https://itsutsu.com/games) uses, and the demo page has its own
+English and Japanese.
+
+The command line is the one thing here that talks, and it speaks English and
+Japanese (`--lang`, or the environment's language). **The Japanese is not yet
+reviewed by a native reader. Corrections welcome.** Every Japanese string of
+the command line is listed beside its English in
+[docs/strings-ja.md](./docs/strings-ja.md), and there is an
+[issue template](https://github.com/johnmorrisdotca/narabe/issues/new?template=fix-a-translation.md)
+for fixing one.
+
+## The command line
+
+```sh
+npx @johnmorrisdotca/narabe games                                 # every game, with its boards
+npx @johnmorrisdotca/narabe board renju --size 9                  # a starting position, as text
+npx @johnmorrisdotca/narabe play renju --size 9 --seed 7          # random play to the end
+npx @johnmorrisdotca/narabe play hex --size 11 --seed 7 --record > hex.json
+npx @johnmorrisdotca/narabe replay hex.json                       # read it back through the engine
+npx @johnmorrisdotca/narabe simulate reversi --games 200 --seed 1 # count how random games end
+```
+
+| Command or option | What it does |
+| --- | --- |
+| `games` | lists every game with the boards it is played on and the one it opens on |
+| `board <game>` | prints the starting position as text: X for Black, O for White, `#` for a sealed square |
+| `play <game>` | random play to the end, or until it is called off; prints the position and the result |
+| `replay <file>` | reads a saved game back through the engine, from a file or from `--stdin`; exits 1 if the engine cannot play it out |
+| `simulate <game>` | plays many random games and counts Black's wins, White's wins, draws and games not finished |
+| `-s`, `--seed N` | the number a game's chance comes from; a fresh one is named on standard error if not given |
+| `--size N` | the board's side; the one the game opens on if not given |
+| `--games N` | `simulate`: how many games |
+| `--record` | `play`: prints the saved game as JSON, ready for `replay` |
+| `--stdin` | `replay`: reads the saved game from standard input |
+| `-j`, `--json` | prints JSON |
+| `--lang L` | `en` or `ja` |
+
+The moves are random: this is a way to see the engine work and to check a
+record, not a player. A game of moving pieces need not end under random play,
+so `play` calls it off after a while and says so. The exit code is 0 when all
+went well, 1 when what was asked for could not be done and 2 when the command
+itself was wrong. The same seed plays the same game on every machine.
 
 ## API
 
@@ -259,6 +389,19 @@ seededRandom(seed): () => number          // the generator every seeded choice u
 `DEFAULT_SETTINGS`, `STAR_POINTS` and the rest compare a value without a
 string literal: `state.status === GAME_STATUS.won`.
 
+### Drawing
+
+```ts
+boardSvg(state, options?): string        // one <svg> element, from "@johnmorrisdotca/narabe/draw"
+
+type DrawBoardOptions = {
+  width?: number; title?: string;        // pixels; what a screen reader says
+  lastMove?: boolean; winningLine?: boolean;   // marked unless false
+  forbidden?: boolean; legal?: boolean;  // off unless asked
+  selected?: Point;                      // a piece picked up
+}
+```
+
 ### React
 
 ```ts
@@ -270,11 +413,23 @@ useNarabe(settings?): {
 }
 ```
 
+## Theming
+
+`boardSvg` paints with CSS variables that each have a default, so a page
+restyles a board from outside: `--nb-wood`, `--nb-wood-deep`, `--nb-line`,
+`--nb-cell-light`, `--nb-cell-dark`, `--nb-black`, `--nb-white`, `--nb-accent`,
+`--nb-good`, `--nb-hot` and `--nb-worm`. Set them on the element holding the SVG
+or on any ancestor. The engine and the React hook draw nothing, so have no
+theme.
+
 ## Browser support
 
-Any browser from the last few years: the engine needs ES2020 and nothing else.
-It also runs in Node 20 and later, Deno and Bun. The demo is a static page with
-no build step beyond the package's own.
+Any browser from the last few years: the engine needs ES2020 and nothing else,
+and the SVG is plain SVG with CSS variables. It also runs in Node 22 and later,
+Deno and Bun, and is tested in Node 22 and 24 on Linux, macOS and Windows,
+installed from the tarball npm makes. The demo is a static page with no build
+step beyond the package's own, and its tests run in Chromium and WebKit,
+Safari's engine.
 
 ## Architecture
 
@@ -289,7 +444,9 @@ hand, so a wrong row cannot agree with itself.
 ```text
 src/
 ├── board.constants.ts    the board's geometry: line directions, star points and column letters
+├── cli.ts                the command line as a pure function, with its words in English and Japanese
 ├── constants.ts          the table of variants, the choices they are made from, and every number the rules use
+├── draw.ts               the "/draw" entry: a position as one SVG string, drawn the way its game is traditionally drawn
 ├── engine.ts             the engine: create a game, ask what is legal, play a move, pass, forfeit
 ├── index.ts              the main entry: the engine, the variants table, notation, replay and everything the rules modules export
 ├── length.ts             how long a game can get, and what stops one that would never end
@@ -301,6 +458,7 @@ src/
 ├── test-support.ts       helpers the tests share, such as drawing a position from a diagram
 ├── types.ts              the engine's domain types: stones, points, settings, and the game state
 ├── variantSpec.types.ts  one rule set as data, a row of the table the engine consults
+├── version.ts            the version, held to package.json by a test
 ├── rules/  the rules, one module per mechanic, each delegated to by the engine
 │   ├── board.ts             board geometry shared by the engine and the rules, kept apart so a rule need not import the engine
 │   ├── camps.ts             the race games: pieces start in one corner and the aim is to fill the far one
@@ -366,6 +524,47 @@ and its API reference page, and `demo/` is the page published on GitHub Pages.
 *na-ra-be*. Most of the games here are won by lining stones up, which is why
 the package carries it.
 
+## The family
+
+Narabe has siblings, each made for the same site, each at
+[github.com/johnmorrisdotca](https://github.com/johnmorrisdotca) and each
+published to npm:
+
+- [Korokoro](https://github.com/johnmorrisdotca/korokoro) (コロコロ, the sound
+  of something small rolling along): fair dice for the table, with the odds of
+  every throw.
+- [Kyuubu](https://github.com/johnmorrisdotca/kyuubu) (キューブ, "cube"): a
+  turning cube for the browser, 2×2 to 7×7, drawn in CSS 3D.
+- [Toranpu](https://github.com/johnmorrisdotca/toranpu) (トランプ, "playing
+  cards"): a deck of cards and ten card games with computer players.
+- [Hitotsu](https://github.com/johnmorrisdotca/hitotsu) (一つ, "one"): the colour-card game, with the house rules people actually play.
+- [Tane](https://github.com/johnmorrisdotca/tane) (種, a seed, the kind you
+  plant): seeded random numbers and daily seeds, the same in every browser and
+  on every server.
+- **Narabe** (並べ, "line them up"): this one, one rules engine for the
+  abstract board games, from gomoku to Go.
+- [Tenka](https://github.com/johnmorrisdotca/tenka) (天下, "under heaven"):
+  world conquest for two to six, on a map of the real world.
+- [Kumimoji](https://github.com/johnmorrisdotca/kumimoji) (組み文字, "letters
+  put together"): the crossword tile race, in English and Japanese.
+- [Tsunagi](https://github.com/johnmorrisdotca/tsunagi) (繋ぎ, "joining"): a
+  line-joining logic puzzle whose every level has exactly one answer.
+- [Jarajara](https://github.com/johnmorrisdotca/jarajara) (ジャラジャラ, the
+  rattle of mahjong tiles): mahjong tiles drawn as SVG, and the matching
+  solitaire Awase.
+- [Suido](https://github.com/johnmorrisdotca/suido) (水道, "waterworks"): a
+  pipe puzzle: turn the pieces until the water reaches every drain.
+- [Sugoroku](https://github.com/johnmorrisdotca/sugoroku) (双六, backgammon):
+  backgammon and its variants, with a computer player and a board to play on.
+- [Kazu](https://github.com/johnmorrisdotca/kazu) (数, "number"): grid number
+  puzzles, Sudoku and its relatives.
+- [Domino](https://github.com/johnmorrisdotca/domino) (ドミノ): dominoes and
+  Mexican Train.
+- [Kotoba](https://github.com/johnmorrisdotca/kotoba) (言葉, "words"): word
+  lists and word-game rules in English, French, German and Japanese.
+- [Meikyuu](https://github.com/johnmorrisdotca/meikyuu) (迷宮, "labyrinth"): a
+  maze game of many levels, drawn with a finger or the mouse.
+
 ## Roadmap
 
 - **narabe-bots**, the computer players, as a companion package beside this
@@ -377,7 +576,7 @@ the package carries it.
   family's seeded-random package
 - Standard notations in and out: SGF for Go, PDN for draughts, RIF records for
   renju
-- A board component for React on top of `turnChoices`
+- A board component for React on top of `turnChoices` and `boardSvg`
 - More games: Pente, Lines of Action, Breakthrough, Amazons
 
 Ideas and pull requests are welcome.
@@ -389,9 +588,11 @@ short:
 
 ```sh
 pnpm install
-pnpm check   # lint, types and tests
-pnpm site    # build the demo into ./site, then serve it
-pnpm test:demo   # build the demo and tap through it in a real browser
+pnpm check         # lint, types and tests
+pnpm site          # build the demo into ./site, then serve it
+pnpm test:demo     # build the demo and tap through it in a real browser
+pnpm test:cli      # the command line, as a child process
+pnpm test:package  # pack it, install the tarball, and use it as published
 ```
 
 Please follow the [code of conduct](./CODE_OF_CONDUCT.md).
