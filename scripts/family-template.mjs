@@ -14,7 +14,8 @@
 // The page's own words are a table { en: { pitch, name, nameLink, foot, … }, ja: { … } }; every
 // element with data-say="key" is given words[lang][key] as text, never as HTML.
 //
-// THE HELP SWITCH. The header carries a "Help" / 「説明」 switch beside the language chooser. Off (the
+// THE HELP SWITCH. The header carries a "Help" / 「説明」 switch beside the cloth patches, a fixed width in
+// both languages and no taller than a patch, so that the header wraps and measures the same in both. Off (the
 // default), a demo looks as it always did. On, every OPTION ROW shows one short plain line under it,
 // saying what the row does and how to use it. A page marks a row with the words for it in both
 // languages, and the template does the rest:
@@ -53,6 +54,9 @@ export const FAMILY = [
   { id: "suido", name: "Suido", kana: "水道" },
   { id: "domino", name: "Domino", kana: "ドミノ" },
   { id: "kotoba", name: "Kotoba", kana: "言葉" },
+  { id: "sugoroku", name: "Sugoroku", kana: "双六" },
+  { id: "kazu", name: "Kazu", kana: "数" },
+  { id: "meikyuu", name: "Meikyuu", kana: "迷宮" },
 ];
 
 /**
@@ -102,7 +106,7 @@ export function familyHead({ id, title, description, ogTitle, ogDescription }) {
 /**
  * The header: the name with its kana, the pitch (data-say="pitch"), a line on the name
  * (data-say="name", and a link to the README's "The name", data-say="nameLink"), the
- * "English · 日本語" chooser, the Help switch, the cloth patches, and the GitHub and npm pills. `links` adds pills before those
+ * "English · 日本語" chooser, the cloth patches, the Help switch, and the GitHub and npm pills. `links` adds pills before those
  * two: [{ href, say }] where `say` is a key in the page's words.
  */
 export function familyHeader({ id, links = [] }) {
@@ -117,13 +121,11 @@ export function familyHeader({ id, links = [] }) {
           <div class="lang" role="group" aria-label="Language / 言語">
             <button type="button" data-lang="en" lang="en">English</button>
             <button type="button" data-lang="ja" lang="ja">日本語</button>
-          </div>
-          <div class="lang" role="group" data-say-label="help">
-            <button type="button" data-help-switch aria-pressed="false" data-say="help" data-say-title="helpTip"></button>
           </div>${links.map((link) => `\n          <a href="${escape(link.href)}" data-say="${escape(link.say)}"></a>`).join("")}
           <div class="cloth" role="radiogroup" data-say-label="cloth" style="display:inline-flex;gap:0;align-items:center">${Object.entries(FAMILY_CLOTHS)
             .map(([name, cloth]) => `<button type="button" role="radio" data-cloth="${name}" data-say-label="cloth_${name}" style="width:44px;height:44px;min-width:44px;padding:8px;border:0;border-radius:12px;cursor:pointer;background:radial-gradient(120% 90% at 30% 20%, ${cloth.felt} 0%, ${cloth.deep} 100%) content-box;box-shadow:inset 0 0 0 8px transparent"></button>`)
             .join("")}</div>
+          <button type="button" class="fam-button" data-help-switch aria-pressed="false" data-say="help" data-say-title="helpTip" style="min-width:68px"></button>
           <a href="${repo(id)}">GitHub</a>
           <a href="${npm(id)}">npm</a>
         </nav>
