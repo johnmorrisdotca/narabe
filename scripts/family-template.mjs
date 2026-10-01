@@ -2,6 +2,12 @@
 // johnmorrisdotca package's demo site shares, beside family.css. Copied unchanged into
 // each repository (scripts/family-template.mjs); a package never edits it.
 //
+// It is also the one list of the family: FAMILY (who, in what order), FAMILY_PITCH (a line on each) and
+// FAMILY_TEMPLATE_VERSION (the day this text was last changed). The footer reads the list, and so does the
+// README's "The family" block, which scripts/family-readme.mjs writes from it. A change here is made in every
+// repository at once, with a new version marker, and `family.test.js` (src/ or test/) holds every copy to one
+// recorded hash.
+//
 // A site script uses it at build time:
 //
 //   import { FAMILY_SCRIPT, familyFooter, familyHead, familyHeader, familyUnreviewed } from "./family-template.mjs";
@@ -39,6 +45,9 @@
 
 const OWNER = "johnmorrisdotca";
 
+/** The day this file was last changed, in every repository at once. A test records the file's hash beside it. */
+export const FAMILY_TEMPLATE_VERSION = "2026-10-01";
+
 /** The packages, in the order the footer lists them. `kana` is the name as it is written in Japanese. */
 export const FAMILY = [
   { id: "korokoro", name: "Korokoro", kana: "コロコロ" },
@@ -57,7 +66,37 @@ export const FAMILY = [
   { id: "sugoroku", name: "Sugoroku", kana: "双六" },
   { id: "kazu", name: "Kazu", kana: "数" },
   { id: "meikyuu", name: "Meikyuu", kana: "迷宮" },
+  { id: "hikidashi", name: "Hikidashi", kana: "引き出し" },
+  { id: "chizu", name: "Chizu", kana: "地図" },
+  { id: "bushu", name: "Bushu", kana: "部首" },
 ];
+
+/**
+ * One line on each package, for the README's "The family" block: lower case, no full stop, no number that can
+ * fall behind the code. Kept apart from FAMILY so that a package's own test can still match a member's row
+ * whole.
+ */
+export const FAMILY_PITCH = {
+  korokoro: "dice, with notation, exact odds, real sounds and the dice of many games",
+  kyuubu: "a turning cube for the browser, 2×2 to 7×7, with record solves to replay",
+  hitotsu: "a colour-card shedding game for two to eight, with the house rules people play",
+  toranpu: "a deck of playing cards, card games with computer players, and solitaires",
+  tane: "seeded random numbers and daily seeds, the same in every browser and on every server",
+  narabe: "one rules engine for abstract board games, from gomoku and Reversi to Go and checkers",
+  tenka: "world conquest for two to six, on a map of the real world",
+  kumimoji: "a crossword tile race, in English and Japanese kana",
+  tsunagi: "a line-joining logic puzzle whose every level has exactly one answer",
+  jarajara: "mahjong tiles drawn as SVG, stacked layouts, and the matching solitaire Awase",
+  suido: "a pipe puzzle: turn the pieces until the water reaches every drain",
+  domino: "dominoes and Mexican Train",
+  kotoba: "word lists and word-game rules in English, French, German and Japanese",
+  sugoroku: "backgammon and its variants, with the doubling cube and match play",
+  kazu: "grid number puzzles: Sudoku and its variants, Futoshiki and Skyscrapers",
+  meikyuu: "mazes on squares, hexagons, triangles and circles, made from a seed and drawn through with a finger or the mouse",
+  hikidashi: "a drawer of small Japanese text tools: era dates, kanji numerals, readings and sentence difficulty",
+  chizu: "maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts",
+  bushu: "find a kanji by the parts it is made of",
+};
 
 /**
  * THE CLOTHS A TABLE MAY BE LAID IN, the same five itsutsu.com's boards offer: green (the family's own,

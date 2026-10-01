@@ -73,6 +73,10 @@ it is, and says so in its changelog line.
 - A README table or count is held to the code by `src/docs.test.js`: change both
   together, and never type in a number a test can hold.
 - Node 22 or later.
+- **The list of the family in the README is made, not written.** `pnpm family:readme` writes it between its
+  markers from `scripts/family-template.mjs` (the names, the Japanese names and a line on each), and
+  `scripts/family-readme.mjs` is the same file in every package. To add a package or change a line, change the
+  template in every repository, bump `FAMILY_TEMPLATE_VERSION` and record the new hash in `src/family.test.js`.
 - One change per pull request, with a line in `CHANGELOG.md` under
   *Unreleased*.
 

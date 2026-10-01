@@ -47,7 +47,8 @@ jobs:
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" ./*.tgz --clobber
           else
-            gh release create "$TAG" ./*.tgz --title "$TAG" --notes "See CHANGELOG.md." --target "$GITHUB_SHA"
+            node scripts/release-notes.mjs "$VERSION" > "$RUNNER_TEMP/notes.md"
+            gh release create "$TAG" ./*.tgz --title "$TAG" --notes-file "$RUNNER_TEMP/notes.md" --target "$GITHUB_SHA"
           fi
       - name: Publish to npm, unless this version is already there
         run: |

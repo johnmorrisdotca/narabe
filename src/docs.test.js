@@ -277,17 +277,6 @@ describe("package.json", () => {
   });
 });
 
-describe("the family", () => {
-  const SIBLINGS = ["korokoro", "kyuubu", "toranpu", "hitotsu", "tane", "tenka", "kumimoji", "tsunagi", "jarajara", "suido", "sugoroku", "kazu", "domino", "kotoba", "meikyuu"];
-
-  it("lists all sixteen packages: this one, and a link to every other", () => {
-    const family = section("## The family");
-    expect(family).toContain("**Narabe** (並べ");
-    for (const name of SIBLINGS) expect(family, name).toContain(`](https://github.com/johnmorrisdotca/${name})`);
-    expect((family.match(/^- /gm) ?? []).length).toBe(16);
-  });
-});
-
 describe("the family's look", () => {
   const css = readFileSync("demo/family.css", "utf8");
 
@@ -299,7 +288,7 @@ describe("the family's look", () => {
   });
 
   it("scripts/family-template.mjs is the family's file too", () => {
-    expect(createHash("sha256").update(readFileSync("scripts/family-template.mjs")).digest("hex")).toBe("6bb8a0ba895eb971a050ddeb2168135f10c75ad21eee50a266be34a9b7298b37");
+    expect(createHash("sha256").update(readFileSync("scripts/family-template.mjs")).digest("hex")).toBe("38bd7b252045af5bac9ac40b873fdac3d0981ad29a3afc1dff88d5d0df0645b4");
   });
 
   it("the site script uses the family's header and footer", () => {

@@ -526,44 +526,32 @@ the package carries it.
 
 ## The family
 
-Narabe has siblings, each made for the same site, each at
-[github.com/johnmorrisdotca](https://github.com/johnmorrisdotca) and each
-published to npm:
+<!-- family:start (made by scripts/family-readme.mjs from scripts/family-template.mjs; change those, not this) -->
+Narabe is one of nineteen packages, each made for the same site, each at
+[github.com/johnmorrisdotca](https://github.com/johnmorrisdotca). The code of every one is MIT.
 
-- [Korokoro](https://github.com/johnmorrisdotca/korokoro) (コロコロ, the sound
-  of something small rolling along): fair dice for the table, with the odds of
-  every throw.
-- [Kyuubu](https://github.com/johnmorrisdotca/kyuubu) (キューブ, "cube"): a
-  turning cube for the browser, 2×2 to 7×7, drawn in CSS 3D.
-- [Toranpu](https://github.com/johnmorrisdotca/toranpu) (トランプ, "playing
-  cards"): a deck of cards and ten card games with computer players.
-- [Hitotsu](https://github.com/johnmorrisdotca/hitotsu) (一つ, "one"): the colour-card game, with the house rules people actually play.
-- [Tane](https://github.com/johnmorrisdotca/tane) (種, a seed, the kind you
-  plant): seeded random numbers and daily seeds, the same in every browser and
-  on every server.
-- **Narabe** (並べ, "line them up"): this one, one rules engine for the
-  abstract board games, from gomoku to Go.
-- [Tenka](https://github.com/johnmorrisdotca/tenka) (天下, "under heaven"):
-  world conquest for two to six, on a map of the real world.
-- [Kumimoji](https://github.com/johnmorrisdotca/kumimoji) (組み文字, "letters
-  put together"): the crossword tile race, in English and Japanese.
-- [Tsunagi](https://github.com/johnmorrisdotca/tsunagi) (繋ぎ, "joining"): a
-  line-joining logic puzzle whose every level has exactly one answer.
-- [Jarajara](https://github.com/johnmorrisdotca/jarajara) (ジャラジャラ, the
-  rattle of mahjong tiles): mahjong tiles drawn as SVG, and the matching
-  solitaire Awase.
-- [Suido](https://github.com/johnmorrisdotca/suido) (水道, "waterworks"): a
-  pipe puzzle: turn the pieces until the water reaches every drain.
-- [Sugoroku](https://github.com/johnmorrisdotca/sugoroku) (双六, backgammon):
-  backgammon and its variants, with a computer player and a board to play on.
-- [Kazu](https://github.com/johnmorrisdotca/kazu) (数, "number"): grid number
-  puzzles, Sudoku and its relatives.
-- [Domino](https://github.com/johnmorrisdotca/domino) (ドミノ): dominoes and
-  Mexican Train.
-- [Kotoba](https://github.com/johnmorrisdotca/kotoba) (言葉, "words"): word
-  lists and word-game rules in English, French, German and Japanese.
-- [Meikyuu](https://github.com/johnmorrisdotca/meikyuu) (迷宮, "labyrinth"): a
-  maze game of many levels, drawn with a finger or the mouse.
+- [Korokoro](https://github.com/johnmorrisdotca/korokoro) (コロコロ): dice, with notation, exact odds, real sounds and the dice of many games. [Demo](https://johnmorrisdotca.github.io/korokoro/).
+- [Kyuubu](https://github.com/johnmorrisdotca/kyuubu) (キューブ): a turning cube for the browser, 2×2 to 7×7, with record solves to replay. [Demo](https://johnmorrisdotca.github.io/kyuubu/).
+- [Hitotsu](https://github.com/johnmorrisdotca/hitotsu) (一つ): a colour-card shedding game for two to eight, with the house rules people play. [Demo](https://johnmorrisdotca.github.io/hitotsu/).
+- [Toranpu](https://github.com/johnmorrisdotca/toranpu) (トランプ): a deck of playing cards, card games with computer players, and solitaires. [Demo](https://johnmorrisdotca.github.io/toranpu/).
+- [Tane](https://github.com/johnmorrisdotca/tane) (種): seeded random numbers and daily seeds, the same in every browser and on every server. [Demo](https://johnmorrisdotca.github.io/tane/).
+- [Narabe](https://github.com/johnmorrisdotca/narabe) (並べ): one rules engine for abstract board games, from gomoku and Reversi to Go and checkers. [Demo](https://johnmorrisdotca.github.io/narabe/).
+- [Tenka](https://github.com/johnmorrisdotca/tenka) (天下): world conquest for two to six, on a map of the real world. [Demo](https://johnmorrisdotca.github.io/tenka/).
+- [Kumimoji](https://github.com/johnmorrisdotca/kumimoji) (組み文字): a crossword tile race, in English and Japanese kana. [Demo](https://johnmorrisdotca.github.io/kumimoji/).
+- [Tsunagi](https://github.com/johnmorrisdotca/tsunagi) (繋ぎ): a line-joining logic puzzle whose every level has exactly one answer. [Demo](https://johnmorrisdotca.github.io/tsunagi/).
+- [Jarajara](https://github.com/johnmorrisdotca/jarajara) (ジャラジャラ): mahjong tiles drawn as SVG, stacked layouts, and the matching solitaire Awase. [Demo](https://johnmorrisdotca.github.io/jarajara/).
+- [Suido](https://github.com/johnmorrisdotca/suido) (水道): a pipe puzzle: turn the pieces until the water reaches every drain. [Demo](https://johnmorrisdotca.github.io/suido/).
+- [Domino](https://github.com/johnmorrisdotca/domino) (ドミノ): dominoes and Mexican Train. [Demo](https://johnmorrisdotca.github.io/domino/).
+- [Kotoba](https://github.com/johnmorrisdotca/kotoba) (言葉): word lists and word-game rules in English, French, German and Japanese. [Demo](https://johnmorrisdotca.github.io/kotoba/).
+- [Sugoroku](https://github.com/johnmorrisdotca/sugoroku) (双六): backgammon and its variants, with the doubling cube and match play. [Demo](https://johnmorrisdotca.github.io/sugoroku/).
+- [Kazu](https://github.com/johnmorrisdotca/kazu) (数): grid number puzzles: Sudoku and its variants, Futoshiki and Skyscrapers. [Demo](https://johnmorrisdotca.github.io/kazu/).
+- [Meikyuu](https://github.com/johnmorrisdotca/meikyuu) (迷宮): mazes on squares, hexagons, triangles and circles, made from a seed and drawn through with a finger or the mouse. [Demo](https://johnmorrisdotca.github.io/meikyuu/).
+- [Hikidashi](https://github.com/johnmorrisdotca/hikidashi) (引き出し): a drawer of small Japanese text tools: era dates, kanji numerals, readings and sentence difficulty. [Demo](https://johnmorrisdotca.github.io/hikidashi/).
+- [Chizu](https://github.com/johnmorrisdotca/chizu) (地図): maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts. [Demo](https://johnmorrisdotca.github.io/chizu/).
+- [Bushu](https://github.com/johnmorrisdotca/bushu) (部首): find a kanji by the parts it is made of. [Demo](https://johnmorrisdotca.github.io/bushu/).
+
+**This package is Narabe.** The demos of all nineteen share one header and footer, so each links the rest.
+<!-- family:end -->
 
 ## Roadmap
 

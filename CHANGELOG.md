@@ -6,6 +6,12 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-01
+
+### Changed
+
+- **Needs Node 22 or later; Node 20 is no longer supported.** Nothing else changed.
+
 ## [1.1.0] - 2026-10-01
 
 Nothing about play changed: every rule, every legal move and every result is exactly as in 1.0.0. These are additions beside the engine.
@@ -66,6 +72,7 @@ Nothing about play changed: every rule, every legal move and every result is exa
   measures whether a head start settles a game, and the source and its tests
   ship in the package beside the build.
 
-[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/johnmorrisdotca/narabe/releases/tag/v1.0.0
