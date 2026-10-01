@@ -77,6 +77,7 @@
     "test": "vitest run",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "site": "pnpm build && node scripts/site.mjs",
+    "pictures": "pnpm site && node scripts/readme-pictures.mjs",
     "prepublishOnly": "pnpm check && pnpm build",
     "test:demo": "pnpm site && playwright test"
   },

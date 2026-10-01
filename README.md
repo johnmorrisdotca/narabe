@@ -24,8 +24,8 @@ site where people play all of these games against each other and against
 graded computer players, and it is the same code the site runs.
 
 <p align="center">
-  <img src="docs/desktop.png" alt="The demo on a desktop: Renju on a 15 by 15 board mid-game, the game chooser on the left and the move list on the right" width="600">
-  <img src="docs/phone.png" alt="The demo on a phone in dark mode: Hex on an 11 by 11 rhombus, Black joining top to bottom and White left to right" width="170">
+  <img src="docs/desktop.jpg" alt="Renju on a 15 by 15 board sixteen moves in, under the demo's header with its language chooser and five cloth patches: the game chooser and its rule on the left, the move list on the right" width="620">
+  <img src="docs/phone.jpg" alt="Hex on an 11 by 11 rhombus on a phone in dark mode, in Japanese: Black and White each part way along a chain, with the move list under the board" width="200">
 </p>
 
 ## Features
@@ -357,6 +357,14 @@ src/
 
 Tests sit beside the code they test (`*.test.ts`). `scripts/` builds the demo
 and its API reference page, and `demo/` is the page published on GitHub Pages.
+
+## The name
+
+*Narabe* (並べ) is Japanese for "line them up", the command form of *naraberu*
+(並べる), to set things in a row or side by side. It is the second half of
+*gomoku-narabe* (五目並べ), five in a row, and is said in three beats,
+*na-ra-be*. Most of the games here are won by lining stones up, which is why
+the package carries it.
 
 ## Roadmap
 
