@@ -15,7 +15,7 @@ const id = pkg.name.replace(/^@[^/]+\//, "");
 
 // The recorded hashes. The template's is the one that says every demo's header and footer, and every README's
 // list of the family, are the same text.
-const TEMPLATE = { version: "2026-10-01", sha256: "38bd7b252045af5bac9ac40b873fdac3d0981ad29a3afc1dff88d5d0df0645b4" };
+const TEMPLATE = { version: "2026-10-05", sha256: "061b5ed89c345dccb6e029d5091dff0a5bbc4a9b57812fbcd0bd619038bdb7f1" };
 const FILES = {
   "scripts/family-readme.mjs": "3c9d5b2cbf17a92d31bced98edac7f544616edb0dff90bf2d141722a9d4516c5",
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
@@ -32,7 +32,7 @@ describe("the family template", () => {
   it("lists every package of the family, in order, each with its Japanese name and a line on it", () => {
     expect(FAMILY.map((one) => one.id)).toEqual([
       "korokoro", "kyuubu", "hitotsu", "toranpu", "tane", "narabe", "tenka", "kumimoji", "tsunagi", "jarajara",
-      "suido", "domino", "kotoba", "sugoroku", "kazu", "meikyuu", "hikidashi", "chizu", "bushu",
+      "suido", "domino", "kotoba", "sugoroku", "kazu", "meikyuu", "hikidashi", "chizu", "bushu", "tobiishi", "jirai", "gunjin",
     ]);
     for (const one of FAMILY) {
       expect(one.name, one.id).toBe(one.id[0].toUpperCase() + one.id.slice(1));

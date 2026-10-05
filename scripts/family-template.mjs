@@ -46,7 +46,7 @@
 const OWNER = "johnmorrisdotca";
 
 /** The day this file was last changed, in every repository at once. A test records the file's hash beside it. */
-export const FAMILY_TEMPLATE_VERSION = "2026-10-01";
+export const FAMILY_TEMPLATE_VERSION = "2026-10-05";
 
 /** The packages, in the order the footer lists them. `kana` is the name as it is written in Japanese. */
 export const FAMILY = [
@@ -69,6 +69,9 @@ export const FAMILY = [
   { id: "hikidashi", name: "Hikidashi", kana: "引き出し" },
   { id: "chizu", name: "Chizu", kana: "地図" },
   { id: "bushu", name: "Bushu", kana: "部首" },
+  { id: "tobiishi", name: "Tobiishi", kana: "飛び石" },
+  { id: "jirai", name: "Jirai", kana: "地雷" },
+  { id: "gunjin", name: "Gunjin", kana: "軍人" },
 ];
 
 /**
@@ -96,6 +99,9 @@ export const FAMILY_PITCH = {
   hikidashi: "a drawer of small Japanese text tools: era dates, kanji numerals, readings and sentence difficulty",
   chizu: "maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts",
   bushu: "find a kanji by the parts it is made of",
+  tobiishi: "peg solitaire with nine boards and seeded solvable challenges",
+  jirai: "minesweeper on shaped grids with verified no-guess boards",
+  gunjin: "five hidden-rank strategy games with pass-the-device play",
 };
 
 /**
