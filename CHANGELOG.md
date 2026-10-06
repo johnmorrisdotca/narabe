@@ -6,8 +6,15 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-10-06
+
+Nothing that was exported has changed.
+
 ### Changed
 
+- The README takes the family's one layout, fully: a hero picture of the demo on a desk and on a phone in light and dark, a picture of nine of the games (gomoku, Drop Four, Reversi, Go, Hex, checkers, Chinese Checkers, Honeycomb and Twist Five) each drawn by `boardSvg`, an Install section, an Examples section of thirteen examples whose output is what they print, and an Accessibility section. Its pictures are in `docs/images` (WebP, light and dark) and are retaken with `pnpm screenshots:readme` (it replaces `pnpm pictures`, `docs/desktop.jpg`, `docs/phone.jpg` and the animated `docs/games.gif`, which the standard's pictures take the place of); they are not in the tarball, and `pnpm test:package` fails if one is.
+- `pnpm test:readme` type-checks and runs every TypeScript and JavaScript example in the README against the built package, as a CI job of its own, and `pnpm check` holds the README to the family's lint (sections in order, a language on every fence, pictures with alt text, widths and captions, no marketing words, at most 64,000 characters, because npm shows only the first 65,536).
+- "The family" is now under "Where it comes from, and where it is used", with "Used by", and the README has a Development and an Accessibility section.
 - Repository only: the package and everything it exports are unchanged. `CONTRIBUTING.md` is the family's one text with a section of its own for Narabe, held to the master in johnmorrisdotca/.github by `src/family.test.js`; `ci.yml` and `pages.yml` are the family's one text (`pnpm check`, the demo, and the package on Linux, macOS and Windows), and any jobs of the package's own after them.
 - The demo's page titles read `Narabe · pitch`, like the rest of the family's.
 - The demo's own stylesheet is `demo/narabe.css`, named for the package like the family's.

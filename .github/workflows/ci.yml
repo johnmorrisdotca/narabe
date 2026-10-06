@@ -51,3 +51,15 @@ jobs:
         run: pnpm test:package
       - name: The command line, as a child process
         run: pnpm test:cli
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: The README's TypeScript and JavaScript examples, type-checked and run against the built package
+        run: pnpm test:readme

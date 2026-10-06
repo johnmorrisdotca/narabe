@@ -33,6 +33,13 @@ const packed = JSON.parse(run("npm", ["pack", "--json", "--ignore-scripts", "--p
 const tarball = join(scratch, packed[0].filename);
 const inTarball = new Set(packed[0].files.map((file) => file.path));
 console.log(`ok   npm pack: ${packed[0].filename}, ${packed[0].files.length} files`);
+// The README's pictures are in docs/images, for GitHub and npm to show by address, and are never in what is installed.
+const shipped = [...inTarball].filter((file) => file.startsWith("docs/") || /\.(webp|png|jpe?g|gif)$/.test(file));
+if (shipped.length > 0) {
+  console.error(`FAIL the tarball holds pictures or docs: ${shipped.join(", ")}`);
+  process.exit(1);
+}
+console.log("ok   no picture and nothing from docs/ is in the tarball");
 
 // 2. Everything package.json points at is in the tarball.
 const pointed = [pkg.main, pkg.module, pkg.types, ...Object.values(pkg.bin ?? {}), ...Object.values(pkg.exports).flatMap((entry) => (typeof entry === "string" ? [entry] : Object.values(entry)))].filter((file) => file !== undefined && !file.includes("*"));

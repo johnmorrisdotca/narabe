@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/narabe",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "One rules engine for forty-eight abstract board games: gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and five draughts rule sets. Pure TypeScript, every move a new state, no dependencies.",
   "keywords": [
     "abstract-board-games",
@@ -125,13 +125,14 @@
     "test": "vitest run",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "site": "pnpm build && node scripts/site.mjs",
-    "pictures": "pnpm site && node scripts/readme-pictures.mjs",
     "prepublishOnly": "pnpm check && pnpm build",
     "test:demo": "pnpm site && playwright test",
     "test:cli": "pnpm build && node scripts/check-cli.mjs",
     "test:package": "pnpm build && node scripts/check-package.mjs",
     "family:readme": "node scripts/family-readme.mjs",
-    "docs:make": "node scripts/docs.mjs"
+    "docs:make": "node scripts/docs.mjs",
+    "screenshots:readme": "pnpm site && node scripts/readme-pictures.mjs",
+    "test:readme": "pnpm build && node scripts/check-readme-examples.mjs"
   },
   "peerDependencies": {
     "react": ">=18"
