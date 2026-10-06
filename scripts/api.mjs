@@ -119,7 +119,7 @@ code, pre { font-family: var(--mono); }
 .api-entry article > * { min-width: 0; max-width: 100%; }
 .api-entry h3 { margin: 0; font-size: 1rem; font-family: var(--mono); overflow-wrap: anywhere; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .api-entry h3 .fam-badge { font-family: system-ui, sans-serif; font-weight: 600; }
-.api-entry p { margin: 0; line-height: 1.5; max-width: 72ch; }
+.api-entry p { margin: 0; line-height: 1.5; max-width: 72ch; overflow-wrap: anywhere; }
 .api-entry p.api-names { max-width: none; }
 .api-entry pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 `;
