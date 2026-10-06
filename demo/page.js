@@ -448,8 +448,8 @@ function render() {
       node("circle", { cx: x, cy: y, r: 0.36, fill: "none", stroke: "var(--worm)", "stroke-width": 0.1, "stroke-dasharray": "0.2 0.1" }, marks);
     } else if (cell === N.STONES.black || cell === N.STONES.white) {
       const fresh = same(p, last) ? " fresh" : "";
-      node("circle", { class: `stone${fresh}`, cx: x, cy: y, r: 0.43, fill: cell === N.STONES.black ? "var(--black)" : "var(--white)", stroke: "rgb(0 0 0 / 0.45)", "stroke-width": 0.03 }, marks);
-      if (kings.some((k) => same(k, p))) node("circle", { cx: x, cy: y, r: 0.22, fill: "none", stroke: "#d4a017", "stroke-width": 0.09 }, marks);
+      node("circle", { class: `stone${fresh}`, cx: x, cy: y, r: 0.43, fill: cell === N.STONES.black ? "var(--black)" : "var(--white)", stroke: "var(--stone-edge)", "stroke-width": 0.03 }, marks);
+      if (kings.some((k) => same(k, p))) node("circle", { cx: x, cy: y, r: 0.22, fill: "none", stroke: "var(--king)", "stroke-width": 0.09 }, marks);
     }
     if (same(p, last)) node("circle", { cx: x, cy: y, r: 0.1, fill: "var(--accent)" }, marks);
     if (winning.some((w) => same(w, p))) node("circle", { cx: x, cy: y, r: 0.47, fill: "none", stroke: "var(--accent)", "stroke-width": 0.08 }, marks);
@@ -488,7 +488,7 @@ function render() {
         const bx = cx + (clockwise ? 0.42 : -0.42);
         const button = node("g", { class: "turn", role: "button", "aria-label": t("turnLabel", { n: quadrant + 1, way: t(clockwise ? "clockwise" : "anticlockwise") }), style: "cursor:pointer" }, svg);
         node("circle", { cx: bx, cy, r: 0.36, fill: "var(--accent)", opacity: 0.92 }, button);
-        const text = node("text", { x: bx, y: cy + 0.15, "text-anchor": "middle", "font-size": 0.44, fill: "#fff", "font-weight": 700 }, button);
+        const text = node("text", { x: bx, y: cy + 0.15, "text-anchor": "middle", "font-size": 0.44, fill: "var(--accent-ink)", "font-weight": 700 }, button);
         text.textContent = clockwise ? "↻" : "↺";
         button.addEventListener("click", () => {
           commit(N.twistBoard(state, quadrant, clockwise));

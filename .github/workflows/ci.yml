@@ -17,9 +17,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
+      - run: pnpm check
       - run: pnpm build
   demo:
     runs-on: ubuntu-latest
@@ -32,7 +30,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium webkit
-      - run: pnpm test:demo
+      - name: The demo, played in Chromium and WebKit at a phone's width and a desk's
+        run: pnpm test:demo
   package:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -48,8 +47,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - name: The package as npm packs it installs and imports, by ESM and by require
+        run: pnpm test:package
       - name: The command line, as a child process
-        run: node scripts/check-cli.mjs
-      - name: The package as npm packs it installs, imports and runs
-        run: node scripts/check-package.mjs
+        run: pnpm test:cli

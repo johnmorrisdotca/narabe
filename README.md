@@ -5,10 +5,10 @@ Gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Ch
 
 <p align="center">
   <a href="https://github.com/johnmorrisdotca/narabe/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/johnmorrisdotca/narabe/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="https://www.npmjs.com/package/@johnmorrisdotca/narabe"><img alt="npm" src="https://img.shields.io/npm/v/@johnmorrisdotca/narabe?color=b3361f"></a>
-  <a href="./LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-b3361f"></a>
-  <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-b3361f">
-  <img alt="48 games" src="https://img.shields.io/badge/games-48-b3361f">
+  <a href="https://www.npmjs.com/package/@johnmorrisdotca/narabe"><img alt="npm" src="https://img.shields.io/npm/v/@johnmorrisdotca/narabe?color=2f5d4a"></a>
+  <a href="./LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2f5d4a"></a>
+  <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
+  <img alt="48 games" src="https://img.shields.io/badge/games-48-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
 </p>
 

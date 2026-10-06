@@ -14,7 +14,7 @@ const frame = ({ title, description, links, body, scripts }) => `<!doctype html>
     ${familyHead({ id, title, description, ogTitle: "Narabe 並べ: forty-eight board games", ogDescription: "Pick any of forty-eight abstract board games and play it on one screen, on one rules engine." })}
     <link rel="icon" href="${icon}" />
     <link rel="stylesheet" href="family.css" />
-    <link rel="stylesheet" href="site.css" />
+    <link rel="stylesheet" href="narabe.css" />
   </head>
   <body>
     <main>
@@ -30,13 +30,13 @@ ${body}
 
 rmSync("site", { recursive: true, force: true });
 mkdirSync("site", { recursive: true });
-for (const file of ["family.css", "site.css", "page.js", "games.js"]) cpSync(`demo/${file}`, `site/${file}`);
+for (const file of ["family.css", "narabe.css", "page.js", "games.js"]) cpSync(`demo/${file}`, `site/${file}`);
 cpSync("dist", "site/dist", { recursive: true });
 
 writeFileSync(
   "site/index.html",
   frame({
-    title: "Narabe 並べ: forty-eight board games, one rules engine",
+    title: "Narabe · forty-eight board games, one rules engine",
     description: "Pick any of forty-eight abstract board games and play it on one screen: gomoku, renju, Connect Four, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and draughts. Every rule runs on Narabe, a TypeScript rules engine. In English and Japanese.",
     links: [{ href: "api.html", say: "pageApi" }],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),

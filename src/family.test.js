@@ -23,7 +23,11 @@ const FILES = {
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
   "scripts/community/SECURITY.md": "ff6f650be7789396233671d2558439736efe7f96a1d1d39115dd5cf94d29275c",
   "scripts/community/CODE_OF_CONDUCT.md": "34da1f56f004ce8f7f95d4449b64d2ecb5827dd9f0d4eea1da351a20713ebe70",
+  "scripts/community/CONTRIBUTING.md": "3225201be4f66531c27e849f0bb219f8c7274e5815b726a93565bccadbc6a43c",
 };
+// The Pages workflow is one text in every package. A package that also builds a documentation site adds the one step that
+// builds it, and that line is left out before the text is compared.
+const PAGES_SHA256 = "f45c33dd0403551588b8b00882cfd0c1d953d2095e558ffab0f7451b8cdb6ef6";
 
 describe("the family template", () => {
   it("is the one file, byte for byte, in every package", () => {
@@ -51,12 +55,40 @@ describe("the family template", () => {
 });
 
 describe("the files every package shares", () => {
-  it("are copied unchanged: the README writer, the release notes, and the family's SECURITY.md and CODE_OF_CONDUCT.md", () => {
+  it("are copied unchanged: the README writer, the release notes, and the family's SECURITY.md, CODE_OF_CONDUCT.md and CONTRIBUTING.md", () => {
     for (const [path, hash] of Object.entries(FILES)) expect(sha(path), path).toBe(hash);
   });
 
   it("SECURITY.md and CODE_OF_CONDUCT.md are the master text of github.com/johnmorrisdotca/.github, which scripts/community keeps a copy of", () => {
     for (const file of ["SECURITY.md", "CODE_OF_CONDUCT.md"]) expect(read(file), file).toBe(read(`scripts/community/${file}`));
+  });
+
+  it("CONTRIBUTING.md is the master text of github.com/johnmorrisdotca/.github, which scripts/community keeps a copy of, and then what is particular to this package", () => {
+    const master = read("scripts/community/CONTRIBUTING.md");
+    const own = read("CONTRIBUTING.md");
+    const name = FAMILY.find((one) => one.id === id).name;
+    expect(own.startsWith(`${master}\n## Particular to ${name}\n`), "CONTRIBUTING.md is the master text, a blank line and '## Particular to <Name>'").toBe(true);
+    expect(own.split("\n## Particular to ").length - 1).toBe(1);
+  });
+});
+
+describe("the workflows", () => {
+  const ci = read(".github/workflows/ci.yml");
+
+  it("ci.yml has the family's three jobs, check, demo and package, and runs `pnpm check` rather than its parts, with jobs of the package's own after them", () => {
+    expect(ci).toMatch(/^name: CI$/m);
+    const jobs = [...ci.slice(ci.indexOf("\njobs:\n")).matchAll(/^ {2}([a-z][a-z-]*):$/gm)].map((match) => match[1]);
+    expect(jobs.slice(0, 3)).toEqual(["check", "demo", "package"]);
+    expect(ci).toContain("      - run: pnpm check\n");
+    expect(ci).not.toMatch(/- run: pnpm (lint|typecheck|test)$/m);
+    expect(ci).toContain("os: [ubuntu-latest, macos-latest, windows-latest]");
+    expect(ci).toContain("run: pnpm test:package");
+  });
+
+  it("pages.yml is the same text in every package, named Pages, apart from one step that builds a documentation site", () => {
+    const pages = read(".github/workflows/pages.yml").replace("\n      - run: pnpm docs:site\n", "\n");
+    expect(pages).toMatch(/^name: Pages$/m);
+    expect(createHash("sha256").update(pages).digest("hex")).toBe(PAGES_SHA256);
   });
 });
 

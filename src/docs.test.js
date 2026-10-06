@@ -48,7 +48,7 @@ describe("how many games", () => {
     expect(RULE_VARIANT_LIST).toHaveLength(48);
     expect(Object.keys(VARIANT_SPECS)).toHaveLength(48);
     expect(readme).toContain("One rules engine for forty-eight abstract board games.");
-    expect(readme).toContain('<img alt="48 games" src="https://img.shields.io/badge/games-48-b3361f">');
+    expect(readme).toContain('<img alt="48 games" src="https://img.shields.io/badge/games-48-2f5d4a">');
     expect(pkg.description).toContain("forty-eight");
     expect(readme).toContain("| Games | 48 | `RULE_VARIANT_LIST` |");
   });
@@ -293,7 +293,7 @@ describe("the family's look", () => {
 
   it("the site script uses the family's header and footer", () => {
     const site = readFileSync("scripts/site.mjs", "utf8");
-    for (const part of ["familyHead(", "familyHeader(", "familyUnreviewed(", "familyFooter(", "FAMILY_SCRIPT", 'href="family.css"', 'href="site.css"']) expect(site).toContain(part);
-    expect(site.indexOf('href="family.css"')).toBeLessThan(site.indexOf('href="site.css"'));
+    for (const part of ["familyHead(", "familyHeader(", "familyUnreviewed(", "familyFooter(", "FAMILY_SCRIPT", 'href="family.css"', 'href="narabe.css"']) expect(site).toContain(part);
+    expect(site.indexOf('href="family.css"')).toBeLessThan(site.indexOf('href="narabe.css"'));
   });
 });

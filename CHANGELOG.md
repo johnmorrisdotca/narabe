@@ -6,6 +6,13 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Repository only: the package and everything it exports are unchanged. `CONTRIBUTING.md` is the family's one text with a section of its own for Narabe, held to the master in johnmorrisdotca/.github by `src/family.test.js`; `ci.yml` and `pages.yml` are the family's one text (`pnpm check`, the demo, and the package on Linux, macOS and Windows), and any jobs of the package's own after them.
+- The demo's page titles read `Narabe · pitch`, like the rest of the family's.
+- The demo's own stylesheet is `demo/narabe.css`, named for the package like the family's.
+- The README's badges use the family's green, and the marks the demo draws on a stone (a king's ring, a stone's edge, a lit cell) are named in `demo/narabe.css` instead of written into the drawing code.
+
 ### Fixed
 
 - The API reference page wraps a long entry path instead of running about 2 px wider than a 360 px screen. Nothing the package exports has changed.

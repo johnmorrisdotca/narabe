@@ -3,6 +3,8 @@
   --intro-room: 9.5rem; --intro-room-wide: 5.5rem;
   --wood: #dcb67a; --wood-deep: #b88a4a; --line: #3b2f22; --cell-dark: #7a5a36; --cell-light: #e9d3a8;
   --black: #1d1b19; --white: #fbfaf6; --hot: #e07b24; --worm: #7a4bb3;
+  /* The marks drawn on a stone or a cell, each named once: the ring of a king, the edge of a stone, and what a touched cell is lit with. */
+  --king: #d4a017; --stone-edge: rgb(0 0 0 / .45); --hit: rgb(255 255 255 / .18);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --wood: #b98d4f; --wood-deep: #8a6330; --line: #2a1f13; }
@@ -32,7 +34,7 @@
 .board { width: 100%; display: grid; place-items: center; user-select: none; -webkit-user-select: none; }
 .board svg { width: 100%; height: auto; max-height: max(320px, calc(100vh - 260px)); display: block; touch-action: manipulation; }
 .hit { fill: transparent; cursor: pointer; }
-.hit:hover { fill: rgb(255 255 255 / .18); }
+.hit:hover { fill: var(--hit); }
 @media (prefers-reduced-motion: no-preference) { .fresh { animation: land 160ms ease-out; } }
 @keyframes land { from { opacity: 0; } }
 

@@ -1,6 +1,5 @@
 # Publishes the demo to GitHub Pages on every push to main. Nothing here costs
-# anything on a public repository. (Inside the Itsutsu repository this file is
-# dormant: GitHub only reads workflows at a repository's root.)
+# anything on a public repository.
 name: Pages
 on:
   push:
