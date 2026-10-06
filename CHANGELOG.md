@@ -6,6 +6,20 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-10-05
+
+Nothing that was exported has changed.
+
+### Added
+
+- A test holds every `@johnmorrisdotca/narabe@N` version pin in the README to this package's major version.
+
+### Changed
+
+- The family's list, in the README and in the demo's footer, names all twenty-four packages, Karakuri and Houseki included.
+- The npm description is one sentence of 250 characters or fewer, so npm and its search show it whole; it is also the repository's About text. `homepage` is the demo site and `author` is `"John Morris"`, the same in every package.
+- The GitHub Actions workflows use the current versions of the actions (checkout 7, setup-node 7, pnpm/action-setup 6; configure-pages 6, upload-pages-artifact 5 and deploy-pages 5 for Pages), which clears GitHub's Node 20 deprecation warning.
+
 ## [1.2.0] - 2026-10-01
 
 ### Changed
@@ -72,7 +86,8 @@ Nothing about play changed: every rule, every legal move and every result is exa
   measures whether a head start settles a game, and the source and its tests
   ship in the package beside the build.
 
-[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/johnmorrisdotca/narabe/releases/tag/v1.0.0

@@ -15,7 +15,9 @@ const id = pkg.name.replace(/^@[^/]+\//, "");
 
 // The recorded hashes. The template's is the one that says every demo's header and footer, and every README's
 // list of the family, are the same text.
-const TEMPLATE = { version: "2026-10-05", sha256: "061b5ed89c345dccb6e029d5091dff0a5bbc4a9b57812fbcd0bd619038bdb7f1" };
+// The template of 2026-10-05 lists twenty-four packages, Karakuri and Houseki included. The family's list is swept again, in every
+// repository at once, when a package is added to it, and this hash is then the new one.
+const TEMPLATE = { version: "2026-10-05", sha256: "a2dc81808be980438bdef8b91f5c0bbff920a739bc50930cd4632cb017c8fa48" };
 const FILES = {
   "scripts/family-readme.mjs": "3c9d5b2cbf17a92d31bced98edac7f544616edb0dff90bf2d141722a9d4516c5",
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
@@ -32,7 +34,7 @@ describe("the family template", () => {
   it("lists every package of the family, in order, each with its Japanese name and a line on it", () => {
     expect(FAMILY.map((one) => one.id)).toEqual([
       "korokoro", "kyuubu", "hitotsu", "toranpu", "tane", "narabe", "tenka", "kumimoji", "tsunagi", "jarajara",
-      "suido", "domino", "kotoba", "sugoroku", "kazu", "meikyuu", "hikidashi", "chizu", "bushu", "tobiishi", "jirai", "gunjin",
+      "suido", "domino", "kotoba", "sugoroku", "kazu", "meikyuu", "hikidashi", "chizu", "bushu", "tobiishi", "jirai", "gunjin", "karakuri", "houseki",
     ]);
     for (const one of FAMILY) {
       expect(one.name, one.id).toBe(one.id[0].toUpperCase() + one.id.slice(1));
@@ -75,13 +77,27 @@ describe("the README's family", () => {
   });
 });
 
+describe("the README's version pins", () => {
+  it("name this package's major version, never an older one: a CDN address says @2 once the package is 2.x", () => {
+    const major = pkg.version.split(".")[0];
+    const pins = read("README.md")
+      .split(`${pkg.name}@`)
+      .slice(1)
+      .map((rest) => /^\d+/.exec(rest)?.[0])
+      .filter((pin) => pin !== undefined);
+    for (const pin of pins) expect(pin, `${pkg.name}@${pin} in README.md`).toBe(major);
+  });
+});
+
 describe("the release notes", () => {
   it("are the changelog's section for the version, which the Release workflow puts on the GitHub release", () => {
     const log = "# Changelog\n\n## [Unreleased]\n\n## [1.2.0] - 2026-01-02\n\n### Added\n\n- A thing.\n\n## [1.1.0] - 2026-01-01\n\n- Older.\n\n[Unreleased]: https://example.test\n";
     expect(releaseNotes(log, "1.2.0")).toBe("### Added\n\n- A thing.");
     expect(releaseNotes(log, "1.1.0")).toBe("- Older.");
     expect(releaseNotes(log, "9.9.9")).toBeNull();
-    expect(releaseNotes(read("CHANGELOG.md"), pkg.version)?.length, `CHANGELOG.md has nothing under ## [${pkg.version}]`).toBeGreaterThan(40);
+    // Until a version is published its notes are under [Unreleased]; the release takes the heading with the version and the date.
+    const notes = releaseNotes(read("CHANGELOG.md"), pkg.version) ?? releaseNotes(read("CHANGELOG.md"), "Unreleased");
+    expect(notes?.length, `CHANGELOG.md has nothing under ## [${pkg.version}] or ## [Unreleased]`).toBeGreaterThan(40);
     const workflow = read(".github/workflows/release.yml");
     expect(workflow).toContain("scripts/release-notes.mjs");
     expect(workflow).not.toContain("See CHANGELOG.md.");
@@ -90,7 +106,8 @@ describe("the release notes", () => {
   it("come from a changelog in Keep a Changelog form: an Unreleased heading, then each version in brackets with its date", () => {
     const log = read("CHANGELOG.md");
     expect(log).toContain("\n## [Unreleased]\n");
-    expect(log).toMatch(/^## \[\d+\.\d+\.\d+\] - \d{4}-\d{2}-\d{2}$/m);
+    // Before the first release there is no versioned heading yet, only Unreleased.
+    if (/^## \[\d/m.test(log)) expect(log).toMatch(/^## \[\d+\.\d+\.\d+\] - \d{4}-\d{2}-\d{2}$/m);
     expect(log).not.toMatch(/^## \d/m);
   });
 });

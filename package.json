@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/narabe",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "One rules engine for forty-eight abstract board games: gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and five draughts rule sets. Pure TypeScript, every move a new state, no dependencies.",
   "keywords": [
     "abstract-board-games",
@@ -79,11 +79,7 @@
     "url": "git+https://github.com/johnmorrisdotca/narabe.git"
   },
   "license": "MIT",
-  "author": {
-    "name": "John Morris",
-    "email": "john@johnmorris.ca",
-    "url": "https://johnmorris.ca"
-  },
+  "author": "John Morris",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
