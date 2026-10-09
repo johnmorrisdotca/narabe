@@ -288,7 +288,7 @@ describe("the family's look", () => {
   });
 
   it("scripts/family-template.mjs is the family's file too", () => {
-    expect(createHash("sha256").update(readFileSync("scripts/family-template.mjs")).digest("hex")).toBe("e6e481a1f2ecb9702bdb87c3c27c172e7090edef0691c5f590a7eb66e4eea470");
+    expect(createHash("sha256").update(readFileSync("scripts/family-template.mjs")).digest("hex")).toBe("384006bedaeed7d61152394f8cd54834117c7b43d6788cb578965a5c79c6311e");
   });
 
   it("the site script uses the family's header and footer", () => {
