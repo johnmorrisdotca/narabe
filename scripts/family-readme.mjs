@@ -13,13 +13,13 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { URL, fileURLToPath } from "node:url";
 import process from "node:process";
-import { FAMILY, FAMILY_PITCH } from "./family-template.mjs";
+import { FAMILY, FAMILY_GROUPS, FAMILY_PITCH, familyRepo, familySite } from "./family-template.mjs";
 
 const OWNER = "johnmorrisdotca";
 export const FAMILY_BLOCK_START = "<!-- family:start (made by scripts/family-readme.mjs from scripts/family-template.mjs; change those, not this) -->";
 export const FAMILY_BLOCK_END = "<!-- family:end -->";
 
-const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twenty-one", "twenty-two", "twenty-three", "twenty-four", "twenty-five"];
+const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twenty-one", "twenty-two", "twenty-three", "twenty-four", "twenty-five", "twenty-six", "twenty-seven", "twenty-eight"];
 const numberWord = (n) => {
   const word = NUMBER_WORDS[n];
   if (word === undefined) throw new Error(`family-readme.mjs has no word for ${n} packages: add it to NUMBER_WORDS`);
@@ -30,16 +30,22 @@ const numberWord = (n) => {
 export function familyReadmeBlock(id) {
   const own = FAMILY.find((one) => one.id === id);
   if (own === undefined) throw new Error(`${id} is not in the family`);
-  const lines = FAMILY.map((one) => {
-    const pitch = FAMILY_PITCH[one.id];
-    if (pitch === undefined) throw new Error(`${one.id} has no line in FAMILY_PITCH`);
-    return `- [${one.name}](https://github.com/${OWNER}/${one.id}) (${one.kana}): ${pitch}. [Demo](https://${OWNER}.github.io/${one.id}/).`;
-  });
+  const lines = FAMILY_GROUPS.flatMap((group) => [
+    `**${group.en}**`,
+    "",
+    ...group.members.map((memberId) => {
+      const one = FAMILY.find((entry) => entry.id === memberId);
+      const pitch = FAMILY_PITCH[one.id];
+      if (pitch === undefined) throw new Error(`${one.id} has no line in FAMILY_PITCH`);
+      return `- [${one.name}](${familyRepo(one.id)}) (${one.kana}): ${pitch}. [Demo](${familySite(one.id)}).`;
+    }),
+    "",
+  ]);
   const count = numberWord(FAMILY.length);
   return [
     FAMILY_BLOCK_START,
     `${own.name} is one of ${count} packages, each made for the same site, each at`,
-    `[github.com/${OWNER}](https://github.com/${OWNER}). The code of every one is MIT.`,
+    `[github.com/${OWNER}](https://github.com/${OWNER}) or [github.com/spxis](https://github.com/spxis). The code of every one is MIT.`,
     "",
     ...lines,
     "",
@@ -65,7 +71,8 @@ export function familyBlockOf(readme) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const readmeUrl = new URL("../README.md", import.meta.url);
-  const id = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).name.replace(/^@[^/]+\//, "");
+  const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  const id = pkg.name === "rest-in-pieces-workspace" ? "rest-in-pieces" : pkg.name.replace(/^@[^/]+\//, "");
   const readme = readFileSync(readmeUrl, "utf8");
   const next = withFamilyBlock(readme, id);
   if (next === null) {

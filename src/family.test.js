@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { familyBlockOf, familyReadmeBlock } from "../scripts/family-readme.mjs";
-import { FAMILY, FAMILY_PITCH, FAMILY_TEMPLATE_VERSION } from "../scripts/family-template.mjs";
+import { FAMILY, FAMILY_GROUPS, FAMILY_PITCH, FAMILY_PITCH_JA, FAMILY_TEMPLATE_VERSION, familyFooter, familyRepo } from "../scripts/family-template.mjs";
 import { releaseNotes } from "../scripts/release-notes.mjs";
 
 const read = (path) => readFileSync(path, "utf8").replace(/\r\n/g, "\n");
@@ -15,11 +15,10 @@ const id = pkg.name.replace(/^@[^/]+\//, "");
 
 // The recorded hashes. The template's is the one that says every demo's header and footer, and every README's
 // list of the family, are the same text.
-// The template of 2026-10-05 lists twenty-four packages, Karakuri and Houseki included. The family's list is swept again, in every
-// repository at once, when a package is added to it, and this hash is then the new one.
-const TEMPLATE = { version: "2026-10-05", sha256: "a2dc81808be980438bdef8b91f5c0bbff920a739bc50930cd4632cb017c8fa48" };
+// The template of 2026-10-09 groups twenty-eight packages by kind.
+const TEMPLATE = { version: "2026-10-09", sha256: "e6e481a1f2ecb9702bdb87c3c27c172e7090edef0691c5f590a7eb66e4eea470" };
 const FILES = {
-  "scripts/family-readme.mjs": "3c9d5b2cbf17a92d31bced98edac7f544616edb0dff90bf2d141722a9d4516c5",
+  "scripts/family-readme.mjs": "f0bb3adff1a917f672c1b6a323e7ee068bd8b43294cdfb55f31c90112971bcf1",
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
   "scripts/community/SECURITY.md": "ff6f650be7789396233671d2558439736efe7f96a1d1d39115dd5cf94d29275c",
   "scripts/community/CODE_OF_CONDUCT.md": "34da1f56f004ce8f7f95d4449b64d2ecb5827dd9f0d4eea1da351a20713ebe70",
@@ -36,17 +35,30 @@ describe("the family template", () => {
   });
 
   it("lists every package of the family, in order, each with its Japanese name and a line on it", () => {
-    expect(FAMILY.map((one) => one.id)).toEqual([
-      "korokoro", "kyuubu", "hitotsu", "toranpu", "tane", "narabe", "tenka", "kumimoji", "tsunagi", "jarajara",
-      "suido", "domino", "kotoba", "sugoroku", "kazu", "meikyuu", "hikidashi", "chizu", "bushu", "tobiishi", "jirai", "gunjin", "karakuri", "houseki",
-    ]);
+    expect(FAMILY.map((one) => one.id)).toEqual(["domino", "gunjin", "narabe", "sugoroku", "tenka", "hitotsu", "jarajara", "kumimoji", "toranpu", "houseki", "jirai", "karakuri", "kazu", "kyuubu", "meikyuu", "suido", "tobiishi", "tsunagi", "korokoro", "tane", "bushu", "hikidashi", "kotoba", "address-plus", "chizu", "hata", "kuni", "rest-in-pieces"]);
     for (const one of FAMILY) {
-      expect(one.name, one.id).toBe(one.id[0].toUpperCase() + one.id.slice(1));
+      expect(one.name, one.id).toBe(({ "address-plus": "address-plus", "rest-in-pieces": "REST in Pieces" })[one.id] ?? one.id[0].toUpperCase() + one.id.slice(1));
       expect(one.kana, one.id).toMatch(/\S/);
       expect(FAMILY_PITCH[one.id], one.id).toMatch(/^[^A-Z.].*[^.]$/);
     }
     expect(Object.keys(FAMILY_PITCH).sort()).toEqual(FAMILY.map((one) => one.id).sort());
     expect(FAMILY.map((one) => one.id)).toContain(id);
+  });
+
+  it("groups every member once and renders the same headings in the footer and README", () => {
+    expect(FAMILY_GROUPS.flatMap((group) => group.members)).toEqual(FAMILY.map((one) => one.id));
+    expect(new Set(FAMILY.map((one) => one.id)).size).toBe(FAMILY.length);
+    const footer = familyFooter({ id });
+    for (const group of FAMILY_GROUPS) {
+      expect(group.members).toEqual([...group.members].sort());
+      expect(footer).toContain(`data-say="family_${group.id}"`);
+      expect(familyReadmeBlock(id)).toContain(`**${group.en}**`);
+      expect(group.ja).toMatch(/\S/);
+    }
+    expect(footer).toContain('href="https://spxis.github.io/rest-in-pieces/"');
+    expect(familyReadmeBlock(id)).toContain('](https://github.com/spxis/rest-in-pieces)');
+    expect(footer.match(/aria-current="page"/g)).toHaveLength(1);
+    for (const memberId of ["address-plus", "rest-in-pieces"]) expect(FAMILY_PITCH_JA[memberId]).toMatch(/\S/);
   });
 
   it("is what this package's footer reads: the demo site names the family through it", () => {
@@ -105,7 +117,7 @@ describe("the README's family", () => {
 
   it("names every package once, as a link", () => {
     const block = familyBlockOf(readme);
-    for (const one of FAMILY) expect(block.split(`](https://github.com/johnmorrisdotca/${one.id})`).length - 1, one.id).toBe(1);
+    for (const one of FAMILY) expect(block.split(`](${familyRepo(one.id)})`).length - 1, one.id).toBe(1);
   });
 });
 
