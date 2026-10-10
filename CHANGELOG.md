@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add a board-position and move-replay element, the shared embed builder and a validated iframe route. The native engine and SVG writer retain all rules and rendering; replay controls, reflected properties, host options and composed events are available.
+
+
 All notable changes to this project are written here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).

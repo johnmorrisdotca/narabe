@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="color-scheme" content="light dark"><title>Narabe · board position</title><style>html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden}body{display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}narabe-board{max-height:100%}</style></head><body><script type="module">
+import "../dist/element-define.js";
+import { RULE_VARIANT_LIST, ALL_BOARD_SIZES } from "../dist/index.js";
+import { parseEmbedMoves } from "../dist/element.js";
+const query=new URLSearchParams(location.search),board=document.createElement("narabe-board");board.setAttribute("size","medium");
+if(RULE_VARIANT_LIST.includes(query.get("game")))board.setAttribute("game",query.get("game"));if(query.has("grid")&&ALL_BOARD_SIZES.includes(Number(query.get("grid"))))board.setAttribute("grid",query.get("grid"));
+for(const[name,choices]of[["size",["small","medium","large"]],["theme",["auto","light","dark"]],["lang",["en","ja"]]])if(choices.includes(query.get(name)))board.setAttribute(name,query.get(name));
+for(const[name,min,max]of[["width",100,2000],["seed",0,2147483647],["step",0,1000]]){const value=query.get(name);if(value!==null&&/^\d+$/.test(value)&&Number(value)>=min&&Number(value)<=max)board.setAttribute(name,value);}
+for(const name of["last-move","winning-line","forbidden","legal","controls"])if(query.has(name)&&["","true","on","1","false","off","no","0"].includes(query.get(name).toLowerCase()))board.setAttribute(name,query.get(name));
+if(query.has("moves")&&parseEmbedMoves(query.get("moves"))!==null)board.setAttribute("moves",query.get("moves"));const label=query.get("label");if(label!==null&&label.length<=200)board.setAttribute("label",label);if(query.get("lang")==="ja")document.documentElement.lang="ja";
+for(const type of["narabe-load","narabe-change","narabe-error"])board.addEventListener(type,event=>{if(parent!==window)parent.postMessage({type:event.type,detail:JSON.parse(JSON.stringify(event.detail))},"*");});document.body.append(board);
+</script></body></html>

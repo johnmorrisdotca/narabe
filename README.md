@@ -784,6 +784,8 @@ hand, so a wrong row cannot agree with itself.
 
 ```text
 src/
+├── element.ts                   # board-position and replay embed
+├── element-define.ts            # default tag registration
 ├── board.constants.ts    the board's geometry: line directions, star points and column letters
 ├── cli.ts                the command line as a pure function, with its words in English and Japanese
 ├── constants.ts          the table of variants, the choices they are made from, and every number the rules use
@@ -927,14 +929,14 @@ Narabe is one of twenty-eight packages, each made for the same site, each at
 
 **Geography & data**
 
-- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada and Japan. [Demo](https://johnmorrisdotca.github.io/address-plus/).
+- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada, Japan, Australia and the United Kingdom. [Demo](https://johnmorrisdotca.github.io/address-plus/).
 - [Chizu](https://github.com/johnmorrisdotca/chizu) (地図): maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts. [Demo](https://johnmorrisdotca.github.io/chizu/).
 - [Hata](https://github.com/johnmorrisdotca/hata) (旗): country and regional flags as SVG, at their true proportions and keyed by ISO code. [Demo](https://johnmorrisdotca.github.io/hata/).
 - [Kuni](https://github.com/johnmorrisdotca/kuni) (国): countries and their regions, with ISO codes and names in English and Japanese. [Demo](https://johnmorrisdotca.github.io/kuni/).
 
 **Developer tools**
 
-- [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
+- [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシーズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
 
 
 **This package is Narabe.** The demos of all twenty-eight share one header and footer, so each links the rest.
@@ -971,3 +973,30 @@ The latest release is 1.2.2: the README takes the family's full layout, with a p
 [MIT](./LICENSE) © John Morris
 
 The code is the only thing that ships: the package carries no data, art or sound of anyone else's, and the demo's pictures are drawn by the package.
+
+
+### Embed builder
+
+[Build a board position](https://johnmorrisdotca.github.io/narabe/builder.html), preview a native game and move record, and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. Choices stay in the URL; embeds read no storage. `<narabe-board game="freestyle" grid="15" size="small">` draws the starting board. Set `moves` to a JSON move array and `step` to inspect a replay position.
+
+For Svelte, register the custom element in the browser.
+
+```svelte
+<script>
+  import { onMount } from "svelte";
+  onMount(() => { void import("@johnmorrisdotca/narabe/element/define"); });
+</script>
+<narabe-board game="freestyle" grid="15" size="small"></narabe-board>
+```
+
+The optional `@johnmorrisdotca/narabe/element` entry exports `NarabeBoard`, `defineBoard`, `parseEmbedMoves`, `NARABE_EMBED_OPTION_KEYS`, `NARABE_DRAW_OPTION_KEYS` and `NarabeElementOptions`. `@johnmorrisdotca/narabe/element/define` registers the tag and reexports that entry. `state` exposes the structured position; `options` accepts advanced native settings and SVG drawing options. See [the embed guide](docs/embeds.md).
+
+For Vue, register the element in the browser and configure `isCustomElement` to accept `narabe-board`.
+
+```vue
+<script setup>
+import { onMounted } from "vue";
+onMounted(() => { void import("@johnmorrisdotca/narabe/element/define"); });
+</script>
+<template><narabe-board game="freestyle" grid="15" size="small"></narabe-board></template>
+```

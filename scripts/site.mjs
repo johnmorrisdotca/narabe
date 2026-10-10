@@ -4,7 +4,7 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 import { apiBody } from "./api.mjs";
-import { FAMILY_SCRIPT, familyFooter, familyHead, familyHeader, familyUnreviewed } from "./family-template.mjs";
+import { FAMILY_SCRIPT, FAMILY_EMBED_BUILDER_WORDS, familyEmbedBuilder, familyFooter, familyHead, familyHeader, familyUnreviewed } from "./family-template.mjs";
 
 const id = "narabe";
 const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23dcb67a'/%3E%3Ccircle cx='11' cy='16' r='7' fill='%231d1b19'/%3E%3Ccircle cx='22' cy='16' r='7' fill='%23fbfaf6' stroke='%231d1b19'/%3E%3C/svg%3E`;
@@ -65,3 +65,9 @@ writeFileSync(
   }),
 );
 console.log(`site/ is ready (${api.total} exports in api.html): serve it, or let the Pages workflow publish it.`);
+
+writeFileSync("site/family-embed-builder.js", `export const FAMILY_EMBED_BUILDER_WORDS = ${JSON.stringify(FAMILY_EMBED_BUILDER_WORDS)};\nexport ${familyEmbedBuilder.toString()};\n`);
+const builderParts = { builderHead: familyHead({ id, title: "Narabe · build a board position embed", description: "Choose a game and moves, preview the board and copy its embed code." }), builderHeader: familyHeader({ id, links: [{ href: "./", say: "toGallery" }] }), unreviewed: familyUnreviewed({ id }), footer: familyFooter({ id }), script: `<script>${FAMILY_SCRIPT}</script>` };
+writeFileSync("site/builder.html", readFileSync("demo/builder.html", "utf8").replace(/<!-- family:([A-Za-z]+) -->/g, (_match, key) => builderParts[key]));
+cpSync("demo/embed", "site/embed", { recursive: true });
+for (const file of ["builder.js", "builder.css", "games.js"]) cpSync(`demo/${file}`, `site/${file}`);
