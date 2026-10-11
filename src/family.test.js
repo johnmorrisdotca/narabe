@@ -16,7 +16,7 @@ const id = pkg.name.replace(/^@[^/]+\//, "");
 // The recorded hashes. The template's is the one that says every demo's header and footer, and every README's
 // list of the family, are the same text.
 // The template of 2026-10-09 groups twenty-eight packages by kind.
-const TEMPLATE = { version: "2026-10-09-embed-builder-words", sha256: "3d90724c7ed364c994d03549b7562dd98b7841d7827b492dc7ddcdc4604192ff" };
+const TEMPLATE = { version: "2026-10-11-seven-country-embeds", sha256: "08e9d500321ad4b7c3b86935362459c847a67fc62a448bef98d2dda4ec6aa495" };
 const FILES = {
   "scripts/family-readme.mjs": "f0bb3adff1a917f672c1b6a323e7ee068bd8b43294cdfb55f31c90112971bcf1",
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
