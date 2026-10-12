@@ -64,6 +64,14 @@ describe("the standard's checks catch what they are for", () => {
     expect(faultsFor(`# T\n\n${"word ".repeat(13_000)}\n`).join("\n")).toMatch(/npm shows only the first 65,536/);
   });
 
+  it("refuses a title or a description without the English job, when docs/site.json names one", () => {
+    const named = { ...pkg, description: "Sample サンプル — tiles for JavaScript: things." };
+    expect(lintReadme({ readme: "# Sample サンプル — tiles for JavaScript\n", pkg: named, pictures: [], minSubjects: 0, job: "tiles for JavaScript" }).join("\n")).not.toMatch(/job/);
+    const faults = lintReadme({ readme: "# Sample サンプル\n", pkg, pictures: [], minSubjects: 0, job: "tiles for JavaScript" }).join("\n");
+    expect(faults).toMatch(/The title is "Sample サンプル"; it carries the job/);
+    expect(faults).toMatch(/description does not carry the job/);
+  });
+
   it("refuses a package whose files ship the pictures", () => {
     expect(lintReadme({ readme: "# T\n", pkg: { ...pkg, files: ["dist", "docs"] }, pictures: [], minSubjects: 0 }).join("\n")).toMatch(/"files" lists docs/);
   });

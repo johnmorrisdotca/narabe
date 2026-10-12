@@ -15,6 +15,7 @@ const WORDS = {
     pitch: "Forty-eight board games, one rules engine. Pick a game and play it here, two to a screen or against a random mover.",
     name: "Narabe is Japanese for “line them up”: the verb in gomoku-narabe, five in a row.",
     nameLink: "About the name",
+    pageDocs: "Docs",
     pageApi: "API reference",
     pageBack: "The games",
     pageApiIntro: "Every export of every entry point, with its signature and its doc comment. Made from the source when the site is built, so it cannot fall behind the code.",
@@ -69,6 +70,7 @@ const WORDS = {
     pitch: "48種類の盤上ゲームを、ひとつのルールエンジンで。ゲームを選んで、ここで遊べます。ひとつの画面で二人で、またはランダムに打つ相手と。",
     name: "「並べ」は、五目並べの「並べ」。石を並べる、という意味です。",
     nameLink: "名前について（英語）",
+    pageDocs: "ドキュメント",
     pageApi: "API リファレンス",
     pageBack: "ゲーム",
     pageApiIntro: "すべてのエントリポイントのすべてのエクスポートを、シグネチャとドキュメントコメントつきで載せています。サイトをビルドするときにソースから作るので、コードとずれません。",
@@ -161,6 +163,7 @@ page = familyLanguage({
   id: "narabe",
   words: WORDS,
   onChange: () => {
+    docsLink();
     fillGames();
     fillSizes();
     render();
@@ -556,3 +559,6 @@ function renderText() {
 fillSizes();
 newGame();
 document.documentElement.dataset.ready = "true";
+
+function docsLink() { document.querySelector('[data-say="pageDocs"]')?.setAttribute("href", page.lang === "ja" ? "docs/ja/index.html" : "docs/index.html"); }
+docsLink();

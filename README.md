@@ -1,4 +1,4 @@
-<h1 align="center">Narabe <sub>並べ</sub></h1>
+<h1 align="center">Narabe <sub>並べ</sub> — Board game rules engine: gomoku, Reversi, Go, checkers</h1>
 
 <p align="center"><strong>One rules engine for forty-eight abstract board games.</strong><br>
 Gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and five draughts rule sets. Every game is a row of data, every move returns a new state, and nothing depends on anything.</p>
@@ -10,9 +10,11 @@ Gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Ch
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="48 games" src="https://img.shields.io/badge/games-48-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
+  <a href="https://johnmorrisdotca.github.io/narabe/docs/api/main/index.html"><img alt="20.8 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-20.8%20kB-2f5d4a"></a>
+  <a href="https://www.npmjs.com/package/@johnmorrisdotca/narabe#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
-<p align="center"><a href="https://johnmorrisdotca.github.io/narabe/"><strong>Play any of them →</strong></a> · <a href="https://johnmorrisdotca.github.io/narabe/api.html">API reference</a> · <a href="#the-games">The 48 games</a></p>
+<p align="center"><a href="https://johnmorrisdotca.github.io/narabe/"><strong>Play any of them →</strong></a> · <a href="https://johnmorrisdotca.github.io/narabe/docs/">Documentation</a> · <a href="https://johnmorrisdotca.github.io/narabe/docs/guides/getting-started.html">Getting started</a> · <a href="https://johnmorrisdotca.github.io/narabe/api.html">API reference</a> · <a href="#the-games">The 48 games</a></p>
 
 <table align="center">
 <tr>
@@ -185,6 +187,17 @@ Each picture is a real board drawn by the package's `boardSvg`, taken from [the 
 </table>
 
 ## Use it in your project
+
+### Install under another name
+
+```sh
+npm install board-games@npm:@johnmorrisdotca/narabe
+```
+
+```ts no-check
+import { createGame } from "board-games";
+console.log(createGame().settings.variant);
+```
 
 ### Install
 
@@ -587,7 +600,7 @@ itself was wrong. The same seed plays the same game on every machine.
 
 ## API
 
-The [API reference](https://johnmorrisdotca.github.io/narabe/api.html) lists every export of every entry point with its signature and its doc comment. It is made from the source by `pnpm site`, so it cannot fall behind the code.
+The [documentation](https://johnmorrisdotca.github.io/narabe/docs/) has bilingual guides, local search, public signatures, parameters, return values and checked examples, built from source by `pnpm docs:site`. The [API index](https://johnmorrisdotca.github.io/narabe/api.html) preserves export anchors.
 
 Everything below is exported from the package root, and every type is
 exported too. Deeper modules are reachable by path, such as

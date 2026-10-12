@@ -156,9 +156,17 @@ test("every game's Japanese rule and group name is there", async ({ page }) => {
 
 test("the API reference is in the family's frame and links back", async ({ page }) => {
   const errors = await open(page, "api.html?lang=en");
-  await expect(page.locator("h1")).toHaveText("Narabe並べ");
-  expect(await page.locator("article[data-kind]").count()).toBeGreaterThan(100);
-  await expect(page.locator("header nav a", { hasText: "The games" })).toHaveAttribute("href", "./");
+  await expect(page.locator("h1")).toHaveText("Narabe API: every export");
+  expect(await page.locator("article[id]").count()).toBeGreaterThan(100);
+  await expect(page.locator("#main-createGame")).toBeVisible();
+  await sound(page, errors);
+  await tap(page, '#main-createGame h3 a');
+  await expect(page.locator("h1")).toContainText("createGame");
+  await expect(page.locator("main")).toContainText("overrides");
+  await tap(page, 'header .lang a[data-lang="ja"]');
+  await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+  await tap(page, page.getByRole("link", {name:"デモ",exact:true}));
+  await expect(page.locator('[data-testid="board"] svg')).toBeVisible();
   await sound(page, errors);
 });
 
@@ -204,3 +212,19 @@ test("Help is off at first, and on it shows a line under each option row, in eit
   await expect(lines.first()).toBeHidden();
   expect(errors).toEqual([]);
 });
+
+for (const path of ["/", "/builder.html"]) {
+  test(`Docs follows the selected language on ${path}`, async ({page}) => {
+    const errors = await open(page, `${path.slice(1)}?lang=ja`);
+    const docs = page.locator('[data-say="pageDocs"]');
+    await expect(docs).toHaveText("ドキュメント");
+    await expect(docs).toHaveAttribute("href", "docs/ja/index.html");
+    await tap(page, '[data-lang="en"]');
+    await expect(docs).toHaveAttribute("href", "docs/index.html");
+    await tap(page, '[data-lang="ja"]');
+    await tap(page, '[data-say="pageDocs"]');
+    await expect(page).toHaveURL("http://narabe.test/docs/ja/index.html");
+    await expect(page.locator("html")).toHaveAttribute("lang","ja");
+    expect(errors).toEqual([]);
+  });
+}

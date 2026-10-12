@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 const browser = Object.fromEntries(["document", "window", "location", "history", "navigator", "console", "URLSearchParams", "familyLanguage", "localStorage", "URL", "Option", "setTimeout", "history"].map((name) => [name, "readonly"]));
 
 export default tseslint.config(
-  { ignores: [".readme-examples/", "dist/", "site/", "node_modules/", "test-results/", "playwright-report/"] },
+  { ignores: [".docs-examples/", ".readme-examples/", "dist/", "site/", "node_modules/", "test-results/", "playwright-report/"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   { files: ["scripts/**/*.mjs"], languageOptions: { globals: { console: "readonly" } } },

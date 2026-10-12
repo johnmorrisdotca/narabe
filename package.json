@@ -1,7 +1,7 @@
 {
   "name": "@johnmorrisdotca/narabe",
   "version": "1.2.2",
-  "description": "One rules engine for forty-eight abstract board games: gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and five draughts rule sets. Pure TypeScript, every move a new state, no dependencies.",
+  "description": "Narabe \u4e26\u3079 \u2014 Board game rules engine: gomoku, Reversi, Go, checkers: forty-eight abstract games, immutable moves, replay, SVG boards and React. Pure TypeScript, zero dependencies.",
   "keywords": [
     "abstract-board-games",
     "abstract-strategy",
@@ -9,6 +9,7 @@
     "board-game",
     "board-game-engine",
     "board-game-rules",
+    "board-games",
     "board-svg",
     "browser",
     "bun",
@@ -114,6 +115,11 @@
       "types": "./dist/element-define.d.ts",
       "import": "./dist/element-define.js",
       "default": "./dist/element-define.js"
+    },
+    "./rules/go": {
+      "types": "./dist/rules/go.d.ts",
+      "import": "./dist/rules/go.js",
+      "default": "./dist/rules/go.js"
     }
   },
   "files": [
@@ -138,13 +144,16 @@
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "site": "pnpm build && node scripts/site.mjs",
     "prepublishOnly": "pnpm check && pnpm build",
-    "test:demo": "pnpm site && playwright test",
+    "test:demo": "pnpm site && node scripts/docs-site.mjs build && playwright test",
     "test:cli": "pnpm build && node scripts/check-cli.mjs",
     "test:package": "pnpm build && node scripts/check-package.mjs",
     "family:readme": "node scripts/family-readme.mjs",
     "docs:make": "node scripts/docs.mjs",
     "screenshots:readme": "pnpm site && node scripts/readme-pictures.mjs",
-    "test:readme": "pnpm build && node scripts/check-readme-examples.mjs"
+    "test:readme": "pnpm build && node scripts/check-readme-examples.mjs",
+    "docs:site": "pnpm build && node scripts/docs-site.mjs build",
+    "docs:check": "pnpm build && node scripts/docs-site.mjs check",
+    "size": "node scripts/docs-site.mjs size"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -162,7 +171,10 @@
     "react": "^19.0.0",
     "typescript": "^5.9.0",
     "typescript-eslint": "^8.0.0",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.0",
+    "pagefind": "^1.5.2",
+    "marked": "^18.0.0",
+    "esbuild": "^0.28.0"
   },
   "publishConfig": {
     "access": "public"

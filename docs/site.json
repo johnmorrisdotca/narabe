@@ -1,0 +1,38 @@
+{
+  "job": "Board game rules engine: gomoku, Reversi, Go, checkers",
+  "pitch": {
+    "en": "Play forty-eight abstract board games through immutable moves, legal choices and replayable records.",
+    "ja": "48種類の盤上ゲームを、新しい局面を返す手の操作、合法手の一覧、再生できる棋譜で扱えます。"
+  },
+  "name": {
+    "en": "Narabe means arranging in Japanese, as in gomoku-narabe: five in a row.",
+    "ja": "「並べ」は五目並べの「並べ」。石を並べることを表す言葉です。"
+  },
+  "icon": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23dcb67a'/%3E%3Ccircle cx='11' cy='16' r='7' fill='%231d1b19'/%3E%3Ccircle cx='22' cy='16' r='7' fill='%23fbfaf6' stroke='%231d1b19'/%3E%3C/svg%3E",
+  "entries": {
+    ".": {
+      "en": "Rules and records",
+      "ja": "ルールと棋譜"
+    },
+    "./react": {
+      "en": "React hook",
+      "ja": "Reactフック"
+    },
+    "./draw": {
+      "en": "SVG boards",
+      "ja": "SVGの盤面"
+    },
+    "./element": {
+      "en": "Board element",
+      "ja": "盤面の要素"
+    },
+    "./element/define": {
+      "en": "Register the board",
+      "ja": "盤面の登録"
+    },
+    "./rules/go": {
+      "en": "Go rules",
+      "ja": "囲碁のルール"
+    }
+  }
+}

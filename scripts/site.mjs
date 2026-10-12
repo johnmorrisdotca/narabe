@@ -11,7 +11,7 @@ const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewB
 const frame = ({ title, description, links, body, scripts }) => `<!doctype html>
 <html lang="en">
   <head>
-    ${familyHead({ id, title, description, ogTitle: "Narabe 並べ: forty-eight board games", ogDescription: "Pick any of forty-eight abstract board games and play it on one screen, on one rules engine." })}
+    ${familyHead({ id, title, description, ogTitle: "Narabe 並べ — Board game rules engine: gomoku, Reversi, Go, checkers", ogDescription: "Pick any of forty-eight abstract board games and play it on one screen, on one rules engine." })}
     <link rel="icon" href="${icon}" />
     <link rel="stylesheet" href="family.css" />
     <link rel="stylesheet" href="narabe.css" />
@@ -36,9 +36,9 @@ cpSync("dist", "site/dist", { recursive: true });
 writeFileSync(
   "site/index.html",
   frame({
-    title: "Narabe · forty-eight board games, one rules engine",
+    title: "Narabe 並べ — Board game rules engine: gomoku, Reversi, Go, checkers",
     description: "Pick any of forty-eight abstract board games and play it on one screen: gomoku, renju, Connect Four, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and draughts. Every rule runs on Narabe, a TypeScript rules engine. In English and Japanese.",
-    links: [{ href: "api.html", say: "pageApi" }],
+    links: [{ href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
     scripts: `<script type="module" src="page.js"></script>`,
   }),
@@ -67,7 +67,7 @@ writeFileSync(
 console.log(`site/ is ready (${api.total} exports in api.html): serve it, or let the Pages workflow publish it.`);
 
 writeFileSync("site/family-embed-builder.js", `export const FAMILY_EMBED_BUILDER_WORDS = ${JSON.stringify(FAMILY_EMBED_BUILDER_WORDS)};\nexport ${familyEmbedBuilder.toString()};\n`);
-const builderParts = { builderHead: familyHead({ id, title: "Narabe · build a board position embed", description: "Choose a game and moves, preview the board and copy its embed code." }), builderHeader: familyHeader({ id, links: [{ href: "./", say: "toGallery" }] }), unreviewed: familyUnreviewed({ id }), footer: familyFooter({ id }), script: `<script>${FAMILY_SCRIPT}</script>` };
+const builderParts = { builderHead: familyHead({ id, title: "Narabe · build a board position embed", description: "Choose a game and moves, preview the board and copy its embed code." }), builderHeader: familyHeader({ id, links: [{ href: "./", say: "toGallery" }, { href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }] }), unreviewed: familyUnreviewed({ id }), footer: familyFooter({ id }), script: `<script>${FAMILY_SCRIPT}</script>` };
 writeFileSync("site/builder.html", readFileSync("demo/builder.html", "utf8").replace(/<!-- family:([A-Za-z]+) -->/g, (_match, key) => builderParts[key]));
 cpSync("demo/embed", "site/embed", { recursive: true });
 for (const file of ["builder.js", "builder.css", "games.js"]) cpSync(`demo/${file}`, `site/${file}`);
