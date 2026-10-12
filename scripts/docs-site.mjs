@@ -65,7 +65,7 @@ import ts from "typescript";
 import { FAMILY, FAMILY_PITCH, FAMILY_SCRIPT, FAMILY_WORDS, familyFooter, familyHead, familyHeader, familyUnreviewed } from "./family-template.mjs";
 
 /** The day this file was last changed, in every repository at once. A test records the file's hash beside it. */
-export const DOCS_SITE_VERSION = "2026-10-09";
+export const DOCS_SITE_VERSION = "2026-10-12";
 
 const OWNER = "johnmorrisdotca";
 /** The kinds of guide, in the order the contents list them (Diátaxis, with troubleshooting and upgrading of their own). */

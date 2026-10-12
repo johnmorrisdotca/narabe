@@ -87,8 +87,8 @@ test.describe("the documentation site", () => {
       await page.goto(`${origin}/${prefix}search.html?q=${encodeURIComponent(name)}`);
       const result = page.locator("#docs-results li a").first();
       await expect(result).toBeVisible({ timeout: 15_000 });
-      await expect(page.locator("#docs-results li a", { hasText: name }).first()).toBeVisible();
-      await page.locator("#docs-results li a", { hasText: name }).first().click();
+      await expect(page.locator(`#docs-results li a[href$="/${name}.html"]`).first()).toBeVisible();
+      await page.locator(`#docs-results li a[href$="/${name}.html"]`).first().click();
       await expect(page).toHaveURL(new RegExp(`/${prefix}api/.+/${name}\\.html`));
     }
     expect(errors).toEqual([]);

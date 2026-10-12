@@ -16,9 +16,9 @@ const pkg = JSON.parse(read("package.json"));
 // The recorded hashes: the generator and its browser test are one text in every package. A change to either is made in
 // every repository at once, with a new DOCS_SITE_VERSION and the new hashes here.
 const RECORDED = {
-  version: "2026-10-09",
-  "scripts/docs-site.mjs": "b660450709c8bb8d42a27915dbfa68286b77f4612cd2e04a4421b1ec5cf8f91f",
-  "e2e/docs-site.demo.mjs": "17f980ddb380a5ae94184be17010eb8287aaa8ba381c0ed9ca4291f98f091bd3",
+  version: "2026-10-12",
+  "scripts/docs-site.mjs": "b77b24e1b3ea74e1ca7d3d86a84ac7100401658b4101ceb5dfb8324d9d94fed8",
+  "e2e/docs-site.demo.mjs": "ac9b9cc9708f720c91a7cf3faa302fede6fbde5468d1cf5255078b46ba665060",
 };
 
 describe("the documentation site's shared files", () => {
