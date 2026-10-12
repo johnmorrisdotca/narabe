@@ -38,7 +38,16 @@ import type { GameSettings } from "./types.ts";
  * returned is what the rules guarantee.
  */
 
-/** Why a game has no bound, or null when the board is its bound. */
+/** Why a game has no bound, or null when the board is its bound.
+ *
+ * @example
+ * ```ts
+ * import type { NoBoundReason } from "@johnmorrisdotca/narabe";
+ *
+ * const value: NoBoundReason = "captures";
+ * console.log(value);
+ * ```
+ */
 export type NoBoundReason = "pieces-move" | "captures" | "line-clear";
 
 /**
@@ -47,6 +56,16 @@ export type NoBoundReason = "pieces-move" | "captures" | "line-clear";
  *
  * Read from the spec rather than from a list of variant names, so a game added
  * tomorrow is classified the day it lands.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns The board-based maximum move count, or null when captures, clearing or moving pieces remove that bound.
+ * @example
+ * ```ts
+ * import { createGame, longestPossibleGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(longestPossibleGame(state.settings));
+ * ```
  */
 export function longestPossibleGame(settings: GameSettings): number | null {
   if (noBoundReason(settings) !== null) return null;
@@ -60,6 +79,16 @@ export function longestPossibleGame(settings: GameSettings): number | null {
  * Order matters only for the answer given to a reader: a game that both moves
  * pieces and captures is unbounded for the first reason, which is the stronger
  * one — captures at least run material down, and sliding does not.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns The mechanism that removes the board bound, or null when placements alone bound the game.
+ * @example
+ * ```ts
+ * import { createGame, noBoundReason } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(noBoundReason(state.settings));
+ * ```
  */
 export function noBoundReason(settings: GameSettings): NoBoundReason | null {
   const spec = VARIANT_SPECS[settings.variant];
@@ -69,7 +98,18 @@ export function noBoundReason(settings: GameSettings): NoBoundReason | null {
   return null;
 }
 
-/** Whether the rules alone guarantee this game ends. */
+/** Whether the rules alone guarantee this game ends.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns Whether the rules alone guarantee this game ends.
+ * @example
+ * ```ts
+ * import { createGame, endsOnItsOwn } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(endsOnItsOwn(state.settings));
+ * ```
+ */
 export function endsOnItsOwn(settings: GameSettings): boolean {
   return longestPossibleGame(settings) !== null;
 }

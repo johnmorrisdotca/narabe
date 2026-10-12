@@ -30,7 +30,17 @@ export type { CheckersMoveResult } from "./checkers.types.ts";
  * family had more than one game in it.
  */
 
-/** Checkers is played on one colour of square only: the board's own dark squares. */
+/** Checkers is played on one colour of square only: the board's own dark squares.
+ *
+ * @param point - A zero-based row and column on the board.
+ * @returns Checkers is played on one colour of square only: the board's own dark squares.
+ * @example
+ * ```ts
+ * import { isDarkSquare } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(isDarkSquare({row:0,col:1}));
+ * ```
+ */
 export function isDarkSquare(point: Point): boolean {
   return (point.row + point.col) % 2 === 1;
 }
@@ -65,7 +75,19 @@ export function checkersStartingPieces(
   return pieces;
 }
 
-/** Whether the piece at `at`, if any, is a king. */
+/** Whether the piece at `at`, if any, is a king.
+ *
+ * @param kings - The points occupied by crowned pieces.
+ * @param at - The point to examine.
+ * @returns Whether the piece at `at`, if any, is a king.
+ * @example
+ * ```ts
+ * import { createGame, isKingAt } from "@johnmorrisdotca/narabe";
+ *
+ * const checkers = createGame({variant:"checkers"});
+ * console.log(isKingAt(checkers.kings,{row:5,col:0}));
+ * ```
+ */
 export function isKingAt(kings: readonly Point[], at: Point): boolean {
   return kings.some((point) => samePoint(point, at));
 }
@@ -122,7 +144,22 @@ function piecesOf(board: readonly Cell[], size: number, stone: Stone): Point[] {
   return points;
 }
 
-/** Whether any of `stone`'s pieces on the board has a capture available right now. */
+/** Whether any of `stone`'s pieces on the board has a capture available right now.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param kings - The points occupied by crowned pieces.
+ * @param size - The number of cells on each side of the board.
+ * @param stone - The black or white colour being examined.
+ * @param rules - The draughts rule set governing capture.
+ * @returns Whether any of `stone`'s pieces on the board has a capture available right now.
+ * @example
+ * ```ts
+ * import { ENGLISH_CHECKERS_RULES, checkersHasCapture, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const checkers = createGame({variant:"checkers"});
+ * console.log(checkersHasCapture(checkers.board,checkers.kings,8,"black",ENGLISH_CHECKERS_RULES));
+ * ```
+ */
 export function checkersHasCapture(
   board: Cell[],
   kings: readonly Point[],

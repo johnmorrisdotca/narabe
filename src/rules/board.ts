@@ -7,23 +7,82 @@ import type { Cell, Point, Stone } from "../types.ts";
  * calls the rule.
  */
 
-/** Narrows a cell to a played stone, excluding empties and obstacles. */
+/** Narrows a cell to a played stone, excluding empties and obstacles.
+ *
+ * @param cell - The board cell to check.
+ * @returns Narrows a cell to a played stone, excluding empties and obstacles.
+ * @example
+ * ```ts
+ * import { isStone } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(isStone("black"));
+ * ```
+ */
 export function isStone(cell: Cell): cell is Stone {
   return cell === STONES.black || cell === STONES.white;
 }
 
+/** The other stone colour.
+ *
+ * @param stone - The black or white colour being examined.
+ * @returns The other stone colour.
+ * @example
+ * ```ts
+ * import { otherStone } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(otherStone("black"));
+ * ```
+ */
 export function otherStone(stone: Stone): Stone {
   return stone === STONES.black ? STONES.white : STONES.black;
 }
 
+/** Convert a board point into its row-major array index.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param point - A zero-based row and column on the board.
+ * @returns Convert a board point into its row-major array index.
+ * @example
+ * ```ts
+ * import { indexOf } from "@johnmorrisdotca/narabe";
+ *
+ * const point = {row:7,col:7};
+ * console.log(indexOf(15, point));
+ * ```
+ */
 export function indexOf(size: number, point: Point): number {
   return point.row * size + point.col;
 }
 
+/** Convert a row-major array index into board coordinates.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param index - The row-major board array index.
+ * @returns Convert a row-major array index into board coordinates.
+ * @example
+ * ```ts
+ * import { pointOf } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(pointOf(15, 112));
+ * ```
+ */
 export function pointOf(size: number, index: number): Point {
   return { row: Math.floor(index / size), col: index % size };
 }
 
+/** Whether both coordinates are within the square board.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param point - A zero-based row and column on the board.
+ * @returns Whether both coordinates are within the square board.
+ * @example
+ * ```ts
+ * import { isOnBoard } from "@johnmorrisdotca/narabe";
+ *
+ * const point = {row:7,col:7};
+ * console.log(isOnBoard(15, point));
+ * ```
+ */
 export function isOnBoard(size: number, point: Point): boolean {
   return (
     point.row >= 0 && point.row < size && point.col >= 0 && point.col < size

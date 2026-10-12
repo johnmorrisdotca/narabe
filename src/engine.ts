@@ -111,6 +111,20 @@ export {
   extendOpening,
 } from "./rules/opening.ts";
 
+/** Read a cell from a valid zero-based board point; null means empty.
+ *
+ * @param state - The current immutable game position.
+ * @param point - A zero-based row and column on the board.
+ * @returns The cell at the point; null means the cell is empty.
+ * @example
+ * ```ts
+ * import { cellAt, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * console.log(cellAt(state, point));
+ * ```
+ */
 export function cellAt(state: GameState, point: Point): Cell {
   return state.board[indexOf(state.settings.size, point)];
 }
@@ -119,6 +133,18 @@ export function cellAt(state: GameState, point: Point): Cell {
  * Whether the colour to move may play `point`: on the board, empty, allowed by
  * the opening, not a shape the variant forbids that colour, the landing cell
  * of its column in a drop game, and not while a twist or a slide is owed.
+ *
+ * @param state - The current immutable game position.
+ * @param point - A zero-based row and column on the board.
+ * @returns Whether a stone placement is legal at this point in the current phase.
+ * @example
+ * ```ts
+ * import { createGame, isLegalMove } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * console.log(isLegalMove(state, point));
+ * ```
  */
 export function isLegalMove(state: GameState, point: Point): boolean {
   if (state.status !== GAME_STATUS.playing || state.pendingTwist) return false;
@@ -143,17 +169,52 @@ export function isLegalMove(state: GameState, point: Point): boolean {
   );
 }
 
-/** Why the colour to move may not play `point`, when a forbidden shape is why. */
+/** Why the colour to move may not play `point`, when a forbidden shape is why.
+ *
+ * @param state - The current immutable game position.
+ * @param point - A zero-based row and column on the board.
+ * @returns The forbidden pattern, or null when this point has no forbidden shape.
+ * @example
+ * ```ts
+ * import { createGame, forbiddenReason } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * console.log(forbiddenReason(state, point));
+ * ```
+ */
 export function forbiddenReason(state: GameState, point: Point): ForbiddenPattern | null {
   return forbiddenAt(state.board, state.settings, state.toPlay, point);
 }
 
-/** Every intersection the colour to move may play right now. */
+/** Every intersection the colour to move may play right now.
+ *
+ * @param state - The current immutable game position.
+ * @returns All points where the colour to play can legally place a stone.
+ * @example
+ * ```ts
+ * import { createGame, legalPoints } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(legalPoints(state));
+ * ```
+ */
 export function legalPoints(state: GameState): Point[] {
   return emptyPoints(state).filter((point) => isLegalMove(state, point));
 }
 
-/** Every intersection still open: no stone, no obstacle. */
+/** Every intersection still open: no stone, no obstacle.
+ *
+ * @param state - The current immutable game position.
+ * @returns All empty intersections, excluding stones and special occupied cells.
+ * @example
+ * ```ts
+ * import { createGame, emptyPoints } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(emptyPoints(state));
+ * ```
+ */
 export function emptyPoints(state: GameState): Point[] {
   const points: Point[] = [];
   state.board.forEach((cell, index) => {
@@ -162,12 +223,34 @@ export function emptyPoints(state: GameState): Point[] {
   return points;
 }
 
-/** Stones the colour to move still has to place before the turn passes. */
+/** Stones the colour to move still has to place before the turn passes.
+ *
+ * @param state - The current immutable game position.
+ * @returns Stones the colour to move still has to place before the turn passes.
+ * @example
+ * ```ts
+ * import { createGame, stonesLeft } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(stonesLeft(state));
+ * ```
+ */
 export function stonesLeft(state: GameState): number {
   return stonesLeftInTurn(state.settings, state.moves, state.toPlay);
 }
 
-/** Single stones the colour to move may still lay instead of a piece. */
+/** Single stones the colour to move may still lay instead of a piece.
+ *
+ * @param state - The current immutable game position.
+ * @returns Single stones the colour to move may still lay instead of a piece.
+ * @example
+ * ```ts
+ * import { createGame, singlesLeft } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(singlesLeft(state));
+ * ```
+ */
 export function singlesLeft(state: GameState): number {
   const { singles } = VARIANT_SPECS[state.settings.variant];
   return Math.max(0, singles - singlesUsedBy(state.moves, state.toPlay));
@@ -178,6 +261,17 @@ export function singlesLeft(state: GameState): number {
  * orientation, on empty points. A piece carries both colours, so it can
  * finish a line for either side: one line wins for its owner, whoever laid
  * it; a line for each is a draw.
+ *
+ * @param state - The current immutable game position.
+ * @param cells - The absolute coloured cells of the piece placement.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, piecePlacements, placePiece } from "@johnmorrisdotca/narabe";
+ *
+ * const queued = createGame({variant:"dominoFive",seed:42});
+ * console.log(placePiece(queued, piecePlacements(queued)[0]).moves.length);
+ * ```
  */
 export function placePiece(state: GameState, cells: readonly PieceCell[]): GameState {
   if (state.status !== GAME_STATUS.playing || state.pendingTwist || owesHeadStart(state)) return state;
@@ -219,6 +313,16 @@ export function placePiece(state: GameState, cells: readonly PieceCell[]): GameS
  * through it: a handicap forbids shapes to one colour, and the last point on a
  * board can be a shape that colour may not make. The board then never fills,
  * the draw never comes, and neither can move. Passing decides nothing.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether the colour to move has nothing it may play. Then the turn passes, on the record, rather than the game stopping where it stands. Gated to piece games once, so a stone game reaching the same condition fell through it: a handicap forbids shapes to one colour, and the last point on a board can be a shape that colour may not make. The board then never fills, the draw never comes, and neither can move. Passing decides nothing.
+ * @example
+ * ```ts
+ * import { createGame, mustPass } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(mustPass(state));
+ * ```
  */
 export function mustPass(state: GameState): boolean {
   if (state.status !== GAME_STATUS.playing || state.pendingTwist) return false;
@@ -257,6 +361,16 @@ export function mustPass(state: GameState): boolean {
  * chosen pass in Go — a person's click and a computer's choice alike — so a Go
  * game on the server could never end by two passes, and a programs' game sat
  * stuck with the engine offering a pass the server would not take.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether passing is on offer: forced in a piece game with nothing to lay, free at any point in Go. This, and not `mustPass`, is the question anything accepting a pass asks. A live game once asked only whether the pass was forced, which refused every chosen pass in Go — a person's click and a computer's choice alike — so a Go game on the server could never end by two passes, and a programs' game sat stuck with the engine offering a pass the server would not take.
+ * @example
+ * ```ts
+ * import { canPass, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canPass(state));
+ * ```
  */
 export function canPass(state: GameState): boolean {
   if (mustPass(state)) return true;
@@ -268,6 +382,16 @@ export function canPass(state: GameState): boolean {
  * Takes a turn without a stone. Two passes end a piece game as a draw; in Go
  * they end it by area count instead, since passing there is a real choice,
  * not a sign nobody can move. A replay passes at the same point either way.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, passTurn, playMove } from "@johnmorrisdotca/narabe";
+ *
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(passTurn(go).moves.length);
+ * ```
  */
 export function passTurn(state: GameState): GameState {
   if (!canPass(state)) return state;
@@ -301,6 +425,16 @@ export function passTurn(state: GameState): GameState {
  * kind, because a pass there is one the rules refuse and a replay stops at.
  * The claim writes whichever kind this settled, so the row and the replay
  * cannot disagree.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, forfeitOnRecord } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(forfeitOnRecord(state));
+ * ```
  */
 export function forfeitOnRecord(state: GameState): GameState {
   /*
@@ -321,6 +455,16 @@ export function forfeitOnRecord(state: GameState): GameState {
  * clock had no pass to write instead. The replay's half of `forfeitOnRecord`,
  * and the reason a forfeit where a pass was on offer is refused rather than
  * read — it is a record the claim could not have made.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether a recorded forfeit could have been written here: only where the clock had no pass to write instead. The replay's half of `forfeitOnRecord`, and the reason a forfeit where a pass was on offer is refused rather than read — it is a record the claim could not have made.
+ * @example
+ * ```ts
+ * import { canForfeit, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canForfeit(state));
+ * ```
  */
 export function canForfeit(state: GameState): boolean {
   return !canPass(state) && forfeitTurn(state) !== state;
@@ -330,6 +474,20 @@ export function canForfeit(state: GameState): boolean {
  * Plays the stone to move at `point`. Illegal moves (occupied intersection,
  * obstacle, off the board, forbidden shape, outside the opening, or game
  * already over) return the state unchanged.
+ *
+ * @param state - The current immutable game position.
+ * @param where - The requested point, resolved by the placement rule.
+ * @param kind - The recorded move kind.
+ * @param chosen - The chosen colour where the variant allows one; null uses the mover.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * console.log(playMove(state, point).moves.length);
+ * ```
  */
 export function playMove(
   state: GameState,

@@ -64,6 +64,17 @@ export function noPlayLeft(state: GameState, why: GameState["winBy"]): GameState
  * Where a stone played at `point` actually goes: the same point, or in a
  * drop game the bottom of its column. A click anywhere in a column is a play
  * in that column.
+ *
+ * @param state - The current immutable game position.
+ * @param point - A zero-based row and column on the board.
+ * @returns Where a stone played at `point` actually goes: the same point, or in a drop game the bottom of its column. A click anywhere in a column is a play in that column.
+ * @example
+ * ```ts
+ * import { createGame, resolvePlacement } from "@johnmorrisdotca/narabe";
+ *
+ * const drop = createGame({variant:"dropFour"});
+ * console.log(resolvePlacement(drop,{row:0,col:0}));
+ * ```
  */
 export function resolvePlacement(state: GameState, point: Point): Point {
   if (VARIANT_SPECS[state.settings.variant].placement !== PLACEMENTS.drop) return point;
@@ -103,7 +114,18 @@ export function blockedByGiveaway(state: GameState, point: Point): boolean {
   return false;
 }
 
-/** Whether the colour to move has all its pieces down and must now slide one. */
+/** Whether the colour to move has all its pieces down and must now slide one.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether the colour to move has all its pieces down and must now slide one.
+ * @example
+ * ```ts
+ * import { createGame, inMovePhase } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(inMovePhase(state));
+ * ```
+ */
 export function inMovePhase(state: GameState): boolean {
   const { pieces, camps, checkers, chineseCheckers } = VARIANT_SPECS[state.settings.variant];
   // In a race game, and in checkers, every piece is down from the start.
@@ -169,7 +191,18 @@ export function settleStone(state: GameState, point: Point, mover?: Stone): Game
   return null;
 }
 
-/** Whether the colour to move owes a quarter turn before the move is complete. */
+/** Whether the colour to move owes a quarter turn before the move is complete.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether the colour to move owes a quarter turn before the move is complete.
+ * @example
+ * ```ts
+ * import { canTwist, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canTwist(state));
+ * ```
+ */
 export function canTwist(state: GameState): boolean {
   return state.status === GAME_STATUS.playing && state.pendingTwist;
 }
@@ -179,6 +212,17 @@ export function canTwist(state: GameState): boolean {
  * because a turn can complete a line for either colour anywhere: one line
  * wins for its owner, a line for each is a draw, and a full board with no line
  * is a draw too.
+ *
+ * @param state - The current immutable game position.
+ * @param quadrant - The zero-based quadrant index.
+ * @param clockwise - Whether to turn clockwise rather than anticlockwise.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, playMove, twistBoard } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(twistBoard(playMove(createGame({variant:"twistFive"}),{row:0,col:0}),0,true).pendingTwist);
+ * ```
  */
 export function twistBoard(state: GameState, quadrant: number, clockwise: boolean): GameState {
   if (!canTwist(state)) return state;
@@ -206,7 +250,19 @@ export function twistBoard(state: GameState, quadrant: number, clockwise: boolea
   return settleDraw({ ...turned, toPlay: otherStone(toPlay) });
 }
 
-/** Where a piece of the colour to move may step from `from`; empty if it may not move. */
+/** Where a piece of the colour to move may step from `from`; empty if it may not move.
+ *
+ * @param state - The current immutable game position.
+ * @param from - The source point of the group or moving piece.
+ * @returns Where a piece of the colour to move may step from `from`; empty if it may not move.
+ * @example
+ * ```ts
+ * import { createGame, pieceMoves } from "@johnmorrisdotca/narabe";
+ *
+ * const checkers = createGame({variant:"checkers"});
+ * console.log(pieceMoves(checkers,{row:5,col:0}));
+ * ```
+ */
 export function pieceMoves(state: GameState, from: Point): Point[] {
   if (state.status !== GAME_STATUS.playing || state.pendingTwist) return [];
   // A turn the other colour's head start takes moves nothing: it is passed.
@@ -220,7 +276,20 @@ export function pieceMoves(state: GameState, from: Point): Point[] {
   return pieceDestinations(state.board, state.settings.size, from);
 }
 
-/** Slides a piece one step, or in checkers a step or a capture. Illegal moves return the state unchanged. */
+/** Slides a piece one step, or in checkers a step or a capture. Illegal moves return the state unchanged.
+ *
+ * @param state - The current immutable game position.
+ * @param from - The source point of the group or moving piece.
+ * @param to - The destination point of the moving piece.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, movePiece } from "@johnmorrisdotca/narabe";
+ *
+ * const checkers = createGame({variant:"checkers"});
+ * console.log(movePiece(checkers,{row:5,col:0},{row:4,col:1}).moves.length);
+ * ```
+ */
 export function movePiece(state: GameState, from: Point, to: Point): GameState {
   const allowed = pieceMoves(state, from).some(
     (point) => point.row === to.row && point.col === to.col,

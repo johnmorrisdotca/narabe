@@ -5,6 +5,15 @@
  *
  * Mulberry32: fast, tiny, and good enough for a board game. The seed is a
  * 31-bit integer.
+ *
+ * @param seed - The numeric seed for a reproducible random stream.
+ * @returns A small seeded random number generator, so anything a game decides by chance — where the dead squares fall, which pieces come next — is fixed by the seed stored with the game and comes out the same on every replay. Mulberry32: fast, tiny, and good enough for a board game. The seed is a 31-bit integer.
+ * @example
+ * ```ts
+ * import { seededRandom } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(seededRandom(42)());
+ * ```
  */
 export function seededRandom(seed: number): () => number {
   let state = seed >>> 0;

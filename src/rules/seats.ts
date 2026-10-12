@@ -16,7 +16,19 @@ import { won } from "./mechanics.ts";
  * an informal swap can move a colour between the two people at the board.
  */
 
-/** The seat holding `stone` right now. Swaps move seats between colours. */
+/** The seat holding `stone` right now. Swaps move seats between colours.
+ *
+ * @param state - The current immutable game position.
+ * @param stone - The black or white colour being examined.
+ * @returns The seat holding `stone` right now. Swaps move seats between colours.
+ * @example
+ * ```ts
+ * import { createGame, seatOf } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(seatOf(state,"black"));
+ * ```
+ */
 export function seatOf(state: GameState, stone: Stone): Seat {
   return state.seats[stone];
 }
@@ -24,6 +36,16 @@ export function seatOf(state: GameState, stone: Stone): Seat {
 /**
  * The seat whose turn it is. During a swap opening one seat lays every stone
  * and then the other decides, whatever colour those stones are.
+ *
+ * @param state - The current immutable game position.
+ * @returns The seat whose turn it is. During a swap opening one seat lays every stone and then the other decides, whatever colour those stones are.
+ * @example
+ * ```ts
+ * import { createGame, seatToPlay } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(seatToPlay(state));
+ * ```
  */
 export function seatToPlay(state: GameState): Seat {
   return state.opening.actor ?? seatOf(state, state.toPlay);
@@ -35,6 +57,16 @@ export function seatToPlay(state: GameState): Seat {
  * into a position the opponent has already won. Not while an opening protocol
  * is still settling who holds which colour, and never under a handicap, which
  * belongs to a colour and would otherwise change hands with it.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether the seat to play may trade seats right now. This covers the mechanical limits only; `analysis.ts` adds the rule that you cannot swap into a position the opponent has already won. Not while an opening protocol is still settling who holds which colour, and never under a handicap, which belongs to a colour and would otherwise change hands with it.
+ * @example
+ * ```ts
+ * import { canSwapSeats, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canSwapSeats(state));
+ * ```
  */
 export function canSwapSeats(state: GameState): boolean {
   return (
@@ -51,6 +83,16 @@ export function canSwapSeats(state: GameState): boolean {
  * Trades seats: the player to move hands over their colour and takes the
  * opponent's stones instead. The board is untouched and the turn passes, so a
  * swap costs you the move you were about to make.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, swapSeats } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(swapSeats(state));
+ * ```
  */
 export function swapSeats(state: GameState): GameState {
   if (!canSwapSeats(state)) return state;
@@ -72,6 +114,17 @@ export function swapSeats(state: GameState): GameState {
  * A clock is not a rule of gomoku, so the engine does not run one — but the
  * result still has to be a proper game state rather than something the UI
  * paints over the top, or the record and the board would disagree.
+ *
+ * @param state - The current immutable game position.
+ * @param loser - The colour that resigned or ran out of time.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, winOnTime } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(winOnTime(state,"black").winner);
+ * ```
  */
 export function winOnTime(state: GameState, loser: Stone): GameState {
   if (state.status !== GAME_STATUS.playing) return state;
@@ -82,6 +135,17 @@ export function winOnTime(state: GameState, loser: Stone): GameState {
  * Gives the game up. The other colour wins at once, with no line to show;
  * the record keeps the moves as they were and says why it ended. A finished
  * game cannot be resigned — there is nothing left to give.
+ *
+ * @param state - The current immutable game position.
+ * @param loser - The colour that resigned or ran out of time.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, resign } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(resign(state,"black").winner);
+ * ```
  */
 export function resign(state: GameState, loser: Stone): GameState {
   if (state.status !== GAME_STATUS.playing) return state;
@@ -98,6 +162,16 @@ export function resign(state: GameState, loser: Stone): GameState {
  *
  * Where the rules DO offer a pass, a missed turn is that pass and not this:
  * `forfeitOnRecord` in engine.ts decides, since only the engine knows.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, forfeitTurn } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(forfeitTurn(state));
+ * ```
  */
 export function forfeitTurn(state: GameState): GameState {
   if (state.status !== GAME_STATUS.playing) return state;

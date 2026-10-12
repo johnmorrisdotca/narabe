@@ -26,6 +26,16 @@ import type {
 /**
  * One rule set, as data. The engine consults this and never the variant's
  * name, so adding a variant is a matter of adding a row.
+ *
+ * @example
+ * ```ts
+ * import { VARIANT_SPECS, createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import type { VariantSpec } from "@johnmorrisdotca/narabe";
+ *
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * const value: VariantSpec = VARIANT_SPECS.go;
+ * console.log(value);
+ * ```
  */
 export type VariantSpec = {
   /** Per colour, because renju lets white win with an overline and not black. */

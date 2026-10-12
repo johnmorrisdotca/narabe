@@ -14,6 +14,19 @@ import { canUndo, undoMove } from "./rules/record.ts";
 import { turnChoices } from "./rules/choices.ts";
 import type { GameSettings, GameState, MoveKind, PieceCell, Point, Stone, TurnChoices } from "./types.ts";
 
+/** A React game state and its native move, replay and reset actions.
+ *
+ * @example
+ * ```ts no-run
+ * import { createElement } from "react";
+ * import { useNarabe, type NarabeGame } from "@johnmorrisdotca/narabe/react";
+ * function Board() {
+ *   const game: NarabeGame = useNarabe({variant:"reversi"});
+ *   return createElement("p",null,game.state.toPlay);
+ * }
+ * console.log(createElement(Board));
+ * ```
+ */
 export type NarabeGame = {
   /** The game as it stands. A new object after every move that changed it. */
   state: GameState;
@@ -41,6 +54,19 @@ export type NarabeGame = {
  *
  * `settings` is read when the hook first runs and again on `reset`; give it a
  * `seed` for a game that starts the same way every time.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns The current position, available choices and native action callbacks.
+ * @example
+ * ```ts no-run
+ * import { createElement } from "react";
+ * import { useNarabe } from "@johnmorrisdotca/narabe/react";
+ * function Board() {
+ *   const game = useNarabe({variant:"reversi"});
+ *   return createElement("p",null,game.state.toPlay);
+ * }
+ * console.log(createElement(Board));
+ * ```
  */
 export function useNarabe(settings: Partial<GameSettings> = {}): NarabeGame {
   const [start] = useState(() => settings);

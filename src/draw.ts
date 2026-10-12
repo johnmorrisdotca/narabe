@@ -18,7 +18,16 @@ import type { GameState, Point } from "./types.ts";
  * else, so it can be a file, an `innerHTML` or a server-rendered component.
  */
 
-/** What to draw besides the board and the stones. Every field is optional. */
+/** What to draw besides the board and the stones. Every field is optional.
+ *
+ * @example
+ * ```ts
+ * import type { DrawBoardOptions } from "@johnmorrisdotca/narabe/draw";
+ *
+ * const value: DrawBoardOptions = {width:480,title:"Opening position",legal:true};
+ * console.log(value);
+ * ```
+ */
 export type DrawBoardOptions = {
   /** The width in pixels. Unless said, the SVG has a `viewBox` and no size, and fills what holds it. */
   width?: number;
@@ -75,7 +84,20 @@ function hexagon(cx: number, cy: number, r: number): string {
   }).join(" ");
 }
 
-/** The position as one `<svg>` element, drawn the way its game is traditionally drawn. */
+/** The position as one `<svg>` element, drawn the way its game is traditionally drawn.
+ *
+ * @param state - The current immutable game position.
+ * @param options - SVG size, label and highlighting options.
+ * @returns One standalone SVG string representing the position.
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/narabe";
+ * import { boardSvg } from "@johnmorrisdotca/narabe/draw";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(boardSvg(state, { legal: true }).startsWith("<svg"));
+ * ```
+ */
 export function boardSvg(state: GameState, options: DrawBoardOptions = {}): string {
   const { size, variant } = state.settings;
   const spec = VARIANT_SPECS[variant];

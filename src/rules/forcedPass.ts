@@ -35,6 +35,16 @@ const MOST_PASSES_OWED = 2;
  * has something to play, one when only it is stuck, and two — ending the game
  * — when neither side can move. Never a pass for a colour with a move, and
  * never Go's, which is a choice.
+ *
+ * @param state - The current immutable game position.
+ * @returns The position after recording any required automatic passes.
+ * @example
+ * ```ts
+ * import { createGame, passesOwed } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(passesOwed(state));
+ * ```
  */
 export function passesOwed(state: GameState): GameState {
   let settled = state;
@@ -53,6 +63,16 @@ export function passesOwed(state: GameState): GameState {
  * Two ways a turn passes, and the record says both: a forced pass on the record,
  * and the flipping games' pass with no row at all, where the colour that just
  * moved is to move again. A pass somebody chose — Go's — is not one.
+ *
+ * @param state - The current immutable game position.
+ * @returns The colour whose forced pass was recorded, or null when the latest move was not such a pass.
+ * @example
+ * ```ts
+ * import { createGame, turnPassedBy } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(turnPassedBy(state));
+ * ```
  */
 export function turnPassedBy(state: GameState): Stone | null {
   const last = state.moves[state.moves.length - 1];
@@ -68,7 +88,18 @@ export function turnPassedBy(state: GameState): Stone | null {
   return skipped ? otherStone(last.stone) : null;
 }
 
-/** Whether the game ended because neither side had a move: two forced passes, the last two moves on the record. */
+/** Whether the game ended because neither side had a move: two forced passes, the last two moves on the record.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether the game ended because neither side had a move: two forced passes, the last two moves on the record.
+ * @example
+ * ```ts
+ * import { createGame, endedWithNoMoves } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(endedWithNoMoves(state));
+ * ```
+ */
 export function endedWithNoMoves(state: GameState): boolean {
   if (state.status === GAME_STATUS.playing) return false;
   const [before, last] = state.moves.slice(-2);

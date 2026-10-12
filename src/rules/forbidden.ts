@@ -41,6 +41,21 @@ const MAX_DEPTH = 6;
  * Why `stone` may not play `point`, or null when it may. Only the patterns the
  * variant forbids that colour are looked for, so this is cheap outside renju
  * and omok.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param settings - The native game settings to interpret.
+ * @param stone - The black or white colour being examined.
+ * @param point - A zero-based row and column on the board.
+ * @param depth - The current recursion depth of the forbidden-shape analysis.
+ * @returns The forbidden pattern, or null when the rules permit the shape.
+ * @example
+ * ```ts
+ * import { createGame, forbiddenAt } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * console.log(forbiddenAt(state.board,state.settings,"black",point));
+ * ```
  */
 export function forbiddenAt(
   board: Cell[],
@@ -201,7 +216,18 @@ function threeAlong(
   return false;
 }
 
-/** Every empty point the colour to move is forbidden from playing right now. */
+/** Every empty point the colour to move is forbidden from playing right now.
+ *
+ * @param state - The current immutable game position.
+ * @returns All currently forbidden points for the colour to play.
+ * @example
+ * ```ts
+ * import { createGame, forbiddenPoints } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(forbiddenPoints(state));
+ * ```
+ */
 export function forbiddenPoints(state: GameState): Point[] {
   const { settings, toPlay, board } = state;
   if (rulesFor(settings, toPlay).forbidden.length === 0) return [];

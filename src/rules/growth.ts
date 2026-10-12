@@ -34,6 +34,16 @@ import { leavesNoStone } from "./stoneless.ts";
  * The next size up, or null when the board is already the largest. A game
  * played on boards of its own — the flipping games, on 4, 6 and 8 — grows
  * through its own list rather than the go sizes.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param sizes - The supported side lengths in ascending order.
+ * @returns The next supported size, or null at the largest size.
+ * @example
+ * ```ts
+ * import { nextBoardSize } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(nextBoardSize(9,[9,13,19]));
+ * ```
  */
 export function nextBoardSize(size: number, sizes: readonly number[] = BOARD_SIZES): number | null {
   const larger = sizes.filter((option) => option > size);
@@ -50,6 +60,18 @@ export function growthOffset(from: number, to: number): number {
   return Math.floor((to - from) / 2);
 }
 
+/** Whether resizing is enabled and a larger native board is available.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether resizing is enabled and a larger native board is available.
+ * @example
+ * ```ts
+ * import { canGrowBoard, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canGrowBoard(state));
+ * ```
+ */
 export function canGrowBoard(state: GameState): boolean {
   const sizes = VARIANT_SPECS[state.settings.variant].boardSizes ?? BOARD_SIZES;
   return (
@@ -70,6 +92,16 @@ function shift(point: Point, offset: number): Point {
  * Returns the game on a larger board, or the state unchanged when it cannot
  * grow. Every stone, every recorded move and the winning line all move
  * together, so the record still replays to the position on the screen.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, growBoard } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(growBoard(state));
+ * ```
  */
 export function growBoard(state: GameState): GameState {
   if (!canGrowBoard(state)) return state;
@@ -117,7 +149,18 @@ export function growBoard(state: GameState): GameState {
   };
 }
 
-/** The next size down, or null when the board is already the smallest. */
+/** The next size down, or null when the board is already the smallest.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param sizes - The supported side lengths in ascending order.
+ * @returns The previous supported size, or null at the smallest size.
+ * @example
+ * ```ts
+ * import { previousBoardSize } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(previousBoardSize(13,[9,13,19]));
+ * ```
+ */
 export function previousBoardSize(size: number, sizes: readonly number[] = BOARD_SIZES): number | null {
   const smaller = sizes.filter((option) => option < size);
   return smaller.length > 0 ? Math.max(...smaller) : null;
@@ -145,6 +188,18 @@ export function ringHoldsMoves(state: GameState, margin: number): boolean {
   );
 }
 
+/** Whether resizing is enabled and a smaller native board is available.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether resizing is enabled and a smaller native board is available.
+ * @example
+ * ```ts
+ * import { canShrinkBoard, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canShrinkBoard(state));
+ * ```
+ */
 export function canShrinkBoard(state: GameState): boolean {
   // A game played on a board of its own size cannot shrink out of it either.
   if (VARIANT_SPECS[state.settings.variant].boardSizes !== null) return false;
@@ -165,6 +220,16 @@ export function canShrinkBoard(state: GameState): boolean {
  * that would be removed is in use. Everything shifts inwards by the same
  * offset growing shifts out by, so the stones keep their positions relative
  * to each other and the centre stays the centre.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, shrinkBoard } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(shrinkBoard(state));
+ * ```
  */
 export function shrinkBoard(state: GameState): GameState {
   if (!canShrinkBoard(state)) return state;

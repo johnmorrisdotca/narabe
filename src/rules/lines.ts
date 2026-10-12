@@ -168,6 +168,19 @@ function blocks(cell: Cell | undefined, stone: Stone): boolean {
  * the rule that applies to its colour. Only lines through the given point are
  * examined, which is all that can change after a single move. Returns an
  * empty array when there is no win.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param settings - The native game settings to interpret.
+ * @param point - A zero-based row and column on the board.
+ * @returns The winning line through the point, or an empty array without one.
+ * @example
+ * ```ts
+ * import { createGame, findWinningLine } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * console.log(findWinningLine(state.board,state.settings,point));
+ * ```
  */
 export function findWinningLine(
   board: Cell[],

@@ -14,6 +14,14 @@
  * Where a stone goes when played. `free`: where it was put. `drop`: it slides
  * to the lowest empty cell of its column, as if the board were upright and
  * the stones were magnetic.
+ *
+ * @example
+ * ```ts
+ * import type { Placement } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Placement = "drop";
+ * console.log(value);
+ * ```
  */
 export type Placement = "free" | "drop" | "edge";
 
@@ -29,6 +37,14 @@ export type Placement = "free" | "drop" | "edge";
  * have the same mechanics and are drawn differently by everybody who has ever
  * played them — so every row declares it, and a row that does not will not
  * compile.
+ *
+ * @example
+ * ```ts
+ * import type { BoardGrid } from "@johnmorrisdotca/narabe";
+ *
+ * const value: BoardGrid = "lines";
+ * console.log(value);
+ * ```
  */
 export type BoardGrid = "lines" | "cells";
 
@@ -39,6 +55,14 @@ export type BoardGrid = "lines" | "cells";
  * Null for a game with no such custom. Declared per game, never inferred from
  * the mechanics — anti-Othello flips discs as Othello does, and a corner there
  * is a burden rather than a gift.
+ *
+ * @example
+ * ```ts
+ * import type { TraditionalHeadStart } from "@johnmorrisdotca/narabe";
+ *
+ * const value: TraditionalHeadStart = "stones";
+ * console.log(value);
+ * ```
  */
 export type TraditionalHeadStart = "stones" | "corners" | "men";
 
@@ -46,10 +70,27 @@ export type TraditionalHeadStart = "stones" | "corners" | "men";
  * The most free turns a game offers as a head start: 0 where it offers none.
  * Declared per game and measured, never inferred — see `headStartTurns` on the
  * spec and `simulation.headStartDecides.ts`.
+ *
+ * @example
+ * ```ts
+ * import type { HeadStartTurns } from "@johnmorrisdotca/narabe";
+ *
+ * const value: HeadStartTurns = 2;
+ * console.log(value);
+ * ```
  */
 export type HeadStartTurns = 0 | 1 | 2 | 3;
 
-/** Which edges of the board join up: a plane, a cylinder, or a torus. */
+/** Which edges of the board join up: a plane, a cylinder, or a torus.
+ *
+ * @example
+ * ```ts
+ * import type { WrapMode } from "@johnmorrisdotca/narabe";
+ *
+ * const value: WrapMode = "columns";
+ * console.log(value);
+ * ```
+ */
 export type WrapMode = "none" | "columns" | "both";
 
 /**
@@ -58,13 +99,39 @@ export type WrapMode = "none" | "columns" | "both";
  * `atLeast`: `winLength` or longer.
  * `exact`: precisely `winLength`; an overline is not a win.
  * `exactOpen`: precisely `winLength`, and not shut in at both ends.
+ *
+ * @example
+ * ```ts
+ * import type { LineRule } from "@johnmorrisdotca/narabe";
+ *
+ * const value: LineRule = "exact";
+ * console.log(value);
+ * ```
  */
 export type LineRule = "atLeast" | "exact" | "exactOpen";
 
-/** Shapes a colour may be forbidden from making. See `rules/forbidden.ts`. */
+/** Shapes a colour may be forbidden from making. See `rules/forbidden.ts`.
+ *
+ * @example
+ * ```ts
+ * import type { ForbiddenPattern } from "@johnmorrisdotca/narabe";
+ *
+ * const value: ForbiddenPattern = "doubleThree";
+ * console.log(value);
+ * ```
+ */
 export type ForbiddenPattern = "doubleThree" | "doubleFour" | "overline";
 
-/** How a flipping game begins: nothing, the fixed four, or four the players lay themselves. */
+/** How a flipping game begins: nothing, the fixed four, or four the players lay themselves.
+ *
+ * @example
+ * ```ts
+ * import type { StartingDiscs } from "@johnmorrisdotca/narabe";
+ *
+ * const value: StartingDiscs = "fixed";
+ * console.log(value);
+ * ```
+ */
 export type StartingDiscs = "none" | "fixed" | "laid";
 
 /**
@@ -75,6 +142,14 @@ export type StartingDiscs = "none" | "fixed" | "laid";
  * `maximum`: only a sequence that takes the most pieces available anywhere on
  * the board, men and kings counted alike — the majority rule of international
  * draughts and the games built on it.
+ *
+ * @example
+ * ```ts
+ * import type { CaptureChoice } from "@johnmorrisdotca/narabe";
+ *
+ * const value: CaptureChoice = "maximum";
+ * console.log(value);
+ * ```
  */
 export type CaptureChoice = "free" | "maximum";
 
@@ -85,6 +160,14 @@ export type CaptureChoice = "free" | "maximum";
  * `continues`: it is crowned at once, and goes on capturing as a king.
  * `passes`: it is not crowned while it has more to take. It carries on as a man,
  * and is crowned only if the move ends on the far row.
+ *
+ * @example
+ * ```ts
+ * import type { CrownMidCapture } from "@johnmorrisdotca/narabe";
+ *
+ * const value: CrownMidCapture = "continues";
+ * console.log(value);
+ * ```
  */
 export type CrownMidCapture = "stops" | "continues" | "passes";
 
@@ -95,6 +178,15 @@ export type CrownMidCapture = "stops" | "continues" | "passes";
  *
  * Every one of these is a rule some published game differs on, and the engine
  * reads them here rather than asking which game it is playing.
+ *
+ * @example
+ * ```ts
+ * import type { CheckersRules } from "@johnmorrisdotca/narabe";
+ * import { ENGLISH_CHECKERS_RULES } from "@johnmorrisdotca/narabe";
+ *
+ * const value: CheckersRules = ENGLISH_CHECKERS_RULES;
+ * console.log(value);
+ * ```
  */
 export type CheckersRules = {
   /*
@@ -124,10 +216,28 @@ export type CheckersRules = {
   endgameCounts: readonly EndgameCount[];
 };
 
-/** A side's pieces, as an endgame count names them. */
+/** A side's pieces, as an endgame count names them.
+ *
+ * @example
+ * ```ts
+ * import type { PieceTally } from "@johnmorrisdotca/narabe";
+ *
+ * const value: PieceTally = {kings:1,men:2};
+ * console.log(value);
+ * ```
+ */
 export type PieceTally = { kings: number; men: number };
 
-/** The two shapes an endgame count is written in — see `EndgameCount`. */
+/** The two shapes an endgame count is written in — see `EndgameCount`.
+ *
+ * @example
+ * ```ts
+ * import type { EndgameCountKind } from "@johnmorrisdotca/narabe";
+ *
+ * const value: EndgameCountKind = "endings";
+ * console.log(value);
+ * ```
+ */
 export type EndgameCountKind = "endings" | "balance";
 
 /**
@@ -144,6 +254,14 @@ export type EndgameCountKind = "endings" | "balance";
  * have a king, counted while the pieces stay exactly as they are — a capture or
  * a crowning always starts it again. The Russian federation's rule, which no
  * list of pairings could state without naming dozens of them.
+ *
+ * @example
+ * ```ts
+ * import type { EndgameCount } from "@johnmorrisdotca/narabe";
+ *
+ * const value: EndgameCount = {kind:"balance",pieces:[2,2],movesEach:15};
+ * console.log(value);
+ * ```
  */
 export type EndgameCount =
   | {

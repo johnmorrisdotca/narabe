@@ -20,6 +20,17 @@ import { hasHeadStart } from "./headStart.ts";
  * A handicap can only make a colour's game harder. It adds forbidden shapes,
  * tightens the line rule, lengthens the line, cuts the stones per turn and
  * removes captures; it never loosens anything the variant already imposes.
+ *
+ * @param settings - The native game settings to interpret.
+ * @param stone - The black or white colour being examined.
+ * @returns The rules a colour plays under: the variant's spec for that colour, with the handicap laid over it when the handicap belongs to that colour. A handicap can only make a colour's game harder. It adds forbidden shapes, tightens the line rule, lengthens the line, cuts the stones per turn and removes captures; it never loosens anything the variant already imposes.
+ * @example
+ * ```ts
+ * import { createGame, rulesFor } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(rulesFor(state.settings,"black"));
+ * ```
  */
 export function rulesFor(settings: GameSettings, stone: Stone): ColourRules {
   const spec = VARIANT_SPECS[settings.variant];
@@ -53,6 +64,16 @@ export function rulesFor(settings: GameSettings, stone: Stone): ColourRules {
  * this is true of moves nobody's rating (`handicapRefusal`). The head start
  * joined here and in `HandicapTerms`, and was refused a rating without anybody
  * having to find the rating code.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns Whether any handicap is in force for anyone: harder rules for one colour, or a head start for one. THE ONE PLACE THAT QUESTION IS ANSWERED, and a rating depends on it: a game this is true of moves nobody's rating (`handicapRefusal`). The head start joined here and in `HandicapTerms`, and was refused a rating without anybody having to find the rating code.
+ * @example
+ * ```ts
+ * import { createGame, hasHandicap } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(hasHandicap(state.settings));
+ * ```
  */
 export function hasHandicap(settings: HandicapTerms): boolean {
   return settings.handicap.stone !== null || hasHeadStart(settings);

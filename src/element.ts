@@ -14,6 +14,8 @@ const isOn = (value: string | null, fallback = true): boolean => value === null 
  * import { parseEmbedMoves } from "@johnmorrisdotca/narabe/element";
  * console.log(parseEmbedMoves('[{"row":7,"col":7}]'));
  * ```
+ *
+ *
  */
 export function parseEmbedMoves(value: string | null): MoveInput[] | null {
   if (value === null || value.trim() === "") return [];
@@ -42,6 +44,8 @@ export function parseEmbedMoves(value: string | null): MoveInput[] | null {
  * const options: NarabeElementOptions = { settings: { variant: "freestyle" }, draw: { legal: true } };
  * console.log(options.settings?.variant);
  * ```
+ *
+ *
  */
 export type NarabeElementOptions = {
   /** Complete host position, taking precedence over replay input. */
@@ -66,6 +70,8 @@ export type NarabeElementOptions = {
  * import { NARABE_EMBED_OPTION_KEYS } from "@johnmorrisdotca/narabe/element";
  * console.log(NARABE_EMBED_OPTION_KEYS);
  * ```
+ *
+ *
  */
 export const NARABE_EMBED_OPTION_KEYS = Object.keys({ state: true, settings: true, moves: true, choices: true, clocked: true, draw: true, onChange: true } satisfies Record<keyof NarabeElementOptions, boolean>);
 /**
@@ -75,6 +81,8 @@ export const NARABE_EMBED_OPTION_KEYS = Object.keys({ state: true, settings: tru
  * import { NARABE_DRAW_OPTION_KEYS } from "@johnmorrisdotca/narabe/element";
  * console.log(NARABE_DRAW_OPTION_KEYS);
  * ```
+ *
+ *
  */
 export const NARABE_DRAW_OPTION_KEYS = Object.keys({ width: true, title: true, lastMove: true, winningLine: true, forbidden: true, legal: true, selected: true } satisfies Record<keyof DrawBoardOptions, boolean>);
 /**
@@ -84,6 +92,8 @@ export const NARABE_DRAW_OPTION_KEYS = Object.keys({ width: true, title: true, l
  * import { NarabeBoard } from "@johnmorrisdotca/narabe/element";
  * console.log(NarabeBoard.observedAttributes.includes("moves"));
  * ```
+ *
+ *
  */
 export class NarabeBoard extends ElementBase {
   static observedAttributes = ["game", "grid", "seed", "moves", "step", "last-move", "winning-line", "forbidden", "legal", "controls", "lang", "size", "width", "theme", "label"];
@@ -217,5 +227,7 @@ export class NarabeBoard extends ElementBase {
  * defineBoard();
  * console.log(typeof defineBoard);
  * ```
+ *
+ *
  */
 export function defineBoard(tagName = "narabe-board", registry: CustomElementRegistry | undefined = typeof customElements === "undefined" ? undefined : customElements): void { if (registry !== undefined && registry.get(tagName) === undefined) registry.define(tagName, tagName === "narabe-board" ? NarabeBoard : class extends NarabeBoard {}); }

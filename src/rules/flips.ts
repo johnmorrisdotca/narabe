@@ -30,7 +30,17 @@ function other(stone: Stone): Stone {
   return stone === STONES.black ? STONES.white : STONES.black;
 }
 
-/** The four centre squares, top-left first. Even boards only; the centre is between four cells. */
+/** The four centre squares, top-left first. Even boards only; the centre is between four cells.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @returns The four centre squares, top-left first. Even boards only; the centre is between four cells.
+ * @example
+ * ```ts
+ * import { centreSquares } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(centreSquares(8));
+ * ```
+ */
 export function centreSquares(size: number): Point[] {
   const half = size / 2;
   return [
@@ -70,7 +80,18 @@ export function startingDiscs(settings: GameSettings): { point: Point; stone: St
   ];
 }
 
-/** Classic reversi: the first four discs are laid by the players, in the centre, with no flipping. */
+/** Classic reversi: the first four discs are laid by the players, in the centre, with no flipping.
+ *
+ * @param state - The current immutable game position.
+ * @returns Classic reversi: the first four discs are laid by the players, in the centre, with no flipping.
+ * @example
+ * ```ts
+ * import { createGame, inLayingPhase } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(inLayingPhase(state));
+ * ```
+ */
 export function inLayingPhase(state: GameState): boolean {
   if (openingFor(state.settings) !== STARTING_DISCS.laid) return false;
   return centreSquares(state.settings.size).some(
@@ -82,6 +103,20 @@ export function inLayingPhase(state: GameState): boolean {
  * The discs a stone of `stone` at `point` would turn. Empty means the move is
  * illegal. `directions` is the square board's eight unless a caller says
  * otherwise; everything that has a state to hand reads `flipDirections`.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param stone - The black or white colour being examined.
+ * @param point - A zero-based row and column on the board.
+ * @param directions - The board directions in which discs can flip.
+ * @returns The discs a stone of `stone` at `point` would turn. Empty means the move is illegal. `directions` is the square board's eight unless a caller says otherwise; everything that has a state to hand reads `flipDirections`.
+ * @example
+ * ```ts
+ * import { createGame, flipsAt } from "@johnmorrisdotca/narabe";
+ *
+ * const reversi = createGame({variant:"reversi"});
+ * console.log(flipsAt(reversi.board,8,"black",{row:2,col:3}));
+ * ```
  */
 export function flipsAt(
   board: Cell[],
@@ -117,6 +152,19 @@ export function flipLegal(state: GameState, point: Point): boolean {
   return flipsAt(state.board, size, state.toPlay, point, flipDirections(state.settings)).length > 0;
 }
 
+/** Whether the colour has a legal disc-flipping move.
+ *
+ * @param state - The current immutable game position.
+ * @param stone - The black or white colour being examined.
+ * @returns Whether the colour has a legal disc-flipping move.
+ * @example
+ * ```ts
+ * import { createGame, hasFlipMove } from "@johnmorrisdotca/narabe";
+ *
+ * const reversi = createGame({variant:"reversi"});
+ * console.log(hasFlipMove(reversi,"black"));
+ * ```
+ */
 export function hasFlipMove(state: GameState, stone: Stone): boolean {
   const { size } = state.settings;
   if (inLayingPhase(state)) return true;
@@ -129,6 +177,18 @@ export function hasFlipMove(state: GameState, stone: Stone): boolean {
   return false;
 }
 
+/** Count black and white discs currently on a board.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @returns Count black and white discs currently on a board.
+ * @example
+ * ```ts
+ * import { createGame, discCount } from "@johnmorrisdotca/narabe";
+ *
+ * const reversi = createGame({variant:"reversi"});
+ * console.log(discCount(reversi.board));
+ * ```
+ */
 export function discCount(board: Cell[]): Record<Stone, number> {
   let black = 0;
   let white = 0;

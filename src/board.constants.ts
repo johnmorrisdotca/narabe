@@ -5,6 +5,12 @@ import type { Point } from "./types.ts";
 /**
  * The four line orientations through a point. Each is checked in both its
  * forward and reverse sense, so four entries cover all eight neighbours.
+ *
+ * @example
+ * ```ts
+ * import { DIRECTIONS } from "@johnmorrisdotca/narabe";
+ * console.log(DIRECTIONS);
+ * ```
  */
 export const DIRECTIONS: readonly Point[] = [
   { row: 0, col: 1 }, // horizontal
@@ -22,6 +28,12 @@ export const DIRECTIONS: readonly Point[] = [
  * two cells that far apart along it are not lattice neighbours, and no
  * unbroken run of hexagon cells ever lies along it — so it is left out here
  * on purpose, never scanned as a line.
+ *
+ * @example
+ * ```ts
+ * import { HEX_LINE_DIRECTIONS } from "@johnmorrisdotca/narabe";
+ * console.log(HEX_LINE_DIRECTIONS);
+ * ```
  */
 export const HEX_LINE_DIRECTIONS: readonly Point[] = [
   { row: 0, col: 1 },
@@ -29,7 +41,17 @@ export const HEX_LINE_DIRECTIONS: readonly Point[] = [
   { row: 1, col: -1 },
 ];
 
-/** The directions a winning line may run: the hexagon's three axes on a hexagon board, the square's four otherwise. */
+/** The directions a winning line may run: the hexagon's three axes on a hexagon board, the square's four otherwise.
+ *
+ * @param hexagon - Whether to use the hexagonal rather than square line directions.
+ * @returns The directions a winning line may run: the hexagon's three axes on a hexagon board, the square's four otherwise.
+ * @example
+ * ```ts
+ * import { lineDirectionsFor } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(lineDirectionsFor(false));
+ * ```
+ */
 export function lineDirectionsFor(hexagon: boolean): readonly Point[] {
   return hexagon ? HEX_LINE_DIRECTIONS : DIRECTIONS;
 }
@@ -37,6 +59,12 @@ export function lineDirectionsFor(hexagon: boolean): readonly Point[] {
 /**
  * Hoshi (star point) positions drawn on the board, by board size: the four
  * corner points, plus tengen at the centre, and for 19×19 the side points too.
+ *
+ * @example
+ * ```ts
+ * import { STAR_POINTS } from "@johnmorrisdotca/narabe";
+ * console.log(STAR_POINTS);
+ * ```
  */
 export const STAR_POINTS: Record<number, readonly Point[]> = {
   9: starGrid([2, 4, 6], [2, 6]),
@@ -58,5 +86,12 @@ function starGrid(all: number[], corners: number[]): Point[] {
   return points.sort((a, b) => a.row - b.row || a.col - b.col);
 }
 
-/** Column letters used in coordinate labels, left to right. "I" is skipped as in go. */
+/** Column letters used in coordinate labels, left to right. "I" is skipped as in go.
+ *
+ * @example
+ * ```ts
+ * import { COLUMN_LETTERS } from "@johnmorrisdotca/narabe";
+ * console.log(COLUMN_LETTERS);
+ * ```
+ */
 export const COLUMN_LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZ";

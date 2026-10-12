@@ -40,6 +40,16 @@ import { stalled } from "./noProgress.ts";
  *
  * Read from the spec, never from a variant's name: any game that is won by
  * joining two sides has the same theorem behind it.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns Whether the native game mechanics can end in a draw.
+ * @example
+ * ```ts
+ * import { canBeDrawn, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canBeDrawn(state.settings));
+ * ```
  */
 export function canBeDrawn(settings: GameSettings): boolean {
   return !VARIANT_SPECS[settings.variant].connects;
@@ -76,6 +86,16 @@ export function lengthReason(settings: GameSettings): "cannot-draw" | "too-small
  * Rounded down, so "half the board" on an odd board is the smaller half: a
  * limit that arrives a move early is easier to defend than one that arrives
  * a move late.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns The configured move limit, or null when the settings have no applicable length limit.
+ * @example
+ * ```ts
+ * import { createGame, movesBeforeDraw } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(movesBeforeDraw(state.settings));
+ * ```
  */
 export function movesBeforeDraw(settings: GameSettings): number | null {
   if (lengthReason(settings) !== null) return null;
@@ -140,6 +160,16 @@ export function settleDraw(state: GameState): GameState {
  * The status line has to say which: "both made a line at once" is a different
  * thing from "we agreed to stop here", and telling a player the wrong one is
  * worse than telling them nothing.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether a finished game was drawn because it ran to its length, rather than because the board filled or both sides made a line at once. The status line has to say which: "both made a line at once" is a different thing from "we agreed to stop here", and telling a player the wrong one is worse than telling them nothing.
+ * @example
+ * ```ts
+ * import { createGame, drawnByLength } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(drawnByLength(state));
+ * ```
  */
 export function drawnByLength(state: GameState): boolean {
   if (state.status !== GAME_STATUS.draw) return false;

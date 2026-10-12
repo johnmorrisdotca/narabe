@@ -168,7 +168,18 @@ export function openingAfterMove(state: GameState): OpeningState {
   return opening;
 }
 
-/** Whether the game is waiting on a seat to pick a colour. */
+/** Whether the game is waiting on a seat to pick a colour.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether the game is waiting on a seat to pick a colour.
+ * @example
+ * ```ts
+ * import { canChooseColour, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canChooseColour(state));
+ * ```
+ */
 export function canChooseColour(state: GameState): boolean {
   return (
     state.status === GAME_STATUS.playing &&
@@ -176,7 +187,18 @@ export function canChooseColour(state: GameState): boolean {
   );
 }
 
-/** Swap2 only: the first chooser may add two stones and pass the choice back. */
+/** Swap2 only: the first chooser may add two stones and pass the choice back.
+ *
+ * @param state - The current immutable game position.
+ * @returns Swap2 only: the first chooser may add two stones and pass the choice back.
+ * @example
+ * ```ts
+ * import { canExtendOpening, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canExtendOpening(state));
+ * ```
+ */
 export function canExtendOpening(state: GameState): boolean {
   return (
     canChooseColour(state) &&
@@ -188,6 +210,17 @@ export function canExtendOpening(state: GameState): boolean {
 /**
  * The deciding seat takes `stone`. Seats are exchanged if that colour is not
  * already theirs; the board and the colour to move are untouched.
+ *
+ * @param state - The current immutable game position.
+ * @param stone - The black or white colour being examined.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { chooseColour, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(chooseColour(state,"black").opening.stage);
+ * ```
  */
 export function chooseColour(state: GameState, stone: Stone): GameState {
   if (!canChooseColour(state)) return state;
@@ -215,7 +248,18 @@ export function chooseColour(state: GameState, stone: Stone): GameState {
   };
 }
 
-/** The chooser declines to choose and lays two more stones instead. */
+/** The chooser declines to choose and lays two more stones instead.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, extendOpening } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(extendOpening(state));
+ * ```
+ */
 export function extendOpening(state: GameState): GameState {
   if (!canExtendOpening(state)) return state;
   return {

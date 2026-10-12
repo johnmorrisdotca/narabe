@@ -86,14 +86,37 @@ export function singlesUsedBy(moves: readonly Move[], stone: Stone): number {
   return moves.filter((move) => (move.by ?? move.stone) === stone && move.kind === MOVE_KINDS.place).length;
 }
 
-/** The piece the colour to move must lay next, or null outside the piece games. */
+/** The piece the colour to move must lay next, or null outside the piece games.
+ *
+ * @param state - The current immutable game position.
+ * @returns The piece in hand, or null when this variant has no piece queue.
+ * @example
+ * ```ts
+ * import { createGame, queuedPiece } from "@johnmorrisdotca/narabe";
+ *
+ * const queued = createGame({variant:"dominoFive",seed:42});
+ * console.log(queuedPiece(queued));
+ * ```
+ */
 export function queuedPiece(state: GameState): Piece | null {
   const queue = pieceQueue(state.settings);
   if (queue.length === 0) return null;
   return queue[piecesLaidBy(state.moves, state.toPlay) % queue.length];
 }
 
-/** The pieces after the one in hand, for the preview. */
+/** The pieces after the one in hand, for the preview.
+ *
+ * @param state - The current immutable game position.
+ * @param count - The number of upcoming queue pieces to read.
+ * @returns The pieces after the one in hand, for the preview.
+ * @example
+ * ```ts
+ * import { createGame, upcomingPieces } from "@johnmorrisdotca/narabe";
+ *
+ * const queued = createGame({variant:"dominoFive",seed:42});
+ * console.log(upcomingPieces(queued,2));
+ * ```
+ */
 export function upcomingPieces(state: GameState, count: number): Piece[] {
   const queue = pieceQueue(state.settings);
   if (queue.length === 0) return [];
@@ -127,6 +150,15 @@ function key(cells: readonly PieceCell[]): string {
  * Every distinct way the piece can lie: four rotations, each also mirrored.
  * Colours travel with their cells, so a black-white domino turned round is a
  * different orientation from the one it started as.
+ *
+ * @param piece - The queued piece with relative coloured cells.
+ * @returns Every distinct way the piece can lie: four rotations, each also mirrored. Colours travel with their cells, so a black-white domino turned round is a different orientation from the one it started as.
+ * @example
+ * ```ts
+ * import { orientations } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(orientations({cells:[{row:0,col:0,stone:"black"},{row:0,col:1,stone:"white"}]}).length);
+ * ```
  */
 export function orientations(piece: Piece): PieceCell[][] {
   const seen = new Set<string>();
@@ -145,14 +177,38 @@ export function orientations(piece: Piece): PieceCell[][] {
   return result;
 }
 
-/** The piece turned `turns` quarter turns and, if asked, mirrored — the shape a player has in hand. */
+/** The piece turned `turns` quarter turns and, if asked, mirrored — the shape a player has in hand.
+ *
+ * @param piece - The queued piece with relative coloured cells.
+ * @param turns - The number of clockwise quarter turns.
+ * @param flipped - Whether to reflect the piece before rotating it.
+ * @returns The piece turned `turns` quarter turns and, if asked, mirrored — the shape a player has in hand.
+ * @example
+ * ```ts
+ * import { orientCells } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(orientCells({cells:[{row:0,col:0,stone:"black"},{row:0,col:1,stone:"white"}]},1,false));
+ * ```
+ */
 export function orientCells(piece: Piece, turns: number, flipped: boolean): PieceCell[] {
   let cells = normalise(piece.cells);
   for (let i = 0; i < ((turns % 4) + 4) % 4; i += 1) cells = rotate(cells);
   return flipped ? flip(cells) : cells;
 }
 
-/** The absolute cells of an orientation anchored with its origin at `anchor`. */
+/** The absolute cells of an orientation anchored with its origin at `anchor`.
+ *
+ * @param orientation - Relative coloured cells after rotation or reflection.
+ * @param anchor - The absolute point where the relative footprint is placed.
+ * @returns The absolute cells of an orientation anchored with its origin at `anchor`.
+ * @example
+ * ```ts
+ * import { footprintAt } from "@johnmorrisdotca/narabe";
+ *
+ * const point = {row:7,col:7};
+ * console.log(footprintAt([{row:0,col:0,stone:"black"}],point));
+ * ```
+ */
 export function footprintAt(orientation: readonly PieceCell[], anchor: Point): PieceCell[] {
   return orientation.map((cell) => ({
     row: cell.row + anchor.row,
@@ -161,12 +217,37 @@ export function footprintAt(orientation: readonly PieceCell[], anchor: Point): P
   }));
 }
 
-/** Whether every cell of a footprint is on the board and empty. */
+/** Whether every cell of a footprint is on the board and empty.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param cells - The absolute coloured cells of the piece placement.
+ * @returns Whether every cell of a footprint is on the board and empty.
+ * @example
+ * ```ts
+ * import { createGame, footprintFits } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * console.log(footprintFits(state.board,15,[{...point,stone:"black"}]));
+ * ```
+ */
 export function footprintFits(board: Cell[], size: number, cells: readonly PieceCell[]): boolean {
   return cells.every((cell) => isOnBoard(size, cell) && board[indexOf(size, cell)] === null);
 }
 
-/** Every legal footprint of the piece in hand. Empty when nothing fits. */
+/** Every legal footprint of the piece in hand. Empty when nothing fits.
+ *
+ * @param state - The current immutable game position.
+ * @returns Every legal footprint of the piece in hand. Empty when nothing fits.
+ * @example
+ * ```ts
+ * import { createGame, piecePlacements } from "@johnmorrisdotca/narabe";
+ *
+ * const queued = createGame({variant:"dominoFive",seed:42});
+ * console.log(piecePlacements(queued).length);
+ * ```
+ */
 export function piecePlacements(state: GameState): PieceCell[][] {
   const piece = queuedPiece(state);
   if (piece === null) return [];

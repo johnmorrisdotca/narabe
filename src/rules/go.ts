@@ -12,6 +12,12 @@ import { settleDraw } from "./drawLimit.ts";
  *
  * The standard bonus for playing second — komi — is fixed rather than a
  * setting, at the usual 6.5: a half point so the count can never tie.
+ *
+ * @example
+ * ```ts
+ * import { KOMI } from "@johnmorrisdotca/narabe/rules/go";
+ * console.log(KOMI);
+ * ```
  */
 export const KOMI = 6.5;
 
@@ -26,6 +32,19 @@ const NEIGHBOURS: readonly Point[] = [
  * The connected group of stones sharing the colour at `from`, and the empty
  * points touching any of them — its liberties. A group with none is what
  * capturing takes off the board.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param from - The source point of the group or moving piece.
+ * @returns The connected same-colour stones and their empty neighbouring indices.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import { groupAt } from "@johnmorrisdotca/narabe/rules/go";
+ *
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(groupAt(go.board, go.settings.size, {row:4,col:4}).liberties.size);
+ * ```
  */
 export function groupAt(
   board: Cell[],
@@ -64,6 +83,21 @@ export function groupAt(
  * groups left with no liberties come off first; only then is the played
  * stone's own group checked for a liberty of its own, since a capture can
  * open one that was not there before the board was read.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param point - A zero-based row and column on the board.
+ * @param stone - The black or white colour being examined.
+ * @returns The copied board and captured points, or null if the move is suicide.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import { applyGoMove } from "@johnmorrisdotca/narabe/rules/go";
+ *
+ * const point = {row:7,col:7};
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(applyGoMove(go.board, go.settings.size, point, "black")?.captured);
+ * ```
  */
 export function applyGoMove(
   board: Cell[],
@@ -103,6 +137,22 @@ export function applyGoMove(
  * recapture cannot instantly restore the position it broke. Any other move
  * lifts the restriction; it is not the whole of positional superko, but it
  * is the actual rule most rule sets call "simple ko".
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param point - A zero-based row and column on the board.
+ * @param stone - The black or white colour being examined.
+ * @param koPoint - The forbidden immediate-recapture point, or null without a ko restriction.
+ * @returns Whether the point is on board, empty, not suicide and not the immediate ko point.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import { goLegal } from "@johnmorrisdotca/narabe/rules/go";
+ *
+ * const point = {row:7,col:7};
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(goLegal(go.board, go.settings.size, point, "white", go.koPoint));
+ * ```
  */
 export function goLegal(
   board: Cell[],
@@ -124,6 +174,18 @@ export function goLegal(
  * the board still counts as a stone, so a player who wants credit for
  * territory a stray stone sits in has to capture it before passing, the
  * same as playing it out at the real table.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @returns The raw black and white area totals, without komi.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import { scoreArea } from "@johnmorrisdotca/narabe/rules/go";
+ *
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(scoreArea(go.board, go.settings.size));
+ * ```
  */
 export function scoreArea(board: Cell[], size: number): { black: number; white: number } {
   const score = { black: 0, white: 0 };
@@ -182,6 +244,19 @@ export function scoreArea(board: Cell[], size: number): { black: number; white: 
  * fills the eyes the group lives by. So it is never a move worth making, and
  * the computer players leave it out; a player who has nothing else left
  * passes, which is how Go ends.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param stone - The black or white colour being examined.
+ * @returns Indices of empty points bordered only by the requested colour.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import { walledIn } from "@johnmorrisdotca/narabe/rules/go";
+ *
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(walledIn(go.board, go.settings.size, "black").size);
+ * ```
  */
 export function walledIn(board: Cell[], size: number, stone: Stone): Set<number> {
   const owned = new Set<number>();
@@ -217,6 +292,21 @@ export function walledIn(board: Cell[], size: number, stone: Stone): Set<number>
   return owned;
 }
 
+/** The colour whose area plus komi wins the Go position.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param komi - The score bonus credited to white.
+ * @returns Black when its area is greater than white area plus komi; otherwise white.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import { areaWinner } from "@johnmorrisdotca/narabe/rules/go";
+ *
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(areaWinner(go.board, go.settings.size, 6.5));
+ * ```
+ */
 export function areaWinner(board: Cell[], size: number, komi: number): Stone {
   const { black, white } = scoreArea(board, size);
   return black > white + komi ? "black" : "white";
@@ -227,6 +317,19 @@ export function areaWinner(board: Cell[], size: number, komi: number): Stone {
  * sets a fresh ko point when that capture was exactly one stone (and clears
  * it otherwise), and passes the turn — Go has no further move of its own to
  * settle, unlike the twist games or a piece game's line.
+ *
+ * @param state - The current immutable game position.
+ * @param point - A zero-based row and column on the board.
+ * @returns The position after a known legal placement, captures, ko update and turn change; unchanged if the placement is suicide.
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import { playGoMove } from "@johnmorrisdotca/narabe/rules/go";
+ *
+ * const point = {row:7,col:7};
+ * const go = playMove(createGame({variant:"go",size:9}),{row:4,col:4});
+ * console.log(playGoMove(go, point).moves.length);
+ * ```
  */
 export function playGoMove(state: GameState, point: Point): GameState {
   const { settings, toPlay, koPoint } = state;

@@ -40,6 +40,20 @@ const NO_CLOCK: ReplayFacts = { clocked: false };
  * a coherent one: none of them decides whether a move is legal, and nothing in
  * the engine calls any of them. The dependency runs one way, from here into
  * the engine, which is why this can import from it without a cycle.
+ *
+ */
+
+/** Whether skipping is enabled and a legal corner stone can burn the turn.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether skipping is enabled and the selected empty point is legal in the current phase.
+ * @example
+ * ```ts
+ * import { canSkip, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canSkip(state));
+ * ```
  */
 export function canSkip(state: GameState): boolean {
   if (!state.settings.allowSkip || state.status !== GAME_STATUS.playing) return false;
@@ -52,6 +66,16 @@ export function canSkip(state: GameState): boolean {
  * Where a skipped turn puts its stone: the open intersection furthest from the
  * action, picked from the corner chosen by `roll`. A skip is still a stone on
  * the board — it just spends the turn somewhere that should not matter.
+ *
+ * @param state - The current immutable game position.
+ * @param roll - A random value in [0,1), supplied for reproducible choices.
+ * @returns The chosen empty point, or null when no point is available.
+ * @example
+ * ```ts
+ * import { createGame, skipTarget } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(skipTarget(createGame({allowSkip:true}), 0.5));
+ * ```
  */
 export function skipTarget(state: GameState, roll = 0): Point | null {
   const open = emptyPoints(state);
@@ -73,7 +97,18 @@ export function skipTarget(state: GameState, roll = 0): Point | null {
   );
 }
 
-/** Burns the turn on a corner stone. A no-op when skipping is not allowed. */
+/** Burns the turn on a corner stone. A no-op when skipping is not allowed.
+ *
+ * @param state - The current immutable game position.
+ * @param roll - A random value in [0,1), supplied for reproducible choices.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, skipMove } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(skipMove(createGame({allowSkip:true}), 0.5).moves.length);
+ * ```
+ */
 export function skipMove(state: GameState, roll = 0): GameState {
   if (!canSkip(state)) return state;
   const target = skipTarget(state, roll);
@@ -81,6 +116,18 @@ export function skipMove(state: GameState, roll = 0): GameState {
   return playMove(state, target, MOVE_KINDS.skip);
 }
 
+/** Whether undo is enabled and a recorded move can be removed.
+ *
+ * @param state - The current immutable game position.
+ * @returns Whether undo is enabled and a recorded move can be removed.
+ * @example
+ * ```ts
+ * import { canUndo, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(canUndo(state));
+ * ```
+ */
 export function canUndo(state: GameState): boolean {
   return state.settings.allowUndo && state.moves.length > 0;
 }
@@ -90,6 +137,16 @@ export function canUndo(state: GameState): boolean {
  * came from, and a twisted quadrant the way it was. Also reopens a finished
  * game. The opening is left as it stands: a colour choice is a decision, not
  * a stone, and is not undone by lifting one.
+ *
+ * @param state - The current immutable game position.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame, undoMove } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(undoMove(state));
+ * ```
  */
 export function undoMove(state: GameState): GameState {
   if (!canUndo(state)) return state;
@@ -164,6 +221,18 @@ function undoOne(state: GameState): GameState {
   };
 }
 
+/** The point of the latest stone or piece move; null when no point was played.
+ *
+ * @param state - The current immutable game position.
+ * @returns The last played point, or null when no move with a board point exists.
+ * @example
+ * ```ts
+ * import { createGame, lastMove } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(lastMove(state));
+ * ```
+ */
 export function lastMove(state: GameState): Point | null {
   const last = state.moves[state.moves.length - 1];
   return last === undefined || leavesNoStone(last.kind) ? null : last;
@@ -192,6 +261,19 @@ function replayForfeit(state: GameState, facts: ReplayFacts): GameState {
  * fits the rules from there. `facts` says what the moves cannot: a record
  * read without them is taken to have had no clock, and a forfeit on it stops
  * the replay like any other move the rules refuse.
+ *
+ * @param start - The initial game position used to replay the record.
+ * @param moves - The move record in replay order.
+ * @param choices - Recorded choices made during the opening protocol.
+ * @param facts - Whether the original game ran a clock; needed to accept forfeits.
+ * @returns The initial position followed by every successfully replayed position; replay stops at the first refused input.
+ * @example
+ * ```ts
+ * import { createGame, replayMoves } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(replayMoves(state, [{row:7,col:7}]).length);
+ * ```
  */
 export function replayMoves(
   start: GameState,

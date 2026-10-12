@@ -39,6 +39,16 @@ const SWAPPING_OPENINGS: readonly GameSettings["opening"][] = [
  * opening under a head start. Pro and the renju protocols count stones from the
  * first, and a head start's free turns and starting pieces are exactly what
  * that count does not expect.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns The opening identifiers allowed by the variant, handicap and head-start terms.
+ * @example
+ * ```ts
+ * import { availableOpenings, createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(availableOpenings(state.settings));
+ * ```
  */
 export function availableOpenings(settings: GameSettings): OpeningRule[] {
   const offered = VARIANT_SPECS[settings.variant].openings;
@@ -53,6 +63,16 @@ export function availableOpenings(settings: GameSettings): OpeningRule[] {
  * player's choice, an opening the variant does not offer falls back to free,
  * and a handicap rules out the openings that swap colours. Applied on creation
  * so a state can never carry a contradiction.
+ *
+ * @param settings - The native game settings to interpret.
+ * @returns A copy of the settings normalized to the variant, opening and handicap rules.
+ * @example
+ * ```ts
+ * import { createGame, normaliseSettings } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(normaliseSettings(state.settings));
+ * ```
  */
 export function normaliseSettings(settings: GameSettings): GameSettings {
   const spec = VARIANT_SPECS[settings.variant];
@@ -147,6 +167,17 @@ export function fixedOpener(
  * The colour that opens. `random` is decided by `roll`, a number in [0, 1),
  * which the caller supplies so this stays pure and testable. Variants that
  * constrain black, and every opening protocol, put black on move one.
+ *
+ * @param settings - The native game settings to interpret.
+ * @param roll - A random value in [0,1), supplied for reproducible choices.
+ * @returns The colour that opens. `random` is decided by `roll`, a number in [0, 1), which the caller supplies so this stays pure and testable. Variants that constrain black, and every opening protocol, put black on move one.
+ * @example
+ * ```ts
+ * import { createGame, resolveOpener } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(resolveOpener({...state.settings,firstPlayer:"random"}, 0.25));
+ * ```
  */
 export function resolveOpener(settings: GameSettings, roll = 0): Stone {
   const fixed = fixedOpener(settings.variant, settings.opening, settings);
@@ -157,6 +188,18 @@ export function resolveOpener(settings: GameSettings, roll = 0): Stone {
   return settings.firstPlayer;
 }
 
+/** Create an initial immutable position from native settings and an opening roll.
+ *
+ * @param overrides - Optional settings over the native defaults.
+ * @param roll - A random value in [0,1), supplied for reproducible choices.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(createGame({variant:"reversi"}).board.length);
+ * ```
+ */
 export function createGame(
   overrides: Partial<GameSettings> = {},
   roll = 0,

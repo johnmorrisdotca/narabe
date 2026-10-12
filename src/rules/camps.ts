@@ -20,7 +20,17 @@ export const CAMP_ROWS: Record<number, readonly number[]> = {
   16: [5, 5, 4, 3, 2],
 };
 
-/** Pieces a side has on `size`: the squares of its camp. */
+/** Pieces a side has on `size`: the squares of its camp.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @returns Pieces a side has on `size`: the squares of its camp.
+ * @example
+ * ```ts
+ * import { campSize } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(campSize(8));
+ * ```
+ */
 export function campSize(size: number): number {
   return (CAMP_ROWS[size] ?? []).reduce((sum, count) => sum + count, 0);
 }
@@ -28,6 +38,16 @@ export function campSize(size: number): number {
 /**
  * The squares of a colour's home camp. Black starts top-left and white
  * bottom-right, each camp the mirror of the other through the centre.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param stone - The black or white colour being examined.
+ * @returns The squares of a colour's home camp. Black starts top-left and white bottom-right, each camp the mirror of the other through the centre.
+ * @example
+ * ```ts
+ * import { campSquares } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(campSquares(8,"black"));
+ * ```
  */
 export function campSquares(size: number, stone: Stone): Point[] {
   const rows = CAMP_ROWS[size] ?? [];
@@ -40,7 +60,18 @@ export function campSquares(size: number, stone: Stone): Point[] {
   return points;
 }
 
-/** Whose home camp `point` lies in, or null for the open board. */
+/** Whose home camp `point` lies in, or null for the open board.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param point - A zero-based row and column on the board.
+ * @returns The starting camp colour, or null outside both camps.
+ * @example
+ * ```ts
+ * import { campOf } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(campOf(8,{row:0,col:0}));
+ * ```
+ */
 export function campOf(size: number, point: Point): Stone | null {
   const rows = CAMP_ROWS[size] ?? [];
   if (point.row < rows.length && point.col < rows[point.row]) return "black";
@@ -119,7 +150,20 @@ export function campFilled(board: Cell[], size: number, stone: Stone): boolean {
   return own > 0;
 }
 
-/** How many of `stone`'s pieces stand in the far camp. */
+/** How many of `stone`'s pieces stand in the far camp.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param stone - The black or white colour being examined.
+ * @returns How many of `stone`'s pieces stand in the far camp.
+ * @example
+ * ```ts
+ * import { createGame, piecesHome } from "@johnmorrisdotca/narabe";
+ *
+ * const halma = createGame({variant:"halma",size:8});
+ * console.log(piecesHome(halma.board,8,"black"));
+ * ```
+ */
 export function piecesHome(board: Cell[], size: number, stone: Stone): number {
   const far = campSquares(size, stone === "black" ? "white" : "black");
   return far.filter((point) => cellAtPoint(board, size, point) === stone).length;

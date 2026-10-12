@@ -18,6 +18,16 @@ import { checkersNarrowing } from "./checkers.ts";
  * Null where a turn has no set of moves to show: a finished game, a quarter
  * turn owed, a game whose piece is laid by its footprint from a queue, and Go,
  * where a pass is always on offer beside the points.
+ *
+ * @param state - The current immutable game position.
+ * @returns The native placement or movement choices, or null when no choice list applies.
+ * @example
+ * ```ts
+ * import { createGame, turnChoices } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * console.log(turnChoices(state));
+ * ```
  */
 export function turnChoices(state: GameState): TurnChoices | null {
   if (state.status !== GAME_STATUS.playing || state.pendingTwist) return null;

@@ -10,7 +10,19 @@ import { findWinningLine } from "./lines.ts";
  * left, 1 top right, 2 bottom left, 3 bottom right.
  */
 
-/** The top-left corner of quadrant `quadrant`. */
+/** The top-left corner of quadrant `quadrant`.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param quadrantSize - The number of cells on each side of a quadrant.
+ * @param quadrant - The zero-based quadrant index.
+ * @returns The top-left corner of quadrant `quadrant`.
+ * @example
+ * ```ts
+ * import { quadrantOrigin } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(quadrantOrigin(6,3,1));
+ * ```
+ */
 export function quadrantOrigin(size: number, quadrantSize: number, quadrant: number): Point {
   const across = size / quadrantSize;
   return {
@@ -19,7 +31,18 @@ export function quadrantOrigin(size: number, quadrantSize: number, quadrant: num
   };
 }
 
-/** How many quadrants a board of this size holds. */
+/** How many quadrants a board of this size holds.
+ *
+ * @param size - The number of cells on each side of the board.
+ * @param quadrantSize - The number of cells on each side of a quadrant.
+ * @returns How many quadrants a board of this size holds.
+ * @example
+ * ```ts
+ * import { quadrantCount } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(quadrantCount(6,3));
+ * ```
+ */
 export function quadrantCount(size: number, quadrantSize: number): number {
   const across = size / quadrantSize;
   return across * across;

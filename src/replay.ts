@@ -3,7 +3,17 @@ import { replayMoves } from "./rules/record.ts";
 import { DRAW_LIMITS, NO_HANDICAP, NO_HEAD_START } from "./constants.ts";
 import type { GameState, Handicap, HeadStart, MoveInput, Stone } from "./types.ts";
 
-/** The stored shape of a game, as both the API and the pages see it. */
+/** The stored shape of a game, as both the API and the pages see it.
+ *
+ * @example
+ * ```ts
+ * import type { StoredGame } from "@johnmorrisdotca/narabe";
+ *
+ * const stored = {size:15,winLength:5,variant:"freestyle",obstacles:"none",opener:"black",moveTimeMs:null,moves:[{row:7,col:7}]};
+ * const value: StoredGame = stored;
+ * console.log(value);
+ * ```
+ */
 export type StoredGame = {
   size: number;
   winLength: number;
@@ -35,6 +45,16 @@ export type StoredGame = {
  *
  * Swap-opening decisions are not stored, so a game with one replays as though
  * the chooser kept their colour: the stones are the same either way.
+ *
+ * @param game - The saved settings and move record to rebuild.
+ * @returns Rebuilds every position a game passed through by replaying its moves. A stored game is a move list, never a board, so this is the only way to read one back — and because it runs the same engine, a replayed game and a live one can never disagree about what is legal or who has won. Swap-opening decisions are not stored, so a game with one replays as though the chooser kept their colour: the stones are the same either way.
+ * @example
+ * ```ts
+ * import { replayTimeline } from "@johnmorrisdotca/narabe";
+ *
+ * const stored = {size:15,winLength:5,variant:"freestyle",obstacles:"none",opener:"black",moveTimeMs:null,moves:[{row:7,col:7}]};
+ * console.log(replayTimeline(stored).length);
+ * ```
  */
 export function replayTimeline(game: StoredGame): GameState[] {
   const start = createGame({
@@ -54,7 +74,18 @@ export function replayTimeline(game: StoredGame): GameState[] {
   return replayMoves(start, game.moves, [], { clocked: game.moveTimeMs !== null });
 }
 
-/** The position as it stands now. */
+/** The position as it stands now.
+ *
+ * @param game - The saved settings and move record to rebuild.
+ * @returns The resulting position; a refused or inapplicable action leaves the input position unchanged.
+ * @example
+ * ```ts
+ * import { replayGame } from "@johnmorrisdotca/narabe";
+ *
+ * const stored = {size:15,winLength:5,variant:"freestyle",obstacles:"none",opener:"black",moveTimeMs:null,moves:[{row:7,col:7}]};
+ * console.log(replayGame(stored).moves.length);
+ * ```
+ */
 export function replayGame(game: StoredGame): GameState {
   const timeline = replayTimeline(game);
   return timeline[timeline.length - 1];

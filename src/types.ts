@@ -23,21 +23,76 @@ export type {
   WrapMode,
 } from "./spec.types.ts";
 
+/** One of the two stone colours.
+ *
+ * @example
+ * ```ts
+ * import type { Stone } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Stone = "black";
+ * console.log(value);
+ * ```
+ */
 export type Stone = "black" | "white";
 
-/** An intersection the rules have taken out of play. See `obstacles.ts`. */
+/** An intersection the rules have taken out of play. See `obstacles.ts`.
+ *
+ * @example
+ * ```ts
+ * import type { Blocked } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Blocked = "blocked";
+ * console.log(value);
+ * ```
+ */
 export type Blocked = "blocked";
 
-/** A hotspot: an intersection that counts as either colour's stone in a line. */
+/** A hotspot: an intersection that counts as either colour's stone in a line.
+ *
+ * @example
+ * ```ts
+ * import type { Hot } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Hot = "hot";
+ * console.log(value);
+ * ```
+ */
 export type Hot = "hot";
 
-/** A wormhole: a line entering it comes out of its partner and carries on. */
+/** A wormhole: a line entering it comes out of its partner and carries on.
+ *
+ * @example
+ * ```ts
+ * import type { Worm } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Worm = "worm";
+ * console.log(value);
+ * ```
+ */
 export type Worm = "worm";
 
-/** One intersection of the board: a stone, an obstacle, a hotspot, a wormhole, or nothing. */
+/** One intersection of the board: a stone, an obstacle, a hotspot, a wormhole, or nothing.
+ *
+ * @example
+ * ```ts
+ * import type { Cell } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Cell = null;
+ * console.log(value);
+ * ```
+ */
 export type Cell = Stone | Blocked | Hot | Worm | null;
 
-/** Zero-based board coordinates. Row 0 is the top, column 0 is the left. */
+/** Zero-based board coordinates. Row 0 is the top, column 0 is the left.
+ *
+ * @example
+ * ```ts
+ * import type { Point } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Point = {row:7,col:7};
+ * console.log(value);
+ * ```
+ */
 export type Point = {
   row: number;
   col: number;
@@ -58,6 +113,14 @@ export type Point = {
  * a pass the rules refuse stops a replay, and a forfeit read as a pass would
  * stop every game with a timeout in it at the turn that was lost.
  * Neither has a point; their row and column are -1.
+ *
+ * @example
+ * ```ts
+ * import type { MoveKind } from "@johnmorrisdotca/narabe";
+ *
+ * const value: MoveKind = "place";
+ * console.log(value);
+ * ```
  */
 export type MoveKind = "place" | "skip" | "move" | "piece" | "pass" | "forfeit";
 
@@ -68,28 +131,82 @@ export type MoveKind = "place" | "skip" | "move" | "piece" | "pass" | "forfeit";
  * False for anything that never had one — a board at one screen, a filed game
  * from a browser — and there a forfeit is refused like any other move the
  * rules could not have produced.
+ *
+ * @example
+ * ```ts
+ * import type { ReplayFacts } from "@johnmorrisdotca/narabe";
+ *
+ * const value: ReplayFacts = {clocked:false};
+ * console.log(value);
+ * ```
  */
 export type ReplayFacts = {
   clocked: boolean;
 };
 
-/** One cell of a multi-cell piece, with the colour it carries. */
+/** One cell of a multi-cell piece, with the colour it carries.
+ *
+ * @example
+ * ```ts
+ * import type { PieceCell } from "@johnmorrisdotca/narabe";
+ *
+ * const value: PieceCell = {row:7,col:7,stone:"black"};
+ * console.log(value);
+ * ```
+ */
 export type PieceCell = Point & { stone: Stone };
 
-/** A piece from the queue: its cells relative to the top-left of its bounding box. */
+/** A piece from the queue: its cells relative to the top-left of its bounding box.
+ *
+ * @example
+ * ```ts
+ * import type { Piece } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Piece = {cells:[{row:0,col:0,stone:"black"},{row:0,col:1,stone:"white"}]};
+ * console.log(value);
+ * ```
+ */
 export type Piece = {
   cells: readonly PieceCell[];
 };
 
-/** Which queue of pieces a game draws from. */
+/** Which queue of pieces a game draws from.
+ *
+ * @example
+ * ```ts
+ * import type { PieceQueue } from "@johnmorrisdotca/narabe";
+ *
+ * const value: PieceQueue = "domino";
+ * console.log(value);
+ * ```
+ */
 export type PieceQueue = "domino" | "tetro";
 
-/** A quarter turn of one quadrant, which ends a move in the twist games. */
+/** A quarter turn of one quadrant, which ends a move in the twist games.
+ *
+ * @example
+ * ```ts
+ * import type { Twist } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Twist = {quadrant:0,clockwise:true};
+ * console.log(value);
+ * ```
+ */
 export type Twist = {
   quadrant: number;
   clockwise: boolean;
 };
 
+/** A move rebuilt by the engine, including captures and other replay effects.
+ *
+ * @example
+ * ```ts
+ * import type { Move } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Move = {row:7,col:7,stone:"black",kind:"place"};
+ * console.log(value);
+ * ```
+ */
 export type Move = Point & {
   /** The colour of the stone placed. */
   stone: Stone;
@@ -134,7 +251,16 @@ export type Move = Point & {
   koPointBefore?: Point | null;
 };
 
-/** The shape of a move as a record or a request carries it, without the colour. */
+/** The shape of a move as a record or a request carries it, without the colour.
+ *
+ * @example
+ * ```ts
+ * import type { MoveInput } from "@johnmorrisdotca/narabe";
+ *
+ * const value: MoveInput = {row:7,col:7};
+ * console.log(value);
+ * ```
+ */
 export type MoveInput = Point & {
   /** As a record stores it: a string, checked against MOVE_KINDS where it matters. */
   kind?: string;
@@ -156,6 +282,14 @@ export type MoveInput = Point & {
  * `caro`: exactly five wins, and not when blocked at both ends.
  * `ninuki`: five in a row wins, and so does capturing five pairs.
  * `connect6`: two stones a turn, six in a row wins.
+ *
+ * @example
+ * ```ts
+ * import type { RuleVariant } from "@johnmorrisdotca/narabe";
+ *
+ * const value: RuleVariant = "reversi";
+ * console.log(value);
+ * ```
  */
 export type RuleVariant =
   | "freestyle"
@@ -223,6 +357,14 @@ export type RuleVariant =
  * the central 7×7.
  * `tarannikov`: the first five stones must land inside the central 1×1, 3×3,
  * 5×5, 7×7 and 9×9 in turn, and after each of them the other seat may swap.
+ *
+ * @example
+ * ```ts
+ * import type { OpeningRule } from "@johnmorrisdotca/narabe";
+ *
+ * const value: OpeningRule = "swap2";
+ * console.log(value);
+ * ```
  */
 export type OpeningRule =
   | "free"
@@ -239,6 +381,14 @@ export type OpeningRule =
  * they made the line the rules forbid. `square` is four in a 2×2. `blocked`
  * is the checkers family: the colour to move has no legal move left, whether
  * because it has no pieces or because every one of them is shut in.
+ *
+ * @example
+ * ```ts
+ * import type { WinReason } from "@johnmorrisdotca/narabe";
+ *
+ * const value: WinReason = "territory";
+ * console.log(value);
+ * ```
  */
 export type WinReason = "line" | "captures" | "time" | "resign" | "trap" | "square" | "full" | "count" | "camp" | "connection" | "blocked" | "territory";
 
@@ -246,12 +396,41 @@ export type WinReason = "line" | "captures" | "time" | "resign" | "trap" | "squa
  * Where a swap-style opening stands. `placing` and `extending` are stretches
  * where one seat lays every stone regardless of colour; `choosing` is a pause
  * where no stone is legal until the deciding seat has picked a colour.
+ *
+ * @example
+ * ```ts
+ * import type { OpeningStage } from "@johnmorrisdotca/narabe";
+ *
+ * const value: OpeningStage = "placing";
+ * console.log(value);
+ * ```
  */
 export type OpeningStage = "placing" | "choosing" | "extending" | "done";
 
-/** A decision taken during the opening: a colour, or two more stones. */
+/** A decision taken during the opening: a colour, or two more stones.
+ *
+ * @example
+ * ```ts
+ * import type { OpeningChoice } from "@johnmorrisdotca/narabe";
+ *
+ * const value: OpeningChoice = "extend";
+ * console.log(value);
+ * ```
+ */
 export type OpeningChoice = Stone | "extend";
 
+/** The opening protocol stage, acting seat and recorded colour choices.
+ *
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/narabe";
+ * import type { OpeningState } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const value: OpeningState = state.opening;
+ * console.log(value);
+ * ```
+ */
 export type OpeningState = {
   stage: OpeningStage;
   /** The seat acting outside the normal turn order, if any. */
@@ -276,6 +455,15 @@ export type { VariantSpec } from "./variantSpec.types.ts";
  * `noCaptures`: this colour does not capture, in the capture variants.
  * `secondStoneExclusion`: this colour's second stone must land outside the
  * central square of this half-width (2 for 5×5, 3 for 7×7); 0 for none.
+ *
+ * @example
+ * ```ts
+ * import type { Handicap } from "@johnmorrisdotca/narabe";
+ * import { NO_HANDICAP } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Handicap = {...NO_HANDICAP,stone:"black",doubleThree:true};
+ * console.log(value);
+ * ```
  */
 export type Handicap = {
   stone: Stone | null;
@@ -290,7 +478,16 @@ export type Handicap = {
   secondStoneExclusion: number;
 };
 
-/** The toggles of a handicap, without the colour that carries them. */
+/** The toggles of a handicap, without the colour that carries them.
+ *
+ * @example
+ * ```ts
+ * import type { HandicapRule } from "@johnmorrisdotca/narabe";
+ *
+ * const value: HandicapRule = "doubleThree";
+ * console.log(value);
+ * ```
+ */
 export type HandicapRule = Exclude<keyof Handicap, "stone" | "secondStoneExclusion">;
 
 /**
@@ -305,6 +502,14 @@ export type HandicapRule = Exclude<keyof Handicap, "stone" | "secondStoneExclusi
  *
  * The opposite colour from a handicap's, by nature: a handicap makes the
  * stronger side's game harder, a head start makes the weaker side's easier.
+ *
+ * @example
+ * ```ts
+ * import type { HeadStart } from "@johnmorrisdotca/narabe";
+ *
+ * const value: HeadStart = {stone:"black",freeTurns:1,traditional:0};
+ * console.log(value);
+ * ```
  */
 export type HeadStart = {
   stone: Stone | null;
@@ -317,6 +522,15 @@ export type HeadStart = {
  * the per-colour handicap and the head start. Every question that takes it —
  * whether a rating may move, on the pages, the set-up screen and the writers —
  * has to be handed both, so none of them can go on rating a game with either.
+ *
+ * @example
+ * ```ts
+ * import type { HandicapTerms } from "@johnmorrisdotca/narabe";
+ * import { NO_HANDICAP, NO_HEAD_START } from "@johnmorrisdotca/narabe";
+ *
+ * const value: HandicapTerms = {handicap:NO_HANDICAP,headStart:NO_HEAD_START};
+ * console.log(value);
+ * ```
  */
 export type HandicapTerms = Pick<GameSettings, "handicap" | "headStart">;
 
@@ -324,6 +538,16 @@ export type HandicapTerms = Pick<GameSettings, "handicap" | "headStart">;
  * The rules one colour actually plays under: the variant's spec for that
  * colour with the handicap laid over it. Everything in the engine that asks
  * "may this colour…" reads one of these, never the spec directly.
+ *
+ * @example
+ * ```ts
+ * import { createGame, rulesFor } from "@johnmorrisdotca/narabe";
+ * import type { ColourRules } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const value: ColourRules = rulesFor(state.settings,"black");
+ * console.log(value);
+ * ```
  */
 export type ColourRules = {
   lineRule: LineRule;
@@ -334,6 +558,16 @@ export type ColourRules = {
   secondStoneExclusion: number;
 };
 
+/** Whether the game is playing, won or drawn.
+ *
+ * @example
+ * ```ts
+ * import type { GameStatus } from "@johnmorrisdotca/narabe";
+ *
+ * const value: GameStatus = "playing";
+ * console.log(value);
+ * ```
+ */
 export type GameStatus = "playing" | "won" | "draw";
 
 /**
@@ -341,13 +575,39 @@ export type GameStatus = "playing" | "won" | "draw";
  * make: a capture that must be made, or carried on, instead of a step; or —
  * where the game takes the most — the capture taking the most pieces, over
  * shorter ones the pieces also have.
+ *
+ * @example
+ * ```ts
+ * import type { MoveNarrowing } from "@johnmorrisdotca/narabe";
+ *
+ * const value: MoveNarrowing = "capture";
+ * console.log(value);
+ * ```
  */
 export type MoveNarrowing = "capture" | "mostCaptured";
 
-/** Whether a turn moves a piece already on the board, or places on a point. */
+/** Whether a turn moves a piece already on the board, or places on a point.
+ *
+ * @example
+ * ```ts
+ * import type { TurnChoiceKind } from "@johnmorrisdotca/narabe";
+ *
+ * const value: TurnChoiceKind = "move";
+ * console.log(value);
+ * ```
+ */
 export type TurnChoiceKind = "move" | "place";
 
-/** What the colour to move may do this turn, as the engine answers it — see `turnChoices`. */
+/** What the colour to move may do this turn, as the engine answers it — see `turnChoices`.
+ *
+ * @example
+ * ```ts
+ * import type { TurnChoices } from "@johnmorrisdotca/narabe";
+ *
+ * const value: TurnChoices = {kind:"place",points:[{row:7,col:7}],count:1};
+ * console.log(value);
+ * ```
+ */
 export type TurnChoices =
   | { kind: "move"; pieces: Point[]; count: number; narrowedBy: MoveNarrowing | null }
   | { kind: "place"; points: Point[]; count: number };
@@ -355,18 +615,42 @@ export type TurnChoices =
 /**
  * Who opens. `random` is resolved once when the game is created — the engine
  * stays pure by taking the roll as an argument, see `resolveOpener`.
+ *
+ * @example
+ * ```ts
+ * import type { FirstPlayer } from "@johnmorrisdotca/narabe";
+ *
+ * const value: FirstPlayer = "random";
+ * console.log(value);
+ * ```
  */
 export type FirstPlayer = Stone | "random";
 
 /**
  * `none`: every intersection is playable.
  * `hoshi`: the star points are blocked, except tengen at the centre.
+ *
+ * @example
+ * ```ts
+ * import type { ObstacleLayout } from "@johnmorrisdotca/narabe";
+ *
+ * const value: ObstacleLayout = "hoshi";
+ * console.log(value);
+ * ```
  */
 export type ObstacleLayout = "none" | "hoshi";
 
 /**
  * The two people at the board. Seats are distinct from stone colours because
  * `swapSeats` exchanges them mid-game — see `GameState.seats`.
+ *
+ * @example
+ * ```ts
+ * import type { Seat } from "@johnmorrisdotca/narabe";
+ *
+ * const value: Seat = "one";
+ * console.log(value);
+ * ```
  */
 export type Seat = "one" | "two";
 
@@ -378,9 +662,28 @@ export type Seat = "one" | "two";
  * share of the board's points rather than a number of moves, so it needs no
  * arithmetic per size: the same setting means something sensible on 9x9 and
  * on 19x19.
+ *
+ * @example
+ * ```ts
+ * import type { DrawLimit } from "@johnmorrisdotca/narabe";
+ *
+ * const value: DrawLimit = "half";
+ * console.log(value);
+ * ```
  */
 export type DrawLimit = "none" | "half" | "threeQuarters";
 
+/** Native rule, layout, opening, handicap and optional action settings.
+ *
+ * @example
+ * ```ts
+ * import type { GameSettings } from "@johnmorrisdotca/narabe";
+ * import { createGame } from "@johnmorrisdotca/narabe";
+ *
+ * const value: GameSettings = createGame({variant:"go",size:9}).settings;
+ * console.log(value);
+ * ```
+ */
 export type GameSettings = {
   /** Board is `size` × `size` intersections. */
   size: number;
@@ -425,6 +728,19 @@ export type GameSettings = {
   drawLimit: DrawLimit;
 };
 
+/** The complete immutable position and its move history, seats and outcome.
+ *
+ * @example
+ * ```ts
+ * import { createGame, playMove } from "@johnmorrisdotca/narabe";
+ * import type { GameState } from "@johnmorrisdotca/narabe";
+ *
+ * const state = createGame({variant:"freestyle",size:15});
+ * const point = {row:7,col:7};
+ * const value: GameState = playMove(state,point);
+ * console.log(value);
+ * ```
+ */
 export type GameState = {
   settings: GameSettings;
   /** Row-major, `size * size` entries. See `indexOf` / `pointOf`. */

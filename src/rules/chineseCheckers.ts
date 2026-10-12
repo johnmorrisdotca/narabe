@@ -22,10 +22,26 @@ import { cellAtPoint, indexOf, isOnBoard, stepFrom } from "./board.ts";
  * How many rows deep each of the star's six points is. The board's centre
  * hexagon has the same radius, and the standard 121-hole set is radius 4:
  * a 61-cell hexagon plus six 10-cell points.
+ *
+ * @example
+ * ```ts
+ * import { STAR_RADIUS } from "@johnmorrisdotca/narabe";
+ * console.log(STAR_RADIUS);
+ * ```
  */
 export const STAR_RADIUS = 4;
 
-/** The side of the square array a star of this radius is embedded in. */
+/** The side of the square array a star of this radius is embedded in.
+ *
+ * @param radius - The Chinese Checkers star radius.
+ * @returns The side of the square array a star of this radius is embedded in.
+ * @example
+ * ```ts
+ * import { STAR_RADIUS, starSize } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(starSize(STAR_RADIUS));
+ * ```
+ */
 export function starSize(radius: number = STAR_RADIUS): number {
   return 4 * radius + 1;
 }
@@ -152,7 +168,17 @@ function pointCells(radius: number, side: "top" | "bottom"): Point[] {
   return starTipCells(radius, side);
 }
 
-/** Pieces a side has: the cells of one point, ten on the standard board. */
+/** Pieces a side has: the cells of one point, ten on the standard board.
+ *
+ * @param radius - The Chinese Checkers star radius.
+ * @returns Pieces a side has: the cells of one point, ten on the standard board.
+ * @example
+ * ```ts
+ * import { STAR_RADIUS, starCampSize } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(starCampSize(STAR_RADIUS));
+ * ```
+ */
 export function starCampSize(radius: number): number {
   return pointCells(radius, "top").length;
 }
@@ -166,7 +192,18 @@ export function starCampSquares(radius: number, stone: Stone): Point[] {
   return pointCells(radius, stone === "black" ? "top" : "bottom");
 }
 
-/** Whose home point `point` lies in, or null outside both. */
+/** Whose home point `point` lies in, or null outside both.
+ *
+ * @param radius - The Chinese Checkers star radius.
+ * @param point - A zero-based row and column on the board.
+ * @returns The starting star-camp colour, or null outside both camps.
+ * @example
+ * ```ts
+ * import { STAR_RADIUS, starCampOf } from "@johnmorrisdotca/narabe";
+ *
+ * console.log(starCampOf(STAR_RADIUS,{row:0,col:8}));
+ * ```
+ */
 export function starCampOf(radius: number, point: Point): Stone | null {
   const tip = starTipOf(radius, point);
   return tip === "top" ? "black" : tip === "bottom" ? "white" : null;
@@ -230,7 +267,21 @@ export function starFilled(board: Cell[], size: number, radius: number, stone: S
   return own > 0;
 }
 
-/** How many of `stone`'s pieces stand in the far point. */
+/** How many of `stone`'s pieces stand in the far point.
+ *
+ * @param board - The row-major board cells; null marks an empty point.
+ * @param size - The number of cells on each side of the board.
+ * @param radius - The Chinese Checkers star radius.
+ * @param stone - The black or white colour being examined.
+ * @returns How many of `stone`'s pieces stand in the far point.
+ * @example
+ * ```ts
+ * import { STAR_RADIUS, createGame, starPiecesHome } from "@johnmorrisdotca/narabe";
+ *
+ * const star = createGame({variant:"chineseCheckers"});
+ * console.log(starPiecesHome(star.board,star.settings.size,STAR_RADIUS,"black"));
+ * ```
+ */
 export function starPiecesHome(board: Cell[], size: number, radius: number, stone: Stone): number {
   const far = starCampSquares(radius, stone === "black" ? "white" : "black");
   return far.filter((point) => cellAtPoint(board, size, point) === stone).length;
