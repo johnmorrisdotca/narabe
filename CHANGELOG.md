@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+- Synchronize documentation tooling for repository layouts, generated type references, Node entry points and repository-specific README links.
+
 - Keep large documentation resource catalogues on the entry index and the active resource beside core navigation, preserving every reference page; render valid default imports in HTML and Markdown.
 
 - Add the bilingual documentation site, checked examples, paired guides, local search and machine-readable pages. Give the existing Go rules import a named entry for its documentation; keep wildcard imports available.
