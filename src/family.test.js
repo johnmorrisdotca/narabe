@@ -15,9 +15,9 @@ const id = pkg.name.replace(/^@[^/]+\//, "");
 
 // The recorded hashes. The template's is the one that says every demo's header and footer, and every README's
 // list of the family, are the same text.
-// The template of 2026-10-15 lists twenty-six packages: Kyogijo Stadiums (kyogijo-stadiums, the name it was renamed to in 0.4.0) and Taisen (taisen-brackets, not on npm yet, listed in FAMILY_NOT_ON_NPM). The family's list is swept again, in every
+// The template of 2026-10-15b lists twenty-six packages: Kyogijo Stadiums (kyogijo-stadiums, the name it was renamed to in 0.4.0) and Taisen Brackets (taisen-brackets, on npm since 0.1.0, so FAMILY_NOT_ON_NPM is empty). The family's list is swept again, in every
 // repository at once, when a package is added to it, and this hash is then the new one.
-const TEMPLATE = { version: "2026-10-15", sha256: "cee03de7990c262dddb11c080c893d7a53623c13188314bb23b6d60a086ae96c" };
+const TEMPLATE = { version: "2026-10-15b", sha256: "34016d065f9e2231d3372dc35a39cd8f342f7749ab423ebe1d5c162c43637e4a" };
 const FILES = {
   "scripts/family-readme.mjs": "6752eaa287a9007af87d9019e4cee4c36fe1d79b60bf24478e7851ebe75138c4",
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
