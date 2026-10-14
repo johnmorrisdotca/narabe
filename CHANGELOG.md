@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+- Keep large documentation resource catalogues on the entry index and the active resource beside core navigation, preserving every reference page; render valid default imports in HTML and Markdown.
+
 - Add the bilingual documentation site, checked examples, paired guides, local search and machine-readable pages. Give the existing Go rules import a named entry for its documentation; keep wildcard imports available.
 
 - Add a board-position and move-replay element, the shared embed builder and a validated iframe route. The native engine and SVG writer retain all rules and rendering; replay controls, reflected properties, host options and composed events are available.
