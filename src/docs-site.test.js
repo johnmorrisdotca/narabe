@@ -2,13 +2,18 @@
 // (src/docs-site.test.js, or test/docs-site.test.js where a package keeps its tests there), copied unchanged beside
 // scripts/docs-site.mjs and e2e/docs-site.demo.mjs, whose hashes it records. It reads files and builds nothing: the examples
 // are run by `pnpm docs:check` and by the Pages workflow's `pnpm docs:site`, which need the package built.
+import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import process from "node:process";
+import { pathToFileURL } from "node:url";
+import { promisify } from "node:util";
 
 import { describe, expect, it } from "vitest";
 import ts from "typescript";
 
-import { DOCS_SITE_VERSION, docsProblems, importLineOf, measureBundles, navigationEntries, packageOf, sizeBadge } from "../scripts/docs-site.mjs";
+import { DOCS_SITE_VERSION, docsProblems, importLineOf, navigationEntries, packageOf, sizeBadge } from "../scripts/docs-site.mjs";
 
 const read = (path) => readFileSync(path, "utf8").replace(/\r\n/g, "\n");
 const sha = (path) => createHash("sha256").update(readFileSync(path)).digest("hex");
@@ -63,7 +68,11 @@ describe("the README's badges", () => {
   it("show the package's size, minified and gzipped, as docs/bundle-size.json records it and as it measures now", async () => {
     expect(existsSync("docs/bundle-size.json"), "run `pnpm size --write`").toBe(true);
     const recorded = JSON.parse(read("docs/bundle-size.json"));
-    const measured = await measureBundles(".");
+    // Use the CLI's actual Node/module context instead of the test runner's transformed modules.
+    const script = pathToFileURL(resolve("scripts/docs-site.mjs")).href;
+    const code = `import { measureBundles } from ${JSON.stringify(script)}; console.log(JSON.stringify(await measureBundles(process.cwd())));`;
+    const ran = await promisify(execFile)(process.execPath, ["--input-type=module", "-e", code], { cwd: process.cwd(), encoding: "utf8", maxBuffer: 64 * 1024 * 1024, timeout: 30_000 });
+    const measured = JSON.parse(ran.stdout);
     expect(Object.keys(measured.entries).sort()).toEqual(Object.keys(recorded.entries).sort());
     for (const [key, size] of Object.entries(measured.entries)) {
       // gzip's bytes move a little with the zlib a Node version carries; anything more is a change to record.
