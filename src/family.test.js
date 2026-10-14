@@ -15,9 +15,9 @@ const id = pkg.name.replace(/^@[^/]+\//, "");
 
 // The recorded hashes. The template's is the one that says every demo's header and footer, and every README's
 // list of the family, are the same text.
-// The template of 2026-10-15b lists twenty-six packages: Kyogijo Stadiums (kyogijo-stadiums, the name it was renamed to in 0.4.0) and Taisen Brackets (taisen-brackets, on npm since 0.1.0, so FAMILY_NOT_ON_NPM is empty). The family's list is swept again, in every
+// The template of 2026-10-15c lists twenty-eight packages, Dougu Sports (dougu-sports, on npm since 0.2.0) and Senshu Jerseys (senshu-jerseys, on npm since 0.1.0) among them, after Kyogijo Stadiums (kyogijo-stadiums, the name it was renamed to in 0.4.0) and Taisen Brackets (taisen-brackets, on npm since 0.1.0, so FAMILY_NOT_ON_NPM is empty). The family's list is swept again, in every
 // repository at once, when a package is added to it, and this hash is then the new one.
-const TEMPLATE = { version: "2026-10-15b", sha256: "34016d065f9e2231d3372dc35a39cd8f342f7749ab423ebe1d5c162c43637e4a" };
+const TEMPLATE = { version: "2026-10-15c", sha256: "6fd8dcbdf819abcaeec890f75ee77e553ffab4ea9b0e2df40674d9b99da4a906" };
 const FILES = {
   "scripts/family-readme.mjs": "6752eaa287a9007af87d9019e4cee4c36fe1d79b60bf24478e7851ebe75138c4",
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
@@ -38,7 +38,7 @@ describe("the family template", () => {
   it("lists every package of the family, in order, each with its Japanese name and a line on it", () => {
     expect(FAMILY.map((one) => one.id)).toEqual([
       "korokoro", "kyuubu", "hitotsu", "toranpu", "tane", "narabe", "tenka", "kumimoji", "tsunagi", "jarajara",
-      "suido", "domino", "kotoba", "sugoroku", "kazu", "meikyuu", "hikidashi", "chizu", "bushu", "tobiishi", "jirai", "gunjin", "karakuri", "houseki", "kyogijo-stadiums", "taisen-brackets",
+      "suido", "domino", "kotoba", "sugoroku", "kazu", "meikyuu", "hikidashi", "chizu", "bushu", "tobiishi", "jirai", "gunjin", "karakuri", "houseki", "kyogijo-stadiums", "taisen-brackets", "dougu-sports", "senshu-jerseys",
     ]);
     for (const one of FAMILY) {
       const slug = one.name.toLowerCase().replaceAll(" ", "-");
