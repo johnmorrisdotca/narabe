@@ -2,7 +2,7 @@
 title: 囲碁を打ち数える
 section: how-to
 order: 3
-description: 囲碁を打ち数えるの使い方と注意点。
+description: 基本APIで囲碁を打ち、面積で得点を数え、下位の囲碁用の関数を使います。
 ---
 
 ## 基本APIから打つ

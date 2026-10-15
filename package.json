@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/narabe",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "Narabe \u4e26\u3079 \u2014 Board game rules engine: gomoku, Reversi, Go, checkers: forty-eight abstract games, immutable moves, replay, SVG boards and React. Pure TypeScript, zero dependencies.",
   "keywords": [
     "abstract-board-games",

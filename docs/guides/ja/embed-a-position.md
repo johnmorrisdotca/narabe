@@ -2,7 +2,7 @@
 title: 盤面を埋め込む
 section: how-to
 order: 6
-description: 盤面を埋め込むの使い方と注意点。
+description: 盤面を要素、iframe、モジュールで埋め込み、属性と構造化した設定を分けて扱います。
 ---
 
 ## 専用の要素を置く

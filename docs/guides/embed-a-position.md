@@ -2,7 +2,7 @@
 title: Embed a board position
 section: how-to
 order: 6
-description: Learn embed a board position.
+description: Embed a board as an element, an iframe or a module, and keep attributes and structured options apart.
 ---
 
 ## Mount the native element

@@ -2,7 +2,7 @@
 title: Getting started
 section: tutorial
 order: 1
-description: Learn getting started.
+description: Install Narabe, create a game and play two moves.
 ---
 
 Use one immutable rules engine for forty-eight abstract board games. The core needs no DOM or runtime dependency; the optional React entry needs React 18 or later.

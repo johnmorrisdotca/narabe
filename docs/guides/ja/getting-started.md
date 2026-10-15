@@ -2,7 +2,7 @@
 title: はじめに
 section: tutorial
 order: 1
-description: はじめにの使い方と注意点。
+description: Narabeを入れ、ゲームを作り、2手を打ちます。
 ---
 
 48種類の盤上ゲームを、局面を新しく返す1つのルールエンジンで扱います。基本機能にDOMや実行時の依存パッケージは不要です。React用エントリーを使う場合はReact 18以降が必要です。

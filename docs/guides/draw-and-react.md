@@ -2,7 +2,7 @@
 title: Draw with SVG and React
 section: how-to
 order: 5
-description: Learn draw with svg and react.
+description: Draw the current position as SVG and keep game state in React.
 ---
 
 ## Draw the current position

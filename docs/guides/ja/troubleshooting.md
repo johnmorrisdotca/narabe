@@ -2,7 +2,7 @@
 title: 問題の確認とFAQ
 section: troubleshooting
 order: 9
-description: 問題の確認とFAQの使い方と注意点。
+description: 手を打っても変わらない、nullの意味、埋め込みの盤が空白になる、再生が途中で止まるといった場合を確認します。
 ---
 
 ## 手を打っても変わらない

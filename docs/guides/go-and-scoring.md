@@ -2,7 +2,7 @@
 title: Play and score Go
 section: how-to
 order: 3
-description: Learn play and score go.
+description: Play Go with the base API, score by area, and use the lower-level Go functions.
 ---
 
 ## Play through the root API

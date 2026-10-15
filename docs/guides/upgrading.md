@@ -2,12 +2,12 @@
 title: Upgrading and moving from other engines
 section: upgrading
 order: 10
-description: Learn upgrading and moving from other engines.
+description: Keep the 1.x contract and move from engines that change the board directly.
 ---
 
 ## Keep the 1.x contract
 
-This rollout adds documentation and a named entry for the existing rules/go import. The wildcard import remains available. No SDK move behavior changes. Preserve stored initial settings, move kinds, clock information and opening choices; do not migrate records by editing their finished board.
+The existing rules/go import now has a named entry, and the wildcard import remains available. No SDK move behavior changes. Preserve stored initial settings, move kinds, clock information and opening choices; do not migrate records by editing their finished board.
 
 ## Coming from mutable board libraries
 

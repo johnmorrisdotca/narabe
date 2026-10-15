@@ -2,7 +2,7 @@
 title: Troubleshooting and FAQ
 section: troubleshooting
 order: 9
-description: Learn troubleshooting and faq.
+description: Find out why a move changes nothing, what null means, and why an embedded board is blank or a replay stops.
 ---
 
 ## The move changed nothing

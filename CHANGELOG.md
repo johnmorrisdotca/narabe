@@ -6,25 +6,21 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
-- Synchronize documentation tooling for repository layouts, generated type references, Node entry points and repository-specific README links.
+## [1.3.0] - 2026-10-14
 
-- Keep large documentation resource catalogues on the entry index and the active resource beside core navigation, preserving every reference page; render valid default imports in HTML and Markdown.
-
-- Add the bilingual documentation site, checked examples, paired guides, local search and machine-readable pages. Give the existing Go rules import a named entry for its documentation; keep wildcard imports available.
-
-- Add a board-position and move-replay element, the shared embed builder and a validated iframe route. The native engine and SVG writer retain all rules and rendering; replay controls, reflected properties, host options and composed events are available.
-
-
-
+The board is an element with the family's standard embed attributes and a shared builder, the Go rules have a named entry point, and the package has an English and Japanese documentation site with a checked example for every export. The rules, moves, records and the existing imports are unchanged.
 
 ### Added
 
+- Add the bilingual documentation site, checked examples, paired guides, local search and machine-readable pages. Give the existing Go rules import a named entry for its documentation; keep wildcard imports available.
+- Add a board-position and move-replay element, the shared embed builder and a validated iframe route. The native engine and SVG writer retain all rules and rendering; replay controls, reflected properties, host options and composed events are available.
 - Share a package-independent embed builder for option controls, preview adapters, code tabs and shareable links.
 
 ### Changed
 
+- Synchronize documentation tooling for repository layouts, generated type references, Node entry points and repository-specific README links.
+- Keep large documentation resource catalogues on the entry index and the active resource beside core navigation, preserving every reference page; render valid default imports in HTML and Markdown.
 - Group the package family by kind, alphabetize each group, and include the geography packages and REST in Pieces in the shared footer and README.
-
 - Update the shared family description for addresses in all seven supported countries, including France and Germany.
 
 ## [1.2.2] - 2026-10-06
@@ -125,7 +121,8 @@ Nothing about play changed: every rule, every legal move and every result is exa
   measures whether a head start settles a game, and the source and its tests
   ship in the package beside the build.
 
-[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.2...v1.3.0
 [1.2.1]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.0.0...v1.1.0

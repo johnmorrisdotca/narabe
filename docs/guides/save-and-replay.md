@@ -2,7 +2,7 @@
 title: Save and replay a record
 section: how-to
 order: 4
-description: Learn save and replay a record.
+description: Save a record as settings and moves, replay it with its choices and clock, and spot a replay that stops early.
 ---
 
 ## Store settings and moves

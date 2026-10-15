@@ -2,7 +2,7 @@
 title: State and data-driven rules
 section: explanation
 order: 7
-description: Learn state and data-driven rules.
+description: See how one state value and data-driven variant specs hold 48 games, and how seats differ from colours.
 ---
 
 ## One position value

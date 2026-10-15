@@ -2,7 +2,7 @@
 title: Offer legal moves
 section: how-to
 order: 2
-description: Learn offer legal moves.
+description: Ask the engine for legal moves, handle every stage of a turn, and never assume a click ends it.
 ---
 
 ## Ask the native engine

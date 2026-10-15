@@ -2,7 +2,7 @@
 title: Game length and draw limits
 section: explanation
 order: 8
-description: Learn game length and draw limits.
+description: Understand why board size does not bound a game, choose a draw limit, and bound simulations.
 ---
 
 ## A board is not always a bound

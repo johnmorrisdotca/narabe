@@ -2,7 +2,7 @@
 title: SVGとReactで表示する
 section: how-to
 order: 5
-description: SVGとReactで表示するの使い方と注意点。
+description: 現在の局面をSVGで描き、Reactで対局の状態を持ちます。
 ---
 
 ## 今の局面を描く
