@@ -1,3 +1,5 @@
+import { VARIANT_SPECS } from "../constants.ts";
+import { checkMillMove, checkMillSlide } from "./mills.ts";
 import { expect } from "vitest";
 import { checkFlipMove, isFlipping } from "./flips.ts";
 import { cellAt, forbiddenPoints, indexOf, isStone, otherStone } from "../engine.ts";
@@ -49,6 +51,11 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
   // So does the connection game: no lines mean anything in it.
   if (isConnection(after.settings.variant)) {
     checkConnectionMove(before, after, played, where);
+    return;
+  }
+  // The mill games lay and take men by their own lines; restated by hand as well.
+  if (VARIANT_SPECS[after.settings.variant].mills) {
+    checkMillMove(before, after, played, where);
     return;
   }
   // Go plays by liberties and captures, not lines; restated by hand as well.
@@ -327,6 +334,10 @@ function checkTwist(before: GameState, after: GameState, seed: number) {
 /** What must hold after a piece slides: one stone moved one step, nothing else. */
 function checkSlide(before: GameState, after: GameState, from: Point, to: Point, seed: number) {
   const where = `${after.settings.variant} seed ${seed}, slide ${from.row},${from.col} to ${to.row},${to.col}`;
+  if (VARIANT_SPECS[after.settings.variant].mills) {
+    checkMillSlide(before, after, from, to, where);
+    return;
+  }
   expect(cellAt(after, from), `${where}: piece still at its origin`).toBeNull();
   expect(cellAt(after, to), `${where}: piece did not arrive`).toBe(before.toPlay);
   expect(Math.max(Math.abs(from.row - to.row), Math.abs(from.col - to.col)), `${where}: slid more than one step`).toBe(1);

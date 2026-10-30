@@ -122,7 +122,7 @@ export type Point = {
  * console.log(value);
  * ```
  */
-export type MoveKind = "place" | "skip" | "move" | "piece" | "pass" | "forfeit";
+export type MoveKind = "place" | "skip" | "move" | "piece" | "pass" | "forfeit" | "remove";
 
 /**
  * What a replay needs to know about a record that its moves cannot say.
@@ -305,6 +305,7 @@ export type RuleVariant =
   | "twistFive"
   | "twistFour"
   | "squareFour"
+  | "nineMensMorris"
   | "ringDrop"
   | "holeDrop"
   | "hotDrop"
@@ -390,7 +391,7 @@ export type OpeningRule =
  * console.log(value);
  * ```
  */
-export type WinReason = "line" | "captures" | "time" | "resign" | "trap" | "square" | "full" | "count" | "camp" | "connection" | "blocked" | "territory";
+export type WinReason = "line" | "captures" | "time" | "resign" | "trap" | "square" | "full" | "count" | "camp" | "connection" | "blocked" | "territory" | "reduced";
 
 /**
  * Where a swap-style opening stands. `placing` and `extending` are stretches
@@ -759,6 +760,8 @@ export type GameState = {
   toPlay: Stone;
   /** True between placing a stone and turning a quadrant, in the twist games. */
   pendingTwist: boolean;
+  /** A mill was just made and its maker owes the taking of a man: the point played next is the man taken (`rules/mills.ts`). */
+  pendingRemoval: boolean;
   /** Board squares holding a crowned piece, in the checkers family. Empty everywhere else. */
   kings: readonly Point[];
   /** The square of a piece mid-capture-chain that must keep jumping, in the checkers family. Null otherwise. */

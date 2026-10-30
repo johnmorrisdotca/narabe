@@ -1,6 +1,6 @@
 <h1 align="center">Narabe <sub>並べ</sub> — Board game rules engine: gomoku, Reversi, Go, checkers</h1>
 
-<p align="center"><strong>One rules engine for forty-eight abstract board games.</strong><br>
+<p align="center"><strong>One rules engine for forty-nine abstract board games.</strong><br>
 Gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and five draughts rule sets. Every game is a row of data, every move returns a new state, and nothing depends on anything.</p>
 
 <p align="center">
@@ -8,9 +8,9 @@ Gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Ch
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/narabe"><img alt="npm" src="https://img.shields.io/npm/v/@johnmorrisdotca/narabe?color=2f5d4a"></a>
   <a href="./LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
-  <img alt="48 games" src="https://img.shields.io/badge/games-48-2f5d4a">
+  <img alt="49 games" src="https://img.shields.io/badge/games-49-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
-  <a href="https://johnmorrisdotca.github.io/narabe/docs/api/main/index.html"><img alt="20.8 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-20.8%20kB-2f5d4a"></a>
+  <a href="https://johnmorrisdotca.github.io/narabe/docs/api/main/index.html"><img alt="21.8 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-21.8%20kB-2f5d4a"></a>
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/narabe#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
@@ -63,7 +63,7 @@ npx @johnmorrisdotca/narabe play hex --size 11 --seed 7
 ## Who it is for
 
 - **Anybody building a board-game site or app.** The rules, legal moves,
-  results and records of forty-eight games are done behind one set of
+  results and records of forty-nine games are done behind one set of
   functions, and `turnChoices` tells a board what to highlight without knowing
   a rule. You draw the board, or take the SVG one.
 - **Computer players and research.** Pure functions over plain data, so a
@@ -551,7 +551,7 @@ X is Black and O is White, and the random play is the same on every machine. The
 | Five in a row | Gomoku (`freestyle`), Tournament Gomoku (`standard`), Renju (`renju`), Omok (`omok`), Caro (`caro`), Connect6 (`connect6`), Misère Five (`misereFive`), Hex Five (`hexFive`) |
 | Captures | Ninuki-renju (`ninuki`), Sannuki-renju (`sannuki`) |
 | Drops | Drop Four (`dropFour`), Ring Drop (`ringDrop`), Hole Drop (`holeDrop`), Hot Drop (`hotDrop`), Clear Drop (`clearDrop`), Giveaway Drop (`giveawayDrop`), Edge Drop (`edgeDrop`), Wormhole Drop (`wormDrop`) |
-| Small boards | Tic-tac-toe (`tictactoe`), Wild Tic-tac-toe (`wildTicTacToe`), Notakto (`notakto`), Trap Three (`trapThree`), Square Four (`squareFour`), Maker and Breaker (`makerBreaker`) |
+| Small boards | Tic-tac-toe (`tictactoe`), Wild Tic-tac-toe (`wildTicTacToe`), Notakto (`notakto`), Trap Three (`trapThree`), Square Four (`squareFour`), Maker and Breaker (`makerBreaker`), Nine Men's Morris (`nineMensMorris`) |
 | Strange boards | Toroidal Five (`toroidalFive`), Obstacle Five (`obstacleFive`), Scattered Rocks (`scatteredRocks`), Rockfall (`rockfall`), Domino Five (`dominoFive`), Block Five (`blockFive`), Twist Five (`twistFive`), Twist Four (`twistFour`) |
 | Flipping | Reversi (`reversi`), Classic Reversi (`classicReversi`), Anti-Reversi (`antiReversi`), Mini Reversi (`miniReversi`), Grand Reversi (`grandReversi`), Honeycomb (`honeycomb`) |
 | Races | Halma (`halma`), Chinese Checkers (`chineseCheckers`) |
@@ -744,7 +744,7 @@ theme.
 
 | Limit | Value | Constant |
 | --- | --- | --- |
-| Games | 48 | `RULE_VARIANT_LIST` |
+| Games | 49 | `RULE_VARIANT_LIST` |
 | Players | two colours, Black and White | `STONES` |
 | Board sides | 3 to 19; each game offers some of them | `ALL_BOARD_SIZES`, `boardSizesFor(variant)` |
 | Rule sets of checkers and draughts | 6 | `VARIANT_SPECS[…].checkers` |
@@ -865,6 +865,7 @@ src/
 │   ├── hex.ts               the connection game Hex: a rhombus of hexagons with a side each
 │   ├── hexagon.ts           a hexagon of hexagons embedded in a square grid
 │   ├── lines.ts             the line rule: runs of stones, wrapping edges and what wins
+│   ├── mills.ts             the mill games: the board of three squares, its lines, mills, and the man a mill takes
 │   ├── mechanics.ts         the extras some games add to placing a stone: drops, arrival effects, quarter turns and slides
 │   ├── noProgress.ts        a game nobody is getting anywhere in is a draw
 │   ├── opening.ts           opening protocols: placement limits and swap openings
@@ -887,6 +888,7 @@ src/
     ├── chineseCheckers.ts   Chinese Checkers restated by hand
     ├── connections.ts       the connection game restated by hand
     ├── flips.ts             the flipping games restated by hand
+    ├── mills.ts             the mill games restated by hand: the board from its shape, mills, takings and losses
     ├── go.ts                Go restated by hand: liberties, capture, suicide, ko and the area count
     ├── headStart.ts         each game's traditional head start, written out rather than read from the spec
     ├── headStartBounds.ts   whether the favoured colour has made a turn of its own yet

@@ -16,6 +16,7 @@ import { STAR_RADIUS, starCampSquares, starFilled, starMoves } from "./chineseCh
 import { dropTarget } from "./drop.ts";
 import { hexConnection } from "./hex.ts";
 import { rulesFor } from "./handicap.ts";
+import { allLaid, hasMillMove, inMill, menOnBoard, millMoves } from "./mills.ts";
 import { owesHeadStart } from "./headStart.ts";
 import { findWinningLine, runThrough, winningLineFor } from "./lines.ts";
 import { countStones, pieceDestinations, squareThrough } from "./pieces.ts";
@@ -28,6 +29,39 @@ import { findAllWins, rotateQuadrant } from "./twist.ts";
  * with a handful of pieces. Each is consulted by `engine.ts` through the
  * variant's spec.
  */
+
+/** What a mill game's man coming to rest decides: the taking of a man if it made a mill, and otherwise the end of the turn. */
+export function settleMillTurn(state: GameState, to: Point): GameState {
+  const { toPlay } = state;
+  if (inMill(state.board, to, toPlay)) return { ...state, pendingRemoval: true };
+  return millTurnOver(state);
+}
+
+/** The other colour's turn, unless it cannot take one: down to two men with all laid, or with no move, it has lost. */
+export function millTurnOver(state: GameState): GameState {
+  const { toPlay, board } = state;
+  const other = otherStone(toPlay);
+  const after: GameState = { ...state, pendingRemoval: false, toPlay: other };
+  if (allLaid(state, other)) {
+    if (menOnBoard(board, other) < 3) return won(after, toPlay, WIN_REASONS.reduced, []);
+    if (!hasMillMove(board, other)) return won(after, toPlay, WIN_REASONS.blocked, []);
+  }
+  return settleDraw(after);
+}
+
+/** Lays a man, or takes one where a mill is owed its taking: the two things `playMove` means in a mill game. */
+export function playMillPoint(state: GameState, point: Point): GameState {
+  const { settings, toPlay } = state;
+  const board = state.board.slice();
+  if (state.pendingRemoval) {
+    board[indexOf(settings.size, point)] = null;
+    const taken: Move = { ...point, stone: toPlay, kind: MOVE_KINDS.remove };
+    return millTurnOver({ ...state, board, moves: [...state.moves, taken], captures: { ...state.captures, [toPlay]: state.captures[toPlay] + 1 } });
+  }
+  board[indexOf(settings.size, point)] = toPlay;
+  const laid: Move = { ...point, stone: toPlay, kind: MOVE_KINDS.place };
+  return settleMillTurn({ ...state, board, moves: [...state.moves, laid] }, point);
+}
 
 /** A finished game. */
 export function won(
@@ -127,7 +161,9 @@ export function blockedByGiveaway(state: GameState, point: Point): boolean {
  * ```
  */
 export function inMovePhase(state: GameState): boolean {
-  const { pieces, camps, checkers, chineseCheckers } = VARIANT_SPECS[state.settings.variant];
+  const { pieces, camps, checkers, chineseCheckers, mills } = VARIANT_SPECS[state.settings.variant];
+  // A mill game: all nine laid, taken or not, and not owing the taking of a man.
+  if (mills) return !state.pendingRemoval && allLaid(state, state.toPlay);
   // In a race game, and in checkers, every piece is down from the start.
   if (camps || checkers || chineseCheckers) return true;
   return pieces !== null && countStones(state.board, state.toPlay) >= pieces;
@@ -270,6 +306,7 @@ export function pieceMoves(state: GameState, from: Point): Point[] {
   if (!inMovePhase(state)) return [];
   if (!isOnBoard(state.settings.size, from) || state.board[indexOf(state.settings.size, from)] !== state.toPlay) return [];
   const spec = VARIANT_SPECS[state.settings.variant];
+  if (spec.mills) return millMoves(state.board, from, state.toPlay);
   if (spec.camps) return campMoves(state.board, state.settings.size, from);
   if (spec.checkers) return checkersMoves(state, from);
   if (spec.chineseCheckers) return starMoves(state.board, state.settings.size, from);
@@ -341,6 +378,9 @@ export function movePiece(state: GameState, from: Point, to: Point): GameState {
   board[indexOf(settings.size, to)] = toPlay;
   const move: Move = { ...to, stone: toPlay, kind: MOVE_KINDS.move, from };
   const moved: GameState = { ...state, board, moves: [...state.moves, move] };
+
+  // A mill game: three in a line owe the taking of a man, and anything else ends the turn.
+  if (spec.mills) return settleMillTurn(moved, to);
 
   // A race is decided by the far camp filling, and by nothing else on the board.
   if (spec.camps) {

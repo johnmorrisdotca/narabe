@@ -112,6 +112,7 @@ export const RULE_VARIANTS = {
   twistFive: "twistFive",
   twistFour: "twistFour",
   squareFour: "squareFour",
+  nineMensMorris: "nineMensMorris",
   ringDrop: "ringDrop",
   holeDrop: "holeDrop",
   hotDrop: "hotDrop",
@@ -233,6 +234,7 @@ export const RULE_VARIANT_LIST = [
   RULE_VARIANTS.twistFour,
   RULE_VARIANTS.trapThree,
   RULE_VARIANTS.squareFour,
+  RULE_VARIANTS.nineMensMorris,
   RULE_VARIANTS.tictactoe,
   RULE_VARIANTS.wildTicTacToe,
   RULE_VARIANTS.notakto,
@@ -383,6 +385,7 @@ export const WIN_REASONS = {
   connection: "connection",
   blocked: "blocked",
   territory: "territory",
+  reduced: "reduced",
 } as const satisfies Record<WinReason, WinReason>;
 
 /** The stages of the opening protocol.
@@ -915,6 +918,7 @@ function plain(overrides: SpecOverrides): VariantSpec {
     quadrantSize: null,
     pieces: null,
     squareWins: false,
+    mills: false,
     boardSizes: null,
     defaultBoard: null,
     analysis: true,
@@ -1181,6 +1185,20 @@ export const VARIANT_SPECS: Record<RuleVariant, VariantSpec> = {
     analysis: false,
   }),
   /*
+   * Nine Men's Morris: three squares joined at their sides. Nine men each to lay and then to move
+   * along the lines, three in a line taking one of the other side's, and a player brought down to two, or with no move, losing.
+   * No line is read as a win (`winLength` is never asked), and no reading of threats fits it.
+   */
+  nineMensMorris: small({
+    grid: BOARD_GRIDS.lines,
+    headStartTurns: 0,
+    winLength: 3,
+    pieces: 9,
+    mills: true,
+    boardSizes: [7],
+    analysis: false,
+  }),
+  /*
    * The flipping games. `winLength` is pinned to nothing in particular, since
    * no line is ever read; what matters is the flip, the pass and the count.
    */
@@ -1400,6 +1418,8 @@ export const MOVE_KINDS = {
   pass: "pass",
   // Written by a claimed timeout alone. See MoveKind.
   forfeit: "forfeit",
+  // A man taken after a mill: the second half of the turn that made it, in the state's own record. See `rules/mills.ts`.
+  remove: "remove",
 } as const satisfies Record<MoveKind, MoveKind>;
 
 /** How a written move list says the two moves that have no point.

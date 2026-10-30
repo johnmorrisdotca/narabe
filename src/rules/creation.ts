@@ -227,6 +227,7 @@ export function createGame(
     opening: initialOpening(settings, opener, seats),
     toPlay: opener,
     pendingTwist: false,
+    pendingRemoval: false,
     kings: [],
     chainAt: null,
     koPoint: null,

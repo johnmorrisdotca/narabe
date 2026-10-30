@@ -11,7 +11,7 @@ GameState holds settings, cells, moves, colour to play, seats, captures, opening
 
 ## The variant selects mechanics
 
-VARIANT_SPECS describes line rules, forbidden shapes, captures, turns, placement, grids, queues, camps, connections, draughts and Go. Settings normalize against that data. The root composes native mechanics rather than giving the UI forty-eight different engines. [The games](../../README.md#the-games) preserves the complete catalogue.
+VARIANT_SPECS describes line rules, forbidden shapes, captures, turns, placement, grids, queues, camps, connections, draughts and Go. Settings normalize against that data. The root composes native mechanics rather than giving the UI forty-nine different engines. [The games](../../README.md#the-games) preserves the complete catalogue.
 
 ## Seats differ from colours
 

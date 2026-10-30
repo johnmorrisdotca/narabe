@@ -6,6 +6,10 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **Nine Men's Morris** (`nineMensMorris`), the forty-ninth game: nine men each, laid and then moved along the lines of three squares joined at their sides, three in a line taking a man of the other side's, and a side brought down to two men, or with no move, losing; a side down to three may fly. A new mechanic, the mill: `spec.mills`, `state.pendingRemoval`, the win reason `reduced` and the move kind `remove`. While a man is owed, `isLegalMove`, `legalPoints` and `playMove` read the point played as the man to take, so a replay and a bot have one way to say it. `boardSvg` draws its board.
+
 ## [1.3.0] - 2026-10-14
 
 The board is an element with the family's standard embed attributes and a shared builder, the Go rules have a named entry point, and the package has an English and Japanese documentation site with a checked example for every export. The rules, moves, records and the existing imports are unchanged.

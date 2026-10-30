@@ -1,5 +1,5 @@
 import { farCampSquares } from "./farCamp.ts";
-import { GAME_STATUS, RULE_VARIANTS, VARIANT_SPECS } from "../constants.ts";
+import { GAME_STATUS, MOVE_KINDS, RULE_VARIANTS, VARIANT_SPECS } from "../constants.ts";
 import type { GameState, Move, Point, RuleVariant, Stone } from "../types.ts";
 
 /**
@@ -69,6 +69,8 @@ export const PROGRESS_MEASURES = {
   racing: "racing",
   /** Putting a new piece down, in a game that places a few and then slides them. */
   placing: "placing",
+  /** A man laid or a man taken: the two one-way things in a mill game. */
+  milling: "milling",
 } as const;
 
 export type ProgressMeasure = (typeof PROGRESS_MEASURES)[keyof typeof PROGRESS_MEASURES];
@@ -127,6 +129,11 @@ export const NO_PROGRESS_RULES: Partial<Record<RuleVariant, NoProgressRule>> = {
    * somebody who was about to make it.
    */
   [RULE_VARIANTS.squareFour]: { plies: 4000, measure: PROGRESS_MEASURES.placing },
+  /*
+   * Nine Men's Morris: fifty moves each with no man laid or taken. Both are one-way, so this is the taking measure,
+   * where a laid man counts as a man's step does in draughts. Its rules page says the count is the site's.
+   */
+  [RULE_VARIANTS.nineMensMorris]: { plies: 100, measure: PROGRESS_MEASURES.milling },
   /*
    * Chinese Checkers is a race like Halma, and its stall is Halma's: a draw by
    * the no-progress rule, said in the same words (John, 2026-09-15).
@@ -337,6 +344,15 @@ export function pliesWithoutProgress(state: GameState): number | null {
   if (measure === PROGRESS_MEASURES.placing) {
     const laid = 2 * (VARIANT_SPECS[state.settings.variant].pieces ?? 0);
     return Math.max(0, state.moves.length - laid);
+  }
+  if (measure === PROGRESS_MEASURES.milling) {
+    let idle = 0;
+    for (let at = state.moves.length - 1; at >= 0; at -= 1) {
+      const kind = state.moves[at]!.kind;
+      if (kind === MOVE_KINDS.place || kind === MOVE_KINDS.remove) break;
+      idle += 1;
+    }
+    return idle;
   }
   if (measure !== PROGRESS_MEASURES.taking) return null;
   let idle = 0;

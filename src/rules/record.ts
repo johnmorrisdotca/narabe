@@ -171,6 +171,23 @@ function undoOne(state: GameState): GameState {
   const { size } = state.settings;
   const spec = VARIANT_SPECS[state.settings.variant];
   const quadrantSize = spec.quadrantSize;
+  // A man taken after a mill goes back, and the mill's maker owes the taking again.
+  if (last.kind === MOVE_KINDS.remove) {
+    const restored = state.board.slice();
+    restored[indexOf(size, last)] = otherStone(last.stone);
+    return {
+      ...state,
+      board: restored,
+      moves: state.moves.slice(0, -1),
+      pendingRemoval: true,
+      toPlay: last.stone,
+      status: GAME_STATUS.playing,
+      winner: null,
+      winBy: null,
+      winningLine: [],
+      captures: { ...state.captures, [last.stone]: state.captures[last.stone] - 1 },
+    };
+  }
   let board = state.board.slice();
   if (last.twist !== undefined && quadrantSize !== null) {
     board = rotateQuadrant(board, size, quadrantSize, last.twist.quadrant, !last.twist.clockwise);
@@ -208,6 +225,7 @@ function undoOne(state: GameState): GameState {
     chainAt,
     koPoint,
     pendingTwist: false,
+    pendingRemoval: false,
     moves: state.moves.slice(0, -1),
     captures: {
       ...state.captures,

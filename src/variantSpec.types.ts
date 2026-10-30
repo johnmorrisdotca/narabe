@@ -68,6 +68,10 @@ export type VariantSpec = {
   /** A 2×2 square of one colour also wins. */
   squareWins: boolean;
   /**
+   * The mill games: the board is three squares joined at their sides, men move along its lines, and three in a line take one of the other side's (`rules/mills.ts`).
+   */
+  mills: boolean;
+  /**
    * Board sizes this game is played on, or null for the standard list.
    *
    * IN NUMERICAL ORDER, ALWAYS, because that is the order they are drawn in —
