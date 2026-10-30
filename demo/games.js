@@ -26,11 +26,11 @@ export const GROUPS = [
   },
   {
     name: "Moving men",
-    nameJa: "駒を動かす",
+    nameJa: "駒の移動",
     games: [
-      { key: "breakthrough", name: "Breakthrough", kanji: "突破", rule: "Two rows of men each. Step forward, take diagonally, and reach the far row.", ruleJa: "それぞれ2列の駒。前へ進み、斜め前の駒を取り、向こうの端に着きます。" },
-      { key: "linesOfAction", name: "Lines of Action", kanji: "連結", rule: "A man moves as far as there are men on its line. Join all yours to win.", ruleJa: "駒は、その線上の駒の数だけ動きます。自分の駒をすべてつなげると勝ちです。" },
-      { key: "amazons", name: "Amazons", kanji: "アマゾン", rule: "Move a queen, then shoot an arrow. The side with no move loses.", ruleJa: "クイーンを動かし、矢を放ちます。動けなくなったほうの負けです。" },
+      { key: "breakthrough", name: "Breakthrough", kanji: "ブレイクスルー", rule: "Two rows of men each. Step forward, take diagonally, and reach the far row.", ruleJa: "それぞれ2段の駒。前へ進み、斜め前の駒を取り、向こうの端に着きます。" },
+      { key: "linesOfAction", name: "Lines of Action", kanji: "ラインズオブアクション", rule: "A man moves as far as there are men on its line. Join all yours to win.", ruleJa: "駒は、その線上の駒の数だけ動きます。自分の駒をすべてつなげると勝ちです。" },
+      { key: "amazons", name: "Amazons", kanji: "アマゾンズ", rule: "Move a queen, then shoot an arrow. The side with no move loses.", ruleJa: "クイーンを動かし、矢を放ちます。動けなくなったほうの負けです。" },
     ],
   },
   {
@@ -56,7 +56,7 @@ export const GROUPS = [
       { key: "notakto", name: "Notakto", kanji: "黒だけ三目", rule: "Only black stones. Whoever makes three in a row loses.", ruleJa: "黒の石だけを使います。3つ並べた人が負けです。" },
       { key: "trapThree", name: "Trap Three", kanji: "罠三", rule: "Four in a row wins. Three in a row loses.", ruleJa: "4つ並べると勝ち、3つ並べると負けです。" },
       { key: "squareFour", name: "Square Four", kanji: "四角四目", rule: "Four pieces each. Line them up, or make a square.", ruleJa: "それぞれ4つの駒。1列に並べるか、正方形を作ります。" },
-      { key: "nineMensMorris", name: "Nine Men's Morris", kanji: "九人モリス", rule: "Nine men each, laid then moved along the lines. Three in a line take a man.", ruleJa: "それぞれ9つの駒を置き、線に沿って動かします。3つ並ぶと相手の駒を1つ取ります。" },
+      { key: "nineMensMorris", name: "Nine Men's Morris", kanji: "ナインメンズモリス", rule: "Nine men each, laid then moved along the lines. Three in a line take a man.", ruleJa: "それぞれ9つの駒を置き、線に沿って動かします。3つ並ぶと相手の駒を1つ取ります。" },
       { key: "makerBreaker", name: "Maker and Breaker", kanji: "作り手と壊し手", rule: "Both players place either colour. One wants a five, the other wants none.", ruleJa: "どちらも好きな色を置きます。一方は5つ並べたく、もう一方は並べさせたくありません。" },
     ],
   },
