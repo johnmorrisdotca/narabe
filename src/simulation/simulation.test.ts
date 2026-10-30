@@ -225,6 +225,8 @@ describe("a game given a length", () => {
 
   it("never runs past the share of the board it was given", () => {
     for (const variant of ALL) {
+      // Neither can be drawn, so neither is given a length to run past.
+      if (variant === "breakthrough" || variant === "amazons") continue;
       for (const [limit, share] of [["half", 1 / 2], ["threeQuarters", 3 / 4]] as const) {
         const final = playOut({ size: 9, variant, drawLimit: limit }, 77 + variant.length);
         const allowed = lengthByHand(final, share);
