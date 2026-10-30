@@ -1,7 +1,7 @@
 {
   "job": "Board game rules engine: gomoku, Reversi, Go, checkers",
   "pitch": {
-    "en": "Play forty-nine abstract board games through immutable moves, legal choices and replayable records.",
+    "en": "Play fifty-two abstract board games through immutable moves, legal choices and replayable records.",
     "ja": "48種類の盤上ゲームを、新しい局面を返す手の操作、合法手の一覧、再生できる棋譜で扱えます。"
   },
   "name": {

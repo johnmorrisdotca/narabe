@@ -99,6 +99,19 @@ export type Point = {
 };
 
 /**
+ * Which of the moving games' rules a game plays by (`rules/movers.ts`).
+ *
+ * @example
+ * ```ts
+ * import type { MoverRules } from "@johnmorrisdotca/narabe";
+ *
+ * const value: MoverRules = "breakthrough";
+ * console.log(value);
+ * ```
+ */
+export type MoverRules = "breakthrough" | "linesOfAction" | "amazons";
+
+/**
  * `place`: an ordinary stone.
  * `skip`: a deliberately wasted move, dropped on the emptiest corner.
  * `move`: a piece stepping from `from` to the move's point, in the games
@@ -122,7 +135,7 @@ export type Point = {
  * console.log(value);
  * ```
  */
-export type MoveKind = "place" | "skip" | "move" | "piece" | "pass" | "forfeit" | "remove";
+export type MoveKind = "place" | "skip" | "move" | "piece" | "pass" | "forfeit" | "remove" | "shoot";
 
 /**
  * What a replay needs to know about a record that its moves cannot say.
@@ -306,6 +319,9 @@ export type RuleVariant =
   | "twistFour"
   | "squareFour"
   | "nineMensMorris"
+  | "breakthrough"
+  | "linesOfAction"
+  | "amazons"
   | "ringDrop"
   | "holeDrop"
   | "hotDrop"
@@ -391,7 +407,7 @@ export type OpeningRule =
  * console.log(value);
  * ```
  */
-export type WinReason = "line" | "captures" | "time" | "resign" | "trap" | "square" | "full" | "count" | "camp" | "connection" | "blocked" | "territory" | "reduced";
+export type WinReason = "line" | "captures" | "time" | "resign" | "trap" | "square" | "full" | "count" | "camp" | "connection" | "blocked" | "territory" | "reduced" | "reached" | "joined";
 
 /**
  * Where a swap-style opening stands. `placing` and `extending` are stretches
@@ -760,6 +776,8 @@ export type GameState = {
   toPlay: Stone;
   /** True between placing a stone and turning a quadrant, in the twist games. */
   pendingTwist: boolean;
+  /** Amazons: a queen has moved and owes its arrow, from here. The point played next is where the arrow lands (`rules/movers.ts`). */
+  pendingShot: Point | null;
   /** A mill was just made and its maker owes the taking of a man: the point played next is the man taken (`rules/mills.ts`). */
   pendingRemoval: boolean;
   /** Board squares holding a crowned piece, in the checkers family. Empty everywhere else. */

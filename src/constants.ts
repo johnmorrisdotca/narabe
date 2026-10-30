@@ -113,6 +113,9 @@ export const RULE_VARIANTS = {
   twistFour: "twistFour",
   squareFour: "squareFour",
   nineMensMorris: "nineMensMorris",
+  breakthrough: "breakthrough",
+  linesOfAction: "linesOfAction",
+  amazons: "amazons",
   ringDrop: "ringDrop",
   holeDrop: "holeDrop",
   hotDrop: "hotDrop",
@@ -235,6 +238,9 @@ export const RULE_VARIANT_LIST = [
   RULE_VARIANTS.trapThree,
   RULE_VARIANTS.squareFour,
   RULE_VARIANTS.nineMensMorris,
+  RULE_VARIANTS.breakthrough,
+  RULE_VARIANTS.linesOfAction,
+  RULE_VARIANTS.amazons,
   RULE_VARIANTS.tictactoe,
   RULE_VARIANTS.wildTicTacToe,
   RULE_VARIANTS.notakto,
@@ -386,6 +392,8 @@ export const WIN_REASONS = {
   blocked: "blocked",
   territory: "territory",
   reduced: "reduced",
+  reached: "reached",
+  joined: "joined",
 } as const satisfies Record<WinReason, WinReason>;
 
 /** The stages of the opening protocol.
@@ -919,6 +927,7 @@ function plain(overrides: SpecOverrides): VariantSpec {
     pieces: null,
     squareWins: false,
     mills: false,
+    movers: null,
     boardSizes: null,
     defaultBoard: null,
     analysis: true,
@@ -1198,6 +1207,11 @@ export const VARIANT_SPECS: Record<RuleVariant, VariantSpec> = {
     boardSizes: [7],
     analysis: false,
   }),
+  // The moving games, each decided by something other than a line (`rules/movers.ts`): on no reading of threats, drawn in the squares.
+  breakthrough: small({ grid: BOARD_GRIDS.cells, headStartTurns: 0, movers: "breakthrough", allowFirstPlayerChoice: false, boardSizes: [8], analysis: false }),
+  linesOfAction: small({ grid: BOARD_GRIDS.cells, headStartTurns: 0, movers: "linesOfAction", allowFirstPlayerChoice: false, boardSizes: [8], analysis: false }),
+  // White moves first, as the game's own rules have it.
+  amazons: small({ grid: BOARD_GRIDS.cells, headStartTurns: 0, movers: "amazons", allowFirstPlayerChoice: false, firstStone: STONES.white, boardSizes: [10], analysis: false }),
   /*
    * The flipping games. `winLength` is pinned to nothing in particular, since
    * no line is ever read; what matters is the flip, the pass and the count.
@@ -1420,6 +1434,8 @@ export const MOVE_KINDS = {
   forfeit: "forfeit",
   // A man taken after a mill: the second half of the turn that made it, in the state's own record. See `rules/mills.ts`.
   remove: "remove",
+  // An Amazons arrow: the second half of the queen's turn, in the state's own record. See `rules/movers.ts`.
+  shoot: "shoot",
 } as const satisfies Record<MoveKind, MoveKind>;
 
 /** How a written move list says the two moves that have no point.

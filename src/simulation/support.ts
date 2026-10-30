@@ -1,3 +1,5 @@
+import { VARIANT_SPECS } from "../constants.ts";
+import { checkMoverMove } from "./movers.ts";
 import { expect } from "vitest";
 import {
   canPass,
@@ -150,6 +152,7 @@ function playOut(settings: Partial<GameSettings>, seed: number, slideCap: number
       if (isRace(state.settings.variant)) checkRaceMove(before, after, from, to, seed);
       else if (isCheckers(state.settings.variant)) checkCheckersMove(before, after, from, to, seed);
       else if (isChineseCheckers(state.settings.variant)) checkStarMove(before, after, from, to, seed);
+      else if (VARIANT_SPECS[state.settings.variant].movers !== null) checkMoverMove(before, after, from, to, `${state.settings.variant} seed ${seed}, ${from.row},${from.col} to ${to.row},${to.col}`);
       else checkSlide(before, after, from, to, seed);
       state = after;
       // A capture chain keeps the same player on move, so it must not count

@@ -25,6 +25,15 @@ export const GROUPS = [
     ],
   },
   {
+    name: "Moving men",
+    nameJa: "駒を動かす",
+    games: [
+      { key: "breakthrough", name: "Breakthrough", kanji: "突破", rule: "Two rows of men each. Step forward, take diagonally, and reach the far row.", ruleJa: "それぞれ2列の駒。前へ進み、斜め前の駒を取り、向こうの端に着きます。" },
+      { key: "linesOfAction", name: "Lines of Action", kanji: "連結", rule: "A man moves as far as there are men on its line. Join all yours to win.", ruleJa: "駒は、その線上の駒の数だけ動きます。自分の駒をすべてつなげると勝ちです。" },
+      { key: "amazons", name: "Amazons", kanji: "アマゾン", rule: "Move a queen, then shoot an arrow. The side with no move loses.", ruleJa: "クイーンを動かし、矢を放ちます。動けなくなったほうの負けです。" },
+    ],
+  },
+  {
     name: "Drops",
     nameJa: "落とし",
     games: [

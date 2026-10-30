@@ -81,8 +81,8 @@ describe("simulated games", () => {
         let run = 0;
         let previous: Stone | null = null;
         for (const move of final.moves) {
-          // A man taken after a mill is the second half of the turn that made it, not another stone.
-          if (move.kind === "remove") continue;
+          // A man taken after a mill, or an arrow after a queen, is the second half of its turn, not another stone.
+          if (move.kind === "remove" || move.kind === "shoot") continue;
           // Identity is the mover, which differs from the colour where the mover chooses it.
           const mover = move.by ?? move.stone;
           run = mover === previous ? run + 1 : 1;

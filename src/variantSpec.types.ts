@@ -1,4 +1,4 @@
-import type { OpeningRule, PieceQueue, Stone } from "./types.ts";
+import type { MoverRules, OpeningRule, PieceQueue, Stone } from "./types.ts";
 import type { RockSpec } from "./rules/rocks.types.ts";
 import type {
   BoardGrid,
@@ -71,6 +71,8 @@ export type VariantSpec = {
    * The mill games: the board is three squares joined at their sides, men move along its lines, and three in a line take one of the other side's (`rules/mills.ts`).
    */
   mills: boolean;
+  /** The moving games: men set out from the start, moved by these rules, and won by something other than a line (`rules/movers.ts`). */
+  movers: MoverRules | null;
   /**
    * Board sizes this game is played on, or null for the standard list.
    *

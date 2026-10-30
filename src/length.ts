@@ -92,7 +92,7 @@ export function longestPossibleGame(settings: GameSettings): number | null {
  */
 export function noBoundReason(settings: GameSettings): NoBoundReason | null {
   const spec = VARIANT_SPECS[settings.variant];
-  if (spec.camps || spec.checkers || spec.chineseCheckers || spec.pieces !== null) return "pieces-move";
+  if (spec.camps || spec.checkers || spec.chineseCheckers || spec.pieces !== null || spec.movers !== null) return "pieces-move";
   if (spec.captures || spec.go) return "captures";
   if (spec.lineClear) return "line-clear";
   return null;

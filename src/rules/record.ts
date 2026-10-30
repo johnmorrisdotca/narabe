@@ -171,6 +171,13 @@ function undoOne(state: GameState): GameState {
   const { size } = state.settings;
   const spec = VARIANT_SPECS[state.settings.variant];
   const quadrantSize = spec.quadrantSize;
+  // An arrow comes back up, and the queen that shot it owes it again from where it stands.
+  if (last.kind === MOVE_KINDS.shoot) {
+    const cleared = state.board.slice();
+    cleared[indexOf(size, last)] = null;
+    const queen = state.moves[state.moves.length - 2]!;
+    return { ...state, board: cleared, moves: state.moves.slice(0, -1), pendingShot: { row: queen.row, col: queen.col }, toPlay: last.stone, status: GAME_STATUS.playing, winner: null, winBy: null, winningLine: [] };
+  }
   // A man taken after a mill goes back, and the mill's maker owes the taking again.
   if (last.kind === MOVE_KINDS.remove) {
     const restored = state.board.slice();
@@ -226,6 +233,7 @@ function undoOne(state: GameState): GameState {
     koPoint,
     pendingTwist: false,
     pendingRemoval: false,
+    pendingShot: null,
     moves: state.moves.slice(0, -1),
     captures: {
       ...state.captures,

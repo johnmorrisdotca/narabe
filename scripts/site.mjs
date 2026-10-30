@@ -11,7 +11,7 @@ const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewB
 const frame = ({ title, description, links, body, scripts }) => `<!doctype html>
 <html lang="en">
   <head>
-    ${familyHead({ id, title, description, ogTitle: "Narabe 並べ — Board game rules engine: gomoku, Reversi, Go, checkers", ogDescription: "Pick any of forty-nine abstract board games and play it on one screen, on one rules engine." })}
+    ${familyHead({ id, title, description, ogTitle: "Narabe 並べ — Board game rules engine: gomoku, Reversi, Go, checkers", ogDescription: "Pick any of fifty-two abstract board games and play it on one screen, on one rules engine." })}
     <link rel="icon" href="${icon}" />
     <link rel="stylesheet" href="family.css" />
     <link rel="stylesheet" href="narabe.css" />
@@ -37,7 +37,7 @@ writeFileSync(
   "site/index.html",
   frame({
     title: "Narabe 並べ — Board game rules engine: gomoku, Reversi, Go, checkers",
-    description: "Pick any of forty-nine abstract board games and play it on one screen: gomoku, renju, Connect Four, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and draughts. Every rule runs on Narabe, a TypeScript rules engine. In English and Japanese.",
+    description: "Pick any of fifty-two abstract board games and play it on one screen: gomoku, renju, Connect Four, Reversi, Hex, Go, Halma, Chinese Checkers, checkers and draughts. Every rule runs on Narabe, a TypeScript rules engine. In English and Japanese.",
     links: [{ href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
     scripts: `<script type="module" src="page.js"></script>`,

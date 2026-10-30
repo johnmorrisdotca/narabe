@@ -199,6 +199,7 @@ export function forfeitTurn(state: GameState): GameState {
     chainAt: null,
     pendingTwist: false,
     pendingRemoval: false,
+    pendingShot: null,
   };
   if (state.pendingTwist && !state.board.includes(null)) return { ...lost, status: GAME_STATUS.draw };
   return lost;

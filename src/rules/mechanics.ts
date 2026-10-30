@@ -1,4 +1,5 @@
 import {
+  BLOCKED,
   DIRECTIONS,
   GAME_STATUS,
   MOVE_KINDS,
@@ -7,7 +8,7 @@ import {
   VARIANT_SPECS,
   WIN_REASONS,
 } from "../constants.ts";
-import type { Cell, GameState, Move, Point, Stone } from "../types.ts";
+import type { Cell, GameState, Move, MoverRules, Point, Stone } from "../types.ts";
 import { settleDraw } from "./drawLimit.ts";
 import { cellAtPoint, indexOf, isOnBoard, isStone, otherStone, stepFrom } from "./board.ts";
 import { campFilled, campMoves, campSquares } from "./camps.ts";
@@ -16,6 +17,7 @@ import { STAR_RADIUS, starCampSquares, starFilled, starMoves } from "./chineseCh
 import { dropTarget } from "./drop.ts";
 import { hexConnection } from "./hex.ts";
 import { rulesFor } from "./handicap.ts";
+import { allJoined, moverCanMove, moverMoves, reachedFarRow } from "./movers.ts";
 import { allLaid, hasMillMove, inMill, menOnBoard, millMoves } from "./mills.ts";
 import { owesHeadStart } from "./headStart.ts";
 import { findWinningLine, runThrough, winningLineFor } from "./lines.ts";
@@ -61,6 +63,43 @@ export function playMillPoint(state: GameState, point: Point): GameState {
   board[indexOf(settings.size, point)] = toPlay;
   const laid: Move = { ...point, stone: toPlay, kind: MOVE_KINDS.place };
   return settleMillTurn({ ...state, board, moves: [...state.moves, laid] }, point);
+}
+
+/** What a moving game's man coming to rest decides. */
+export function settleMover(before: GameState, moved: GameState, to: Point, rules: MoverRules): GameState {
+  const { settings, toPlay } = before;
+  const landedOn = before.board[indexOf(settings.size, to)];
+  const took = landedOn === otherStone(toPlay);
+  const taking: GameState = took
+    ? {
+        ...moved,
+        moves: [...moved.moves.slice(0, -1), { ...moved.moves.at(-1)!, captured: [to] }],
+        captures: { ...moved.captures, [toPlay]: moved.captures[toPlay] + 1 },
+      }
+    : moved;
+  // A queen moved owes its arrow, from where it landed: the turn is not over.
+  if (rules === "amazons") return { ...taking, pendingShot: to };
+  const other = otherStone(toPlay);
+  if (rules === "breakthrough" && reachedFarRow(taking.board, settings.size, toPlay)) return won(taking, toPlay, WIN_REASONS.reached, [to]);
+  if (rules === "linesOfAction") {
+    // The mover's group first: a move that joins both sides, by a capture, is the mover's win, as the rules say.
+    if (allJoined(taking.board, settings.size, toPlay)) return won(taking, toPlay, WIN_REASONS.joined, []);
+    if (allJoined(taking.board, settings.size, other)) return won(taking, other, WIN_REASONS.joined, []);
+  }
+  const passed: GameState = { ...taking, toPlay: other };
+  if (!moverCanMove(rules, taking.board, settings.size, other)) return won(passed, toPlay, WIN_REASONS.blocked, []);
+  return settleDraw(passed);
+}
+
+/** An Amazons arrow lands: the square is gone for good, and the turn passes, or the game ends if the other side can no longer move. */
+export function shootArrow(state: GameState, point: Point): GameState {
+  const { settings, toPlay } = state;
+  const board = state.board.slice();
+  board[indexOf(settings.size, point)] = BLOCKED;
+  const shot: Move = { ...point, stone: toPlay, kind: MOVE_KINDS.shoot };
+  const other = otherStone(toPlay);
+  const after: GameState = { ...state, board, moves: [...state.moves, shot], pendingShot: null, toPlay: other };
+  return moverCanMove("amazons", board, settings.size, other) ? settleDraw(after) : won(after, toPlay, WIN_REASONS.blocked, []);
 }
 
 /** A finished game. */
@@ -161,9 +200,11 @@ export function blockedByGiveaway(state: GameState, point: Point): boolean {
  * ```
  */
 export function inMovePhase(state: GameState): boolean {
-  const { pieces, camps, checkers, chineseCheckers, mills } = VARIANT_SPECS[state.settings.variant];
+  const { pieces, camps, checkers, chineseCheckers, mills, movers } = VARIANT_SPECS[state.settings.variant];
   // A mill game: all nine laid, taken or not, and not owing the taking of a man.
   if (mills) return !state.pendingRemoval && allLaid(state, state.toPlay);
+  // A moving game: always, but for the arrow an Amazons queen owes.
+  if (movers !== null) return state.pendingShot === null;
   // In a race game, and in checkers, every piece is down from the start.
   if (camps || checkers || chineseCheckers) return true;
   return pieces !== null && countStones(state.board, state.toPlay) >= pieces;
@@ -307,6 +348,7 @@ export function pieceMoves(state: GameState, from: Point): Point[] {
   if (!isOnBoard(state.settings.size, from) || state.board[indexOf(state.settings.size, from)] !== state.toPlay) return [];
   const spec = VARIANT_SPECS[state.settings.variant];
   if (spec.mills) return millMoves(state.board, from, state.toPlay);
+  if (spec.movers !== null) return moverMoves(spec.movers, state.board, state.settings.size, from, state.toPlay);
   if (spec.camps) return campMoves(state.board, state.settings.size, from);
   if (spec.checkers) return checkersMoves(state, from);
   if (spec.chineseCheckers) return starMoves(state.board, state.settings.size, from);
@@ -381,6 +423,8 @@ export function movePiece(state: GameState, from: Point, to: Point): GameState {
 
   // A mill game: three in a line owe the taking of a man, and anything else ends the turn.
   if (spec.mills) return settleMillTurn(moved, to);
+  // A moving game settles by its own rules, and takes what it lands on.
+  if (spec.movers !== null) return settleMover(state, moved, to, spec.movers);
 
   // A race is decided by the far camp filling, and by nothing else on the board.
   if (spec.camps) {

@@ -1,5 +1,6 @@
 import { VARIANT_SPECS } from "../constants.ts";
 import { checkMillMove, checkMillSlide } from "./mills.ts";
+import { checkArrow } from "./movers.ts";
 import { expect } from "vitest";
 import { checkFlipMove, isFlipping } from "./flips.ts";
 import { cellAt, forbiddenPoints, indexOf, isStone, otherStone } from "../engine.ts";
@@ -51,6 +52,11 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
   // So does the connection game: no lines mean anything in it.
   if (isConnection(after.settings.variant)) {
     checkConnectionMove(before, after, played, where);
+    return;
+  }
+  // An Amazons arrow, restated by hand with its queen's moves.
+  if (VARIANT_SPECS[after.settings.variant].movers !== null) {
+    checkArrow(before, after, played, where);
     return;
   }
   // The mill games lay and take men by their own lines; restated by hand as well.

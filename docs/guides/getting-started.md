@@ -5,7 +5,7 @@ order: 1
 description: Install Narabe, create a game and play two moves.
 ---
 
-Use one immutable rules engine for forty-nine abstract board games. The core needs no DOM or runtime dependency; the optional React entry needs React 18 or later.
+Use one immutable rules engine for fifty-two abstract board games. The core needs no DOM or runtime dependency; the optional React entry needs React 18 or later.
 
 ## Install
 

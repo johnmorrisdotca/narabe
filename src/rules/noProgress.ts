@@ -135,6 +135,11 @@ export const NO_PROGRESS_RULES: Partial<Record<RuleVariant, NoProgressRule>> = {
    */
   [RULE_VARIANTS.nineMensMorris]: { plies: 100, measure: PROGRESS_MEASURES.milling },
   /*
+   * Lines of Action can go round for ever and its rules, as published, call repeated positions a draw by agreement; here, a hundred moves each with nothing
+   * taken is a draw, and its rules page says the count is the site's. The other two moving games cannot repeat: Breakthrough's men only go forward, and an arrow is never taken back.
+   */
+  [RULE_VARIANTS.linesOfAction]: { plies: 200, measure: PROGRESS_MEASURES.milling },
+  /*
    * Chinese Checkers is a race like Halma, and its stall is Halma's: a draw by
    * the no-progress rule, said in the same words (John, 2026-09-15).
    *
@@ -348,8 +353,8 @@ export function pliesWithoutProgress(state: GameState): number | null {
   if (measure === PROGRESS_MEASURES.milling) {
     let idle = 0;
     for (let at = state.moves.length - 1; at >= 0; at -= 1) {
-      const kind = state.moves[at]!.kind;
-      if (kind === MOVE_KINDS.place || kind === MOVE_KINDS.remove) break;
+      const { kind, captured } = state.moves[at]!;
+      if (kind === MOVE_KINDS.place || kind === MOVE_KINDS.remove || (captured?.length ?? 0) > 0) break;
       idle += 1;
     }
     return idle;
