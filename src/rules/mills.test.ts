@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { GAME_STATUS, RULE_VARIANTS, STONES, WIN_REASONS } from "../constants.ts";
 import { createGame, inMovePhase, isLegalMove, legalPoints, movePiece, pieceMoves, playMove } from "../engine.ts";
 import { replayMoves, undoMove } from "./record.ts";
-import { MILLS, MILL_POINTS, hasMillMove, inMill, isMillPoint, millNeighbours, takeableMen } from "./mills.ts";
+import { MILLS, MILL_POINTS, hasMillMove, isMillPoint, millNeighbours, takeableMen } from "./mills.ts";
 import type { GameState, Point } from "../types.ts";
 
 const at = (row: number, col: number): Point => ({ row, col });
