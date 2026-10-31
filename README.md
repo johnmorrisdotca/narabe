@@ -1013,7 +1013,7 @@ Please follow the [code of conduct](./CODE_OF_CONDUCT.md).
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-The latest release is 1.3.0: the board as an element, the shared embed builder, the Go rules as a named entry point, and the documentation site with a checked example for every export.
+The latest release, 1.3.1, changes nothing a player sees.
 
 ## Licence
 
