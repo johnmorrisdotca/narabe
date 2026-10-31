@@ -10,7 +10,7 @@ Gomoku and renju, Connect Four, tic-tac-toe, Reversi, Hex, Go, Halma, Chinese Ch
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="52 games" src="https://img.shields.io/badge/games-52-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
-  <a href="https://johnmorrisdotca.github.io/narabe/docs/api/main/index.html"><img alt="22.9 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-22.9%20kB-2f5d4a"></a>
+  <a href="https://johnmorrisdotca.github.io/narabe/docs/api/main/index.html"><img alt="23.2 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-23.2%20kB-2f5d4a"></a>
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/narabe#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 

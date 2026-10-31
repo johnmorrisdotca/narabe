@@ -17,6 +17,4 @@ main { max-width: 1120px; margin: 0 auto; padding: 24px; }
 .family-bld-code .fam-tabs { flex-wrap: wrap; }
 .family-bld-code .fam-tabs button { min-width: 90px; }
 
-.family-bld-stage narabe-board { background: Canvas; border-radius: 12px; padding: 12px; }
-/* The stage is a white card on the felt, so its words take the page's ink rather than the felt's. */
-.family-bld-stage { color: var(--ink); }
+.family-bld-stage narabe-board { background: Canvas; color: CanvasText; border-radius: 12px; padding: 12px; }
