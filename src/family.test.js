@@ -1,8 +1,9 @@
 // family.test.js: what every package of the family holds the same way, held by one test copied unchanged into
-// each repository (src/family.test.js, or test/family.test.js in Kyuubu). It reads files and runs nothing else.
-// Changing a shared file means changing it in every repository, with the new hash recorded here.
+// each repository (src/family.test.js, or test/family.test.js in Kyuubu and Tobiishi). It reads files and runs nothing else.
+// Changing a shared file means changing it in every repository, with the new hash recorded here. The master of this file
+// and of the shared files is family/ in github.com/johnmorrisdotca/.github, and scripts/family-sync.mjs there writes them all.
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { familyBlockOf, familyReadmeBlock } from "../scripts/family-readme.mjs";
 import { FAMILY, FAMILY_GROUPS, FAMILY_PITCH, FAMILY_PITCH_JA, FAMILY_TEMPLATE_VERSION, familyFooter, familyRepo } from "../scripts/family-template.mjs";
@@ -23,10 +24,18 @@ const FILES = {
   "scripts/release-notes.mjs": "efab0fb78ad05973a8885624c0d2ce3b458b55799c11eabaa5176603ce8cd1e9",
   "scripts/community/SECURITY.md": "ff6f650be7789396233671d2558439736efe7f96a1d1d39115dd5cf94d29275c",
   "scripts/community/CODE_OF_CONDUCT.md": "34da1f56f004ce8f7f95d4449b64d2ecb5827dd9f0d4eea1da351a20713ebe70",
-  "scripts/community/CONTRIBUTING.md": "3225201be4f66531c27e849f0bb219f8c7274e5815b726a93565bccadbc6a43c",
+  "scripts/community/CONTRIBUTING.md": "2ba2a0ee6d5374413e42ed2fee92844e8d202cacc9fef9c5d4dfba79de13a24e",
+  "CODE-STYLE.md": "28023371c89181b55cb4f65854584a3d866fd551be573c14d62f88a0d6419590",
+  "scripts/biome-family.json": "be7cb7689f23ee68fb11b678345cf4e0cb862ccc35f04b53d92293118f413c82",
+  "scripts/check-size.mjs": "94e0b0ec2c8c335f03965fcee393610742c34b7cabcd1ddfc74c1bb8132581b5",
 };
-// The Pages workflow is one text in every package. A package that also builds a documentation site adds the one step that
-// builds it, and that line is left out before the text is compared.
+// Shared files only a package with a custom element has: both, or neither.
+const ELEMENT_FILES = {
+  "src/embed-attributes.ts": "4c9c9096d36b1b1c4fd1396b6395e9556d3c89b8e8f5bc14ff903a00b1aae95d",
+  "src/embed-attributes.test.ts": "707c8a7d855897779d37c85436f5d3c216dc03aa502cc5ba48103586f73e70c7",
+};
+// The Pages workflow is one text in every package. A package that also builds a documentation site adds the steps that
+// build and check it, and those lines are left out before the text is compared.
 const PAGES_SHA256 = "f45c33dd0403551588b8b00882cfd0c1d953d2095e558ffab0f7451b8cdb6ef6";
 
 describe("the family template", () => {
@@ -68,8 +77,14 @@ describe("the family template", () => {
 });
 
 describe("the files every package shares", () => {
-  it("are copied unchanged: the README writer, the release notes, and the family's SECURITY.md, CODE_OF_CONDUCT.md and CONTRIBUTING.md", () => {
+  it("are copied unchanged: the README writer, the release notes, the code style and its checks, and the family's SECURITY.md, CODE_OF_CONDUCT.md and CONTRIBUTING.md", () => {
     for (const [path, hash] of Object.entries(FILES)) expect(sha(path), path).toBe(hash);
+  });
+
+  it("include the embed attributes and their test where the package has them, unchanged", () => {
+    const present = Object.keys(ELEMENT_FILES).filter((path) => existsSync(path));
+    if (present.length > 0) expect(present, "src/embed-attributes.ts comes with its test").toEqual(Object.keys(ELEMENT_FILES));
+    for (const path of present) expect(sha(path), path).toBe(ELEMENT_FILES[path]);
   });
 
   it("SECURITY.md and CODE_OF_CONDUCT.md are the master text of github.com/johnmorrisdotca/.github, which scripts/community keeps a copy of", () => {
@@ -82,6 +97,17 @@ describe("the files every package shares", () => {
     const name = FAMILY.find((one) => one.id === id).name;
     expect(own.startsWith(`${master}\n## Particular to ${name}\n`), "CONTRIBUTING.md is the master text, a blank line and '## Particular to <Name>'").toBe(true);
     expect(own.split("\n## Particular to ").length - 1).toBe(1);
+  });
+});
+
+describe("the code style", () => {
+  it("is checked by Biome with the family's settings, and `pnpm check` runs the format and lint check and the size check", () => {
+    expect(JSON.parse(read("biome.json")).extends).toEqual(["./scripts/biome-family.json"]);
+    expect(pkg.scripts.lint).toBe("biome check .");
+    expect(pkg.scripts.format).toBe("biome check --write .");
+    expect(pkg.scripts["check:size"]).toBe("node scripts/check-size.mjs");
+    expect(pkg.scripts.check).toMatch(/^pnpm lint && .*pnpm check:size$/);
+    for (const old of ["eslint", "prettier", "typescript-eslint", "@eslint/js"]) expect(pkg.devDependencies?.[old], old).toBeUndefined();
   });
 });
 
@@ -98,8 +124,8 @@ describe("the workflows", () => {
     expect(ci).toContain("run: pnpm test:package");
   });
 
-  it("pages.yml is the same text in every package, named Pages, apart from one step that builds a documentation site", () => {
-    const pages = read(".github/workflows/pages.yml").replace("\n      - run: pnpm docs:site\n", "\n");
+  it("pages.yml is the same text in every package, named Pages, apart from the steps that build and check a documentation site", () => {
+    const pages = read(".github/workflows/pages.yml").replace("\n      - run: pnpm docs:site\n", "\n").replace("\n      - run: node scripts/docs-compat.mjs\n", "\n");
     expect(pages).toMatch(/^name: Pages$/m);
     expect(createHash("sha256").update(pages).digest("hex")).toBe(PAGES_SHA256);
   });

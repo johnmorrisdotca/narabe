@@ -21,7 +21,8 @@ shape before you spend time on it. Taking part follows the
 
 ```sh
 pnpm install
-pnpm check          # lint, types and tests: the same as CI
+pnpm check          # format, lint, types, file sizes and tests: the same as CI
+pnpm format         # format the code and apply the safe lint fixes
 pnpm test:package   # pack it as npm does, install it in an empty project, import every entry
 pnpm site           # build the demo into ./site, as GitHub Pages publishes it
 ```
@@ -31,12 +32,18 @@ data scripts) are listed under its own heading below.
 
 ## House rules, shared by every package of the family
 
+How the code is written, formatted and checked, and why, is in
+[CODE-STYLE.md](CODE-STYLE.md), the same text in every package.
+
 - **No runtime dependencies.** Development dependencies are for tests, builds and
   documentation only.
 - **The core is pure.** Every function in it returns new values and never
   changes what it was given.
 - **Test what you change.** Tests sit beside the code they test. A rule you
   change has a test that would have caught it.
+- **At most 500 lines of code a file** under `src/`, not counting blank lines,
+  comments, tests or `*.data.ts` data. A file that reaches it is split by what
+  it does, never squeezed.
 - **Words a person reads come in English and Japanese.** If you cannot write the
   Japanese, say so in the pull request and someone will.
 - **Option values and names are kebab case.**
@@ -48,7 +55,9 @@ data scripts) are listed under its own heading below.
   together with the code.
 - **The family's own files are the same in every package**: `demo/family.css`,
   `scripts/family-template.mjs`, `scripts/family-readme.mjs`,
-  `scripts/release-notes.mjs`, the files in `scripts/community/` and
+  `scripts/release-notes.mjs`, the files in `scripts/community/`,
+  `CODE-STYLE.md`, `scripts/biome-family.json`, `scripts/check-size.mjs`,
+  `src/embed-attributes.ts` where the package has an element, and
   `family.test.js` (in `src/`, or in `test/`). Do not edit one here. To change
   one, change it in every repository at once, bump `FAMILY_TEMPLATE_VERSION` for
   the template, and record the new hash in `family.test.js`. What is the
