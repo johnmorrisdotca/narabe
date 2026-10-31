@@ -51,6 +51,22 @@ jobs:
         run: pnpm test:package
       - name: The command line, as a child process
         run: pnpm test:cli
+  frameworks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium webkit
+      - run: pnpm build
+      - name: The README's examples, built from the tarball and played in React, Vue, Svelte, Angular and a plain page
+        run: node scripts/check-frameworks.mjs
+        env:
+          NARABE_BROWSER: "1"
   readme:
     runs-on: ubuntu-latest
     steps:

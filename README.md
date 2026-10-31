@@ -258,13 +258,80 @@ moves without knowing any rules itself.
 
 ```tsx
 import { useNarabe } from "@johnmorrisdotca/narabe/react";
+import { boardSvg } from "@johnmorrisdotca/narabe/draw";
 
 export function Reversi() {
   const { state, choices, play, undo, canUndo } = useNarabe({ variant: "reversi" });
-  // Draw state.board your own way, call play(point) on a click,
-  // and mark choices.points as the legal moves.
+  const next = choices?.kind === "place" ? choices.points[0] : undefined;
+  return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: boardSvg(state, { width: 400, legal: true }) }} />
+      <button type="button" id="play" disabled={next === undefined} onClick={() => next && play(next)}>Play a legal point</button>
+      <button type="button" disabled={!canUndo} onClick={undo}>Undo</button>
+    </>
+  );
 }
 ```
+
+### In plain HTML
+
+No framework and no bundler: one script tag, then the tag wherever a board belongs.
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/npm/@johnmorrisdotca/narabe@1/dist/element-define.js"></script>
+
+<narabe-board game="renju" grid="15" moves='[{"row":7,"col":7},{"row":7,"col":8}]' size="small"></narabe-board>
+```
+
+### In Vue
+
+Tell Vue's compiler that `narabe-board` is a custom element, then use the tag.
+
+```vue
+<script setup>
+import "@johnmorrisdotca/narabe/element/define";
+</script>
+
+<template>
+  <narabe-board game="freestyle" grid="15" size="small"></narabe-board>
+</template>
+```
+
+```js no-check
+// vite.config.js
+import vue from "@vitejs/plugin-vue";
+
+export default { plugins: [vue({ template: { compilerOptions: { isCustomElement: (tag) => tag === "narabe-board" } } })] };
+```
+
+### In Svelte
+
+```svelte
+<script>
+  import "@johnmorrisdotca/narabe/element/define";
+</script>
+
+<narabe-board game="freestyle" grid="15" size="small"></narabe-board>
+```
+
+### In Angular
+
+Angular needs `CUSTOM_ELEMENTS_SCHEMA` for a tag it does not know.
+
+```ts no-check
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import "@johnmorrisdotca/narabe/element/define";
+
+@Component({
+  selector: "app-board",
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `<narabe-board game="reversi" size="small"></narabe-board>`,
+})
+export class BoardComponent {}
+```
+
+Each of these is taken from this page as it is written, built from the packed tarball in a project of its own, and opened in Chromium and WebKit, by `scripts/check-frameworks.mjs`, before a release names it.
 
 ### Drawing a board
 
@@ -299,27 +366,7 @@ The cookbook, with the output of each example, is under [Examples](#examples).
 
 [Build a board position](https://johnmorrisdotca.github.io/narabe/builder.html), preview a native game and move record, and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. Choices stay in the URL; embeds read no storage. `<narabe-board game="freestyle" grid="15" size="small">` draws the starting board. Set `moves` to a JSON move array and `step` to inspect a replay position.
 
-For Svelte, register the custom element in the browser.
-
-```svelte
-<script>
-  import { onMount } from "svelte";
-  onMount(() => { void import("@johnmorrisdotca/narabe/element/define"); });
-</script>
-<narabe-board game="freestyle" grid="15" size="small"></narabe-board>
-```
-
 The optional `@johnmorrisdotca/narabe/element` entry exports `NarabeBoard`, `defineBoard`, `parseEmbedMoves`, `NARABE_EMBED_OPTION_KEYS`, `NARABE_DRAW_OPTION_KEYS` and `NarabeElementOptions`. `@johnmorrisdotca/narabe/element/define` registers the tag and reexports that entry. `state` exposes the structured position; `options` accepts advanced native settings and SVG drawing options. See [the embed guide](docs/embeds.md).
-
-For Vue, register the element in the browser and configure `isCustomElement` to accept `narabe-board`.
-
-```vue
-<script setup>
-import { onMounted } from "vue";
-onMounted(() => { void import("@johnmorrisdotca/narabe/element/define"); });
-</script>
-<template><narabe-board game="freestyle" grid="15" size="small"></narabe-board></template>
-```
 
 ## Examples
 
@@ -1001,6 +1048,7 @@ pnpm check             # lint, types and tests, including the rules checked a se
 pnpm test:demo         # build the demo and tap through it in a real browser
 pnpm test:cli          # the command line, as a child process
 pnpm test:package      # pack it, install the tarball, and use it as published
+pnpm test:frameworks   # the framework examples, built from the packed tarball and opened in a browser
 pnpm test:readme       # every TypeScript and JavaScript example in this README, type-checked and run
 pnpm screenshots:readme  # retake the README's pictures into docs/images (builds the demo first)
 ```

@@ -8,6 +8,10 @@ All notable changes to this project are written here. The format follows
 
 ### Added
 
+- `pnpm test:frameworks` (`scripts/check-frameworks.mjs`) builds the README's React, Vue, Svelte, Angular and plain-page examples from the packed tarball and plays them in Chromium and WebKit, in CI too.
+
+### Added
+
 - **Nine Men's Morris** (`nineMensMorris`), the forty-ninth game: nine men each, laid and then moved along the lines of three squares joined at their sides, three in a line taking a man of the other side's, and a side brought down to two men, or with no move, losing; a side down to three may fly. A new mechanic, the mill: `spec.mills`, `state.pendingRemoval`, the win reason `reduced` and the move kind `remove`. While a man is owed, `isLegalMove`, `legalPoints` and `playMove` read the point played as the man to take, so a replay and a bot have one way to say it. `boardSvg` draws its board.
 - **Breakthrough** (`breakthrough`), **Lines of Action** (`linesOfAction`) and **Amazons** (`amazons`), the fiftieth to fifty-second: men set out from the start, moved by their own rules, and won by reaching the far row, by joining all your men, or by leaving the other side no move. One new spec field, `spec.movers`, the win reasons `reached` and `joined`, the move kind `shoot` and, for Amazons' arrow, `state.pendingShot`: while it is owed, `legalPoints` and `playMove` read the point played as where the arrow lands.
 

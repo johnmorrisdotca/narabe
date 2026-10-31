@@ -147,6 +147,7 @@
     "test:demo": "pnpm site && node scripts/docs-site.mjs build && playwright test",
     "test:cli": "pnpm build && node scripts/check-cli.mjs",
     "test:package": "pnpm build && node scripts/check-package.mjs",
+    "test:frameworks": "pnpm build && node scripts/check-frameworks.mjs",
     "family:readme": "node scripts/family-readme.mjs",
     "docs:make": "node scripts/docs.mjs",
     "screenshots:readme": "pnpm site && node scripts/readme-pictures.mjs",

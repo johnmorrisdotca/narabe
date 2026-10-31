@@ -94,6 +94,7 @@ pnpm site             # builds the demo into ./site
 pnpm test:demo        # the demo, tapped through in a real browser
 pnpm test:cli         # the command line, as a child process
 pnpm test:package     # packed, installed from the tarball, and used as published
+pnpm test:frameworks  # the README's examples built in React, Vue, Svelte, Angular and a plain page
 ```
 
 Narabe is the rules engine of a live site, which installs a released version of
