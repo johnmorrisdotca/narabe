@@ -89,7 +89,10 @@ describe("which games can run away", () => {
         const where = `${variant} on ${size}×${size}`;
         if (rule!.measure === PROGRESS_MEASURES.racing) {
           for (const stone of [STONES.black, STONES.white]) {
-            expect(distanceHome(size, stone, { row: 0, col: 0 }), `${where}: ${stone} has no camp to measure to`).not.toBeNull();
+            expect(
+              distanceHome(size, stone, { row: 0, col: 0 }),
+              `${where}: ${stone} has no camp to measure to`,
+            ).not.toBeNull();
           }
         } else if (rule!.measure === PROGRESS_MEASURES.placing) {
           // The count is `moves.length - 2 * pieces`; with no `pieces` it
@@ -199,8 +202,7 @@ describe("the race games, measured by distance rather than a ledger", () => {
       if (state.board[index] !== state.toPlay) continue;
       const from = { row: Math.floor(index / size), col: index % size };
       for (const to of pieceMoves(state, from)) {
-        const gain =
-          (distanceHome(size, state.toPlay, from) ?? 0) - (distanceHome(size, state.toPlay, to) ?? 0);
+        const gain = (distanceHome(size, state.toPlay, from) ?? 0) - (distanceHome(size, state.toPlay, to) ?? 0);
         if (pick === null || (want === "best" ? gain > pick.gain : gain < pick.gain)) {
           pick = { from, to, gain };
         }

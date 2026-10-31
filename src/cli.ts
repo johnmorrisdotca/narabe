@@ -1,7 +1,4 @@
-import {
-  canChooseColour,
-  chooseColour,
-} from "./rules/opening.ts";
+import { canChooseColour, chooseColour } from "./rules/opening.ts";
 import { columnLetter, rowNumber } from "./notation.ts";
 import { seededRandom } from "./rules/random.ts";
 import { GAME_STATUS, RULE_VARIANT_LIST, VARIANT_SPECS, boardSizesFor } from "./constants.ts";
@@ -83,7 +80,8 @@ export const CLI_STRINGS: Record<CliLanguage, Record<string, string>> = {
     stopped: "Stopped after {moves} moves, with nobody having won: random play does not always end.",
     played: "{game} on {size} by {size}, seed {seed}: {moves} moves.",
     replayed: "{game} on {size} by {size}: {moves} moves read back.",
-    simulated: "{game}, {n} random games on {size} by {size} from seed {seed}: Black won {black}, White won {white}, {drawn} drawn, {open} not finished. The longest took {longest} moves.",
+    simulated:
+      "{game}, {n} random games on {size} by {size} from seed {seed}: Black won {black}, White won {white}, {drawn} drawn, {open} not finished. The longest took {longest} moves.",
     usage: `Usage: narabe <command> [options]
 
 One rules engine for the abstract board games. The engine makes every move
@@ -136,7 +134,8 @@ Examples:
     stopped: "{moves}手で打ち切りました（勝負はついていません）。ランダムな手では終わらないことがあります。",
     played: "{game} {size}×{size}、シード {seed}: {moves}手。",
     replayed: "{game} {size}×{size}: {moves}手を読み込みました。",
-    simulated: "{game}、{size}×{size}、シード {seed} から{n}局: 黒の勝ち{black}、白の勝ち{white}、引き分け{drawn}、未了{open}。最長は{longest}手でした。",
+    simulated:
+      "{game}、{size}×{size}、シード {seed} から{n}局: 黒の勝ち{black}、白の勝ち{white}、引き分け{drawn}、未了{open}。最長は{longest}手でした。",
     usage: `使い方: narabe <コマンド> [オプション]
 
 抽象ボードゲームのルールエンジンです。着手も勝敗の判定もエンジンがします。
@@ -175,24 +174,53 @@ function fillIn(template: string, values: Record<string, string | number>): stri
 }
 
 /** The language the command line speaks: `--lang`, or the environment's, or the system's; Japanese for `ja…`, English for anything else. */
-export function cliLanguage(flag: string | undefined, env: Record<string, string | undefined> = {}, locale?: string): CliLanguage {
-  const named = [flag, env.LC_ALL, env.LC_MESSAGES, env.LANG].find((value) => value !== undefined && value !== "" && value !== "C" && value !== "POSIX" && !value.startsWith("C."));
+export function cliLanguage(
+  flag: string | undefined,
+  env: Record<string, string | undefined> = {},
+  locale?: string,
+): CliLanguage {
+  const named = [flag, env.LC_ALL, env.LC_MESSAGES, env.LANG].find(
+    (value) => value !== undefined && value !== "" && value !== "C" && value !== "POSIX" && !value.startsWith("C."),
+  );
   return (named ?? locale ?? "en").toLowerCase().startsWith("ja") ? "ja" : "en";
 }
 
 const SEED_MOST = 2_147_483_647;
 const GAMES_MOST = 10_000;
-const FLAGS_WITH_VALUES: Record<string, string> = { "-s": "seed", "--seed": "seed", "--size": "size", "--games": "games", "--lang": "lang" };
-const FLAGS: Record<string, string> = { "--record": "record", "-j": "json", "--json": "json", "--stdin": "stdin", "-h": "help", "--help": "help", "-v": "version", "--version": "version" };
+const FLAGS_WITH_VALUES: Record<string, string> = {
+  "-s": "seed",
+  "--seed": "seed",
+  "--size": "size",
+  "--games": "games",
+  "--lang": "lang",
+};
+const FLAGS: Record<string, string> = {
+  "--record": "record",
+  "-j": "json",
+  "--json": "json",
+  "--stdin": "stdin",
+  "-h": "help",
+  "--help": "help",
+  "-v": "version",
+  "--version": "version",
+};
 
-type Asked = { values: Record<string, string>; flags: Set<string>; words: string[]; wrong: { message: "unknown" | "needs"; part: string } | null };
+type Asked = {
+  values: Record<string, string>;
+  flags: Set<string>;
+  words: string[];
+  wrong: { message: "unknown" | "needs"; part: string } | null;
+};
 
 /** The arguments sorted into options and words: the command, and what it is given. */
 function sortArguments(args: readonly string[]): Asked {
   const asked: Asked = { values: {}, flags: new Set(), words: [], wrong: null };
   for (let i = 0; i < args.length; i += 1) {
     const arg = args[i] as string;
-    const [name, inline] = arg.startsWith("--") && arg.includes("=") ? [arg.slice(0, arg.indexOf("=")), arg.slice(arg.indexOf("=") + 1)] : [arg, undefined];
+    const [name, inline] =
+      arg.startsWith("--") && arg.includes("=")
+        ? [arg.slice(0, arg.indexOf("=")), arg.slice(arg.indexOf("=") + 1)]
+        : [arg, undefined];
     if (name in FLAGS_WITH_VALUES) {
       const value = inline ?? args[++i];
       if (value === undefined) {
@@ -208,7 +236,8 @@ function sortArguments(args: readonly string[]): Asked {
   return asked;
 }
 
-const whole = (text: string | undefined, least: number, most: number): number | null => (text !== undefined && /^\d{1,10}$/.test(text) && Number(text) >= least && Number(text) <= most ? Number(text) : null);
+const whole = (text: string | undefined, least: number, most: number): number | null =>
+  text !== undefined && /^\d{1,10}$/.test(text) && Number(text) >= least && Number(text) <= most ? Number(text) : null;
 
 /** The board a game opens on when nothing is asked: the engine's own answer, from a game made with nothing but its name. */
 const usualBoard = (key: RuleVariant): number => createGame({ variant: key }, 0).settings.size;
@@ -247,7 +276,9 @@ export function boardText(state: GameState): string {
   const slide = (row: number) => (lattice ? " ".repeat(row) : "");
   const head = `${" ".repeat(wide + 1)}${Array.from({ length: size }, (_, col) => columnLetter(col)).join(" ")}`;
   const rows = Array.from({ length: size }, (_, row) => {
-    const cells = Array.from({ length: size }, (_, col) => cellText(state.board[row * size + col] as GameState["board"][number], lattice));
+    const cells = Array.from({ length: size }, (_, col) =>
+      cellText(state.board[row * size + col] as GameState["board"][number], lattice),
+    );
     return `${slide(row)}${pad(String(rowNumber(size, row)), wide)} ${cells.join(" ")}`.trimEnd();
   });
   return `${head}\n${rows.join("\n")}\n`;
@@ -288,7 +319,12 @@ function randomTurn(state: GameState, random: () => number): GameState | null {
   // Go: a pass is a choice there, taken now and then so that random play can end.
   if (spec.go && canPass(state) && (points.length === 0 || random() < 0.08)) return passTurn(state);
   if (points.length === 0) return null;
-  const colour = state.settings.variant === "makerBreaker" || state.settings.variant === "wildTicTacToe" ? (random() < 0.5 ? "black" : "white") : null;
+  const colour =
+    state.settings.variant === "makerBreaker" || state.settings.variant === "wildTicTacToe"
+      ? random() < 0.5
+        ? "black"
+        : "white"
+      : null;
   return playMove(state, pick(random, points), "place", colour);
 }
 
@@ -331,7 +367,14 @@ function recordOf(state: GameState): { settings: GameSettings; moves: MoveInput[
 function readRecord(text: string): { settings: GameSettings; moves: MoveInput[] } | null {
   try {
     const found = JSON.parse(text) as { settings?: Partial<GameSettings>; moves?: unknown };
-    if (typeof found !== "object" || found === null || typeof found.settings !== "object" || found.settings === null || !Array.isArray(found.moves)) return null;
+    if (
+      typeof found !== "object" ||
+      found === null ||
+      typeof found.settings !== "object" ||
+      found.settings === null ||
+      !Array.isArray(found.moves)
+    )
+      return null;
     if (!RULE_VARIANT_LIST.includes(found.settings.variant as RuleVariant)) return null;
     const settings = createGame(found.settings, 0).settings;
     return { settings, moves: found.moves as MoveInput[] };
@@ -350,37 +393,77 @@ export function runCli(args: readonly string[], around: CliSurroundings = {}): C
   if (asked.wrong !== null) return wrong(fillIn(t[asked.wrong.message] as string, { part: asked.wrong.part }));
   if (lang !== undefined && lang !== "en" && lang !== "ja") return wrong(t.langBad as string);
   const [command, ...rest] = asked.words;
-  if (asked.flags.has("help") || (command === undefined && !asked.flags.has("version"))) return { code: 0, out: t.usage as string, err: "" };
+  if (asked.flags.has("help") || (command === undefined && !asked.flags.has("version")))
+    return { code: 0, out: t.usage as string, err: "" };
   if (asked.flags.has("version")) return { code: 0, out: `${NARABE_VERSION}\n`, err: "" };
   const json = asked.flags.has("json");
-  const print = (body: Record<string, unknown>) => `${JSON.stringify({ generator: `narabe ${NARABE_VERSION}`, ...body }, null, 2)}\n`;
+  const print = (body: Record<string, unknown>) =>
+    `${JSON.stringify({ generator: `narabe ${NARABE_VERSION}`, ...body }, null, 2)}\n`;
   const who = (stone: "black" | "white" | null) => (stone === null ? "" : (t[stone] as string));
 
   if (command === "games") {
     const games = RULE_VARIANT_LIST.map((key) => ({ game: key, sizes: boardSizesFor(key), size: usualBoard(key) }));
     if (json) return { code: 0, out: print({ games }), err: "" };
     const wide = Math.max(...RULE_VARIANT_LIST.map((key) => key.length));
-    return { code: 0, out: games.map(({ game, sizes, size }) => `${fillIn(t.gameLine as string, { key: game.padEnd(wide), sizes: sizes.length === 0 ? String(size) : sizes.join(" "), board: size })}\n`).join(""), err: "" };
+    return {
+      code: 0,
+      out: games
+        .map(
+          ({ game, sizes, size }) =>
+            `${fillIn(t.gameLine as string, { key: game.padEnd(wide), sizes: sizes.length === 0 ? String(size) : sizes.join(" "), board: size })}\n`,
+        )
+        .join(""),
+      err: "",
+    };
   }
 
   if (command === "replay") {
-    const text = asked.flags.has("stdin") ? (around.stdin ?? "") : rest[0] === undefined ? null : (around.readFile?.(rest[0]) ?? null);
-    if (text === null || text.trim() === "") return { code: rest[0] === undefined && !asked.flags.has("stdin") ? 2 : 1, out: "", err: `narabe: ${t.noRecord}\n${rest[0] === undefined && !asked.flags.has("stdin") ? `${t.tryHelp}\n` : ""}` };
+    const text = asked.flags.has("stdin")
+      ? (around.stdin ?? "")
+      : rest[0] === undefined
+        ? null
+        : (around.readFile?.(rest[0]) ?? null);
+    if (text === null || text.trim() === "")
+      return {
+        code: rest[0] === undefined && !asked.flags.has("stdin") ? 2 : 1,
+        out: "",
+        err: `narabe: ${t.noRecord}\n${rest[0] === undefined && !asked.flags.has("stdin") ? `${t.tryHelp}\n` : ""}`,
+      };
     const record = readRecord(text);
     const timeline = record === null ? null : tryReplay(record);
     if (record === null || timeline === null) return { code: 1, out: "", err: `narabe: ${t.notRecord}\n` };
     const state = timeline[timeline.length - 1] as GameState;
-    if (json) return { code: 0, out: print({ game: state.settings.variant, size: state.settings.size, moves: state.moves.length, status: state.status, winner: state.winner, winBy: state.winBy, toPlay: state.toPlay }), err: "" };
+    if (json)
+      return {
+        code: 0,
+        out: print({
+          game: state.settings.variant,
+          size: state.settings.size,
+          moves: state.moves.length,
+          status: state.status,
+          winner: state.winner,
+          winBy: state.winBy,
+          toPlay: state.toPlay,
+        }),
+        err: "",
+      };
     const said = { game: state.settings.variant, size: state.settings.size, moves: state.moves.length };
-    return { code: 0, out: `${fillIn(t.replayed as string, said)}\n${boardText(state)}${resultText(state, t, who)}\n`, err: "" };
+    return {
+      code: 0,
+      out: `${fillIn(t.replayed as string, said)}\n${boardText(state)}${resultText(state, t, who)}\n`,
+      err: "",
+    };
   }
 
-  if (command !== "board" && command !== "play" && command !== "simulate") return wrong(fillIn(t.noCommand as string, { part: command ?? "" }));
+  if (command !== "board" && command !== "play" && command !== "simulate")
+    return wrong(fillIn(t.noCommand as string, { part: command ?? "" }));
   const key = findGame(rest[0] ?? "");
-  if (key === null) return { code: 1, out: "", err: `narabe: ${fillIn(t.noGame as string, { part: rest[0] ?? "" })}\n` };
+  if (key === null)
+    return { code: 1, out: "", err: `narabe: ${fillIn(t.noGame as string, { part: rest[0] ?? "" })}\n` };
   const sizes = boardSizesFor(key);
   const size = asked.values.size === undefined ? usualBoard(key) : whole(asked.values.size, 1, 1000);
-  if (size === null || (sizes.length > 0 && !sizes.includes(size))) return wrong(fillIn(t.sizeBad as string, { game: key, sizes: sizes.join(", ") }));
+  if (size === null || (sizes.length > 0 && !sizes.includes(size)))
+    return wrong(fillIn(t.sizeBad as string, { game: key, sizes: sizes.join(", ") }));
 
   let err = "";
   let seed: number;
@@ -402,10 +485,33 @@ export function runCli(args: readonly string[], around: CliSurroundings = {}): C
 
   if (command === "play") {
     const { state, turns, refused } = playRandomly({ variant: key, size }, seed);
-    if (refused) return { code: 1, out: "", err: `narabe: the engine refused a move it offered (${key}, seed ${seed}, after ${turns} turns): please report it\n` };
+    if (refused)
+      return {
+        code: 1,
+        out: "",
+        err: `narabe: the engine refused a move it offered (${key}, seed ${seed}, after ${turns} turns): please report it\n`,
+      };
     if (asked.flags.has("record")) return { code: 0, out: `${JSON.stringify(recordOf(state))}\n`, err };
-    if (json) return { code: 0, out: print({ game: key, size, seed, moves: state.moves.length, status: state.status, winner: state.winner, winBy: state.winBy, board: state.board }), err };
-    return { code: 0, out: `${fillIn(t.played as string, { game: key, size, seed, moves: state.moves.length })}\n${boardText(state)}${resultText(state, t, who, state.moves.length)}\n`, err };
+    if (json)
+      return {
+        code: 0,
+        out: print({
+          game: key,
+          size,
+          seed,
+          moves: state.moves.length,
+          status: state.status,
+          winner: state.winner,
+          winBy: state.winBy,
+          board: state.board,
+        }),
+        err,
+      };
+    return {
+      code: 0,
+      out: `${fillIn(t.played as string, { game: key, size, seed, moves: state.moves.length })}\n${boardText(state)}${resultText(state, t, who, state.moves.length)}\n`,
+      err,
+    };
   }
 
   // simulate
@@ -415,14 +521,23 @@ export function runCli(args: readonly string[], around: CliSurroundings = {}): C
   let longest = 0;
   for (let n = 0; n < count; n += 1) {
     const { state, refused, turns } = playRandomly({ variant: key, size }, seed + n);
-    if (refused) return { code: 1, out: "", err: `narabe: the engine refused a move it offered (${key}, seed ${seed + n}, after ${turns} turns): please report it\n` };
+    if (refused)
+      return {
+        code: 1,
+        out: "",
+        err: `narabe: the engine refused a move it offered (${key}, seed ${seed + n}, after ${turns} turns): please report it\n`,
+      };
     longest = Math.max(longest, state.moves.length);
     if (state.status === GAME_STATUS.won) tally[state.winner === "white" ? "white" : "black"] += 1;
     else if (state.status === GAME_STATUS.draw) tally.drawn += 1;
     else tally.open += 1;
   }
   if (json) return { code: 0, out: print({ game: key, size, seed, games: count, ...tally, longest }), err };
-  return { code: 0, out: `${fillIn(t.simulated as string, { game: key, n: count, size, seed, ...tally, longest })}\n`, err };
+  return {
+    code: 0,
+    out: `${fillIn(t.simulated as string, { game: key, n: count, size, seed, ...tally, longest })}\n`,
+    err,
+  };
 }
 
 /** A record played again through the engine; null if the engine refuses a move in it. */
@@ -437,8 +552,16 @@ function tryReplay(record: { settings: GameSettings; moves: MoveInput[] }): Game
 }
 
 /** Who won, how, or who is to play, or that a game was called off. */
-function resultText(state: GameState, t: Record<string, string>, who: (stone: "black" | "white" | null) => string, calledOff?: number): string {
-  if (state.status === GAME_STATUS.won) return fillIn(t.wonBy as string, { who: who(state.winner), how: state.winBy ?? "" });
+function resultText(
+  state: GameState,
+  t: Record<string, string>,
+  who: (stone: "black" | "white" | null) => string,
+  calledOff?: number,
+): string {
+  if (state.status === GAME_STATUS.won)
+    return fillIn(t.wonBy as string, { who: who(state.winner), how: state.winBy ?? "" });
   if (state.status === GAME_STATUS.draw) return t.drawn as string;
-  return calledOff === undefined ? fillIn(t.toPlay as string, { who: who(state.toPlay) }) : fillIn(t.stopped as string, { moves: calledOff });
+  return calledOff === undefined
+    ? fillIn(t.toPlay as string, { who: who(state.toPlay) })
+    : fillIn(t.stopped as string, { moves: calledOff });
 }

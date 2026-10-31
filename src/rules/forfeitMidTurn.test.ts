@@ -1,14 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  createGame,
-  emptyPoints,
-  forfeitOnRecord,
-  isLegalMove,
-  movePiece,
-  pieceMoves,
-  playMove,
-} from "../engine.ts";
+import { createGame, emptyPoints, forfeitOnRecord, isLegalMove, movePiece, pieceMoves, playMove } from "../engine.ts";
 import { GAME_STATUS, MOVE_KINDS, STONES } from "../constants.ts";
 import type { GameState, MoveInput, Point } from "../types.ts";
 import { replayMoves } from "./record.ts";
@@ -28,7 +20,13 @@ import { replayMoves } from "./record.ts";
 const p = (row: number, col: number): Point => ({ row, col });
 
 function recordOf(state: GameState): MoveInput[] {
-  return state.moves.map((move) => ({ row: move.row, col: move.col, kind: move.kind, stone: move.stone, from: move.from }));
+  return state.moves.map((move) => ({
+    row: move.row,
+    col: move.col,
+    kind: move.kind,
+    stone: move.stone,
+    from: move.from,
+  }));
 }
 
 describe("a turn lost halfway through a capture chain", () => {

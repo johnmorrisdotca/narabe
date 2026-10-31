@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { forbiddenPoints, isLegalMove, playMove } from "../engine.ts";
-import {
-  FORBIDDEN_PATTERNS,
-  GAME_STATUS,
-  RULE_VARIANTS,
-  STONES,
-} from "../constants.ts";
+import { FORBIDDEN_PATTERNS, GAME_STATUS, RULE_VARIANTS, STONES } from "../constants.ts";
 import { fromDiagram, show, type DiagramOptions } from "../test-support.ts";
 import type { Point, Stone } from "../types.ts";
 import { forbiddenAt } from "./forbidden.ts";
@@ -255,9 +250,7 @@ describe("omok", () => {
       settings: { variant: RULE_VARIANTS.omok },
       toPlay: STONES.white,
     });
-    expect(forbiddenAt(state.board, state.settings, STONES.white, p(4, 4))).toBe(
-      FORBIDDEN_PATTERNS.doubleThree,
-    );
+    expect(forbiddenAt(state.board, state.settings, STONES.white, p(4, 4))).toBe(FORBIDDEN_PATTERNS.doubleThree);
   });
 
   it("allows the double four and wins with an overline", () => {

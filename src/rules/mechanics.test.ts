@@ -32,9 +32,7 @@ describe("drops", () => {
   });
 
   it("offers exactly one landing cell per column with room", () => {
-    expect(show(landingPoints(board, 5))).toEqual(
-      show([p(3, 0), p(2, 1), p(1, 2), p(4, 3), p(3, 4)]),
-    );
+    expect(show(landingPoints(board, 5))).toEqual(show([p(3, 0), p(2, 1), p(1, 2), p(4, 3), p(3, 4)]));
   });
 });
 
@@ -115,8 +113,6 @@ describe("pieces", () => {
     expect(squareThrough(board, 5, p(2, 2), STONES.black)).toEqual([]);
     const squared = board.slice();
     squared[2 * 5 + 2] = STONES.black;
-    expect(show(squareThrough(squared, 5, p(2, 2), STONES.black))).toEqual(
-      show([p(1, 1), p(1, 2), p(2, 1), p(2, 2)]),
-    );
+    expect(show(squareThrough(squared, 5, p(2, 2), STONES.black))).toEqual(show([p(1, 1), p(1, 2), p(2, 1), p(2, 2)]));
   });
 });

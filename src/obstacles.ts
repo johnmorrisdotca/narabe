@@ -1,11 +1,4 @@
-import {
-  BLOCKED,
-  HOT,
-  WORM,
-  OBSTACLE_LAYOUTS,
-  STAR_POINTS,
-  VARIANT_SPECS,
-} from "./constants.ts";
+import { BLOCKED, HOT, WORM, OBSTACLE_LAYOUTS, STAR_POINTS, VARIANT_SPECS } from "./constants.ts";
 import type { Cell, GameSettings, Point } from "./types.ts";
 import { drawDistinct, seededRandom } from "./rules/random.ts";
 import { inStar, STAR_RADIUS } from "./rules/chineseCheckers.ts";
@@ -27,9 +20,7 @@ export function obstaclePoints(settings: GameSettings): Point[] {
   if (settings.obstacles !== OBSTACLE_LAYOUTS.hoshi) return [];
 
   const centre = tengen(settings.size);
-  return (STAR_POINTS[settings.size] ?? []).filter(
-    (point) => point.row !== centre.row || point.col !== centre.col,
-  );
+  return (STAR_POINTS[settings.size] ?? []).filter((point) => point.row !== centre.row || point.col !== centre.col);
 }
 
 /**

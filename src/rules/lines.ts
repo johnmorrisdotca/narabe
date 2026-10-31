@@ -1,21 +1,7 @@
 import { BLOCKED, HOT, LINE_RULES, VARIANT_SPECS, WORM, lineDirectionsFor } from "../constants.ts";
 import { wormholeLinks } from "../obstacles.ts";
-import type {
-  Cell,
-  GameSettings,
-  LineRule,
-  Point,
-  Stone,
-  WrapMode,
-} from "../types.ts";
-import {
-  cellAtPoint,
-  indexOf,
-  isOnBoard,
-  isStone,
-  negate,
-  stepFrom,
-} from "./board.ts";
+import type { Cell, GameSettings, LineRule, Point, Stone, WrapMode } from "../types.ts";
+import { cellAtPoint, indexOf, isOnBoard, isStone, negate, stepFrom } from "./board.ts";
 import { rulesFor } from "./handicap.ts";
 
 /** The line rule that applies to `stone` under these settings. */
@@ -137,12 +123,7 @@ export function lineWorld(settings: GameSettings): LineWorld {
  * run, which only the caro rule looks at: a five with an enemy stone (or an
  * obstacle) at both ends is shut in and does not count.
  */
-export function runWins(
-  rule: LineRule,
-  run: Run,
-  winLength: number,
-  stone: Stone,
-): boolean {
+export function runWins(rule: LineRule, run: Run, winLength: number, stone: Stone): boolean {
   const length = run.cells.length;
   switch (rule) {
     case LINE_RULES.atLeast:
@@ -150,10 +131,7 @@ export function runWins(
     case LINE_RULES.exact:
       return length === winLength;
     case LINE_RULES.exactOpen:
-      return (
-        length === winLength &&
-        !(blocks(run.ends[0], stone) && blocks(run.ends[1], stone))
-      );
+      return length === winLength && !(blocks(run.ends[0], stone) && blocks(run.ends[1], stone));
   }
 }
 
@@ -182,11 +160,7 @@ function blocks(cell: Cell | undefined, stone: Stone): boolean {
  * console.log(findWinningLine(state.board,state.settings,point));
  * ```
  */
-export function findWinningLine(
-  board: Cell[],
-  settings: GameSettings,
-  point: Point,
-): Point[] {
+export function findWinningLine(board: Cell[], settings: GameSettings, point: Point): Point[] {
   const stone = board[indexOf(settings.size, point)];
   if (!isStone(stone)) return [];
   return winningLineFor(board, settings, point, stone);
@@ -196,12 +170,7 @@ export function findWinningLine(
  * The winning line of `stone` through `point`, whatever sits at `point` — a
  * hotspot completes a line for either colour, so both are asked.
  */
-export function winningLineFor(
-  board: Cell[],
-  settings: GameSettings,
-  point: Point,
-  stone: Stone,
-): Point[] {
+export function winningLineFor(board: Cell[], settings: GameSettings, point: Point, stone: Stone): Point[] {
   if (!joins(board[indexOf(settings.size, point)], stone)) return [];
   const { lineRule, winLength } = rulesFor(settings, stone);
   const world = lineWorld(settings);

@@ -138,7 +138,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "lint": "eslint .",
+    "lint": "biome check .",
     "typecheck": "tsc -p tsconfig.check.json",
     "test": "vitest run",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
@@ -153,7 +153,8 @@
     "test:readme": "pnpm build && node scripts/check-readme-examples.mjs",
     "docs:site": "pnpm build && node scripts/docs-site.mjs build",
     "docs:check": "pnpm build && node scripts/docs-site.mjs check",
-    "size": "node scripts/docs-site.mjs size"
+    "size": "node scripts/docs-site.mjs size",
+    "format": "biome check --write ."
   },
   "peerDependencies": {
     "react": ">=18"
@@ -164,17 +165,15 @@
     }
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@biomejs/biome": "2.6.4",
     "@playwright/test": "^1.63.0",
     "@types/react": "^19.0.0",
-    "eslint": "^9.0.0",
+    "esbuild": "^0.28.0",
+    "marked": "^18.0.0",
+    "pagefind": "^1.5.2",
     "react": "^19.0.0",
     "typescript": "^5.9.0",
-    "typescript-eslint": "^8.0.0",
-    "vitest": "^5.0.0",
-    "pagefind": "^1.5.2",
-    "marked": "^18.0.0",
-    "esbuild": "^0.28.0"
+    "vitest": "^5.0.0"
   },
   "publishConfig": {
     "access": "public"

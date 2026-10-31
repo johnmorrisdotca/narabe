@@ -1,16 +1,5 @@
-import {
-  FORBIDDEN_PATTERNS,
-  LINE_RULES,
-  VARIANT_SPECS,
-} from "../constants.ts";
-import type {
-  ColourRules,
-  ForbiddenPattern,
-  GameSettings,
-  Handicap,
-  HandicapTerms,
-  Stone,
-} from "../types.ts";
+import { FORBIDDEN_PATTERNS, LINE_RULES, VARIANT_SPECS } from "../constants.ts";
+import type { ColourRules, ForbiddenPattern, GameSettings, Handicap, HandicapTerms, Stone } from "../types.ts";
 import { hasHeadStart } from "./headStart.ts";
 
 /**
@@ -103,15 +92,10 @@ function tightest(current: ColourRules["lineRule"], handicap: Handicap) {
     : handicap.exactLine || handicap.overline
       ? LINE_RULES.exact
       : LINE_RULES.atLeast;
-  return LINE_RULE_ORDER.indexOf(asked) > LINE_RULE_ORDER.indexOf(current)
-    ? asked
-    : current;
+  return LINE_RULE_ORDER.indexOf(asked) > LINE_RULE_ORDER.indexOf(current) ? asked : current;
 }
 
-function withPatterns(
-  current: readonly ForbiddenPattern[],
-  handicap: Handicap,
-): readonly ForbiddenPattern[] {
+function withPatterns(current: readonly ForbiddenPattern[], handicap: Handicap): readonly ForbiddenPattern[] {
   const added: ForbiddenPattern[] = [];
   if (handicap.doubleThree) added.push(FORBIDDEN_PATTERNS.doubleThree);
   if (handicap.doubleFour) added.push(FORBIDDEN_PATTERNS.doubleFour);

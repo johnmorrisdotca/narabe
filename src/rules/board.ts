@@ -84,9 +84,7 @@ export function pointOf(size: number, index: number): Point {
  * ```
  */
 export function isOnBoard(size: number, point: Point): boolean {
-  return (
-    point.row >= 0 && point.row < size && point.col >= 0 && point.col < size
-  );
+  return point.row >= 0 && point.row < size && point.col >= 0 && point.col < size;
 }
 
 export function samePoint(a: Point, b: Point): boolean {
@@ -113,12 +111,7 @@ export function chebyshev(a: Point, b: Point): number {
 }
 
 /** A copy of the board with `stone` placed at `point`. */
-export function withStone(
-  board: Cell[],
-  size: number,
-  point: Point,
-  stone: Stone,
-): Cell[] {
+export function withStone(board: Cell[], size: number, point: Point, stone: Stone): Cell[] {
   const next = board.slice();
   next[indexOf(size, point)] = stone;
   return next;

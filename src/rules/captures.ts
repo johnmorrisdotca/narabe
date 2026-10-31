@@ -14,12 +14,7 @@ import { rulesFor } from "./handicap.ts";
  * position is safe, which is what makes the game playable rather than a
  * bloodbath.
  */
-export function capturesFrom(
-  board: Cell[],
-  settings: GameSettings,
-  stone: Stone,
-  point: Point,
-): Point[] {
+export function capturesFrom(board: Cell[], settings: GameSettings, stone: Stone, point: Point): Point[] {
   if (!rulesFor(settings, stone).captures) return [];
 
   const { size } = settings;

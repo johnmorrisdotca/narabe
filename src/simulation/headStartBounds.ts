@@ -76,7 +76,8 @@ function stonesToCome(state: GameState, favoured: Stone, turns: { mine: number; 
   return { mine: turns.mine * perMine, theirs: current + Math.max(0, turns.theirs - 1) * perTheirs };
 }
 
-const countOf = (board: readonly Cell[], cell: Cell) => board.reduce((total, one) => (one === cell ? total + 1 : total), 0);
+const countOf = (board: readonly Cell[], cell: Cell) =>
+  board.reduce((total, one) => (one === cell ? total + 1 : total), 0);
 
 const segmentCache = new Map<string, number[][]>();
 
@@ -154,7 +155,12 @@ function openRuns(state: GameState, favoured: Stone, reading: LineReading): numb
 /** A line of either colour in the maker's game: a run holding both colours is closed to it. */
 function makerRunOpen(state: GameState, need: number): boolean {
   const { board, settings } = state;
-  return segments(settings.size, rulesFor(settings, STONES.black).winLength, VARIANT_SPECS[settings.variant].wrap, false).some((cells) => {
+  return segments(
+    settings.size,
+    rulesFor(settings, STONES.black).winLength,
+    VARIANT_SPECS[settings.variant].wrap,
+    false,
+  ).some((cells) => {
     const black = cells.filter((index) => board[index] === STONES.black).length;
     const white = cells.filter((index) => board[index] === STONES.white).length;
     if (cells.some((index) => board[index] === BLOCKED)) return false;
@@ -194,7 +200,8 @@ export function cannotDecide(state: GameState, favoured: Stone, replies: number)
   if (spec.go) return breathingRoom(board, size);
   // A race is won with every piece home, and a turn brings at most one piece in.
   if (spec.camps) return campSize(size) - piecesHome(board, size, favoured) > turns.mine;
-  if (spec.chineseCheckers) return starCampSize(STAR_RADIUS) - starPiecesHome(board, size, STAR_RADIUS, favoured) > turns.mine;
+  if (spec.chineseCheckers)
+    return starCampSize(STAR_RADIUS) - starPiecesHome(board, size, STAR_RADIUS, favoured) > turns.mine;
   const stones = stonesToCome(state, favoured, turns);
   // A Hex chain from side to side needs a stone on every row between them.
   if (spec.connects) return countOf(board, favoured) + stones.mine < size;
@@ -215,7 +222,9 @@ export function cannotDecide(state: GameState, favoured: Stone, replies: number)
     const fullBoard = state.opener === favoured && empties <= stones.mine + stones.theirs;
     return countOf(board, other) + stones.theirs < k && !fullBoard;
   }
-  const byCapture = spec.capturesToWin !== null && state.captures[favoured] + countOf(board, other) + stones.theirs >= spec.capturesToWin;
+  const byCapture =
+    spec.capturesToWin !== null &&
+    state.captures[favoured] + countOf(board, other) + stones.theirs >= spec.capturesToWin;
   const byTrap = spec.loseLength !== null && countOf(board, other) + stones.theirs >= spec.loseLength;
   if (byCapture || byTrap) return false;
   const reading = lineReading(state, favoured, replies);
@@ -271,5 +280,7 @@ export function inOpenRuns(state: GameState, favoured: Stone, replies: number, p
   }
   return points
     .filter((point) => weight.has(point.row * settings.size + point.col))
-    .sort((a, b) => (weight.get(b.row * settings.size + b.col) ?? 0) - (weight.get(a.row * settings.size + a.col) ?? 0));
+    .sort(
+      (a, b) => (weight.get(b.row * settings.size + b.col) ?? 0) - (weight.get(a.row * settings.size + a.col) ?? 0),
+    );
 }

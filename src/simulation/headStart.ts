@@ -87,7 +87,9 @@ export function checkHeadStartPass(before: GameState, after: GameState, seed: nu
 export function checkHeadStartRecord(state: GameState, what: string) {
   const { turns } = headStartTurnsByHand(state);
   state.moves.forEach((move, index) => {
-    expect(move.headStart === true, `${what}: move ${index + 1} marked wrong as a head start's turn`).toBe(turns[index]);
+    expect(move.headStart === true, `${what}: move ${index + 1} marked wrong as a head start's turn`).toBe(
+      turns[index],
+    );
   });
 }
 
@@ -141,11 +143,15 @@ export function checkHeadStartStart(state: GameState, seed: number) {
   if (tradition === "men") {
     const stronger = other(start.stone);
     const row = stronger === "black" ? 0 : size - 1;
-    const dark = Array.from({ length: size }, (_, col) => ({ row, col })).filter((point) => (point.row + point.col) % 2 === 1);
+    const dark = Array.from({ length: size }, (_, col) => ({ row, col })).filter(
+      (point) => (point.row + point.col) % 2 === 1,
+    );
     const gone = dark.filter((point) => at(state, point) === null).length;
     const standing = dark.filter((point) => at(state, point) === stronger).length;
     expect(gone, `${where}: the odds did not take the men off the back row`).toBe(start.traditional);
-    expect(standing, `${where}: the back row holds something other than the stronger side's men`).toBe(dark.length - start.traditional);
+    expect(standing, `${where}: the back row holds something other than the stronger side's men`).toBe(
+      dark.length - start.traditional,
+    );
     return;
   }
   throw new Error(`${where}: a traditional head start on a game with no tradition written here`);

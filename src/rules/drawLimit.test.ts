@@ -190,9 +190,7 @@ describe("every game honours the length it was given", () => {
     expect(limit, `${variant} has no limit with one set`).not.toBeNull();
 
     const finished = playToEnd(short, limit! * 4);
-    expect(finished.status, `${variant} was left playing past its limit`).not.toBe(
-      GAME_STATUS.playing,
-    );
+    expect(finished.status, `${variant} was left playing past its limit`).not.toBe(GAME_STATUS.playing);
     // Whether it ended by the limit or before it, it never went past.
     expect(finished.moves.length).toBeLessThanOrEqual(limit!);
   });
@@ -268,10 +266,7 @@ describe("a board too small to need a length", () => {
   it("refuses a length on a small board however loudly it is asked for", () => {
     // Through createGame, because that is what settles a game onto its own
     // board: tic-tac-toe is played on 3×3 whatever size was asked for.
-    const tiny = createGame(
-      settings({ variant: RULE_VARIANTS.tictactoe, drawLimit: DRAW_LIMITS.half }),
-      0,
-    ).settings;
+    const tiny = createGame(settings({ variant: RULE_VARIANTS.tictactoe, drawLimit: DRAW_LIMITS.half }), 0).settings;
     expect(tiny.size).toBe(3);
     expect(movesBeforeDraw(tiny)).toBeNull();
     expect(lengthReason(tiny)).toBe("too-small");
@@ -279,10 +274,7 @@ describe("a board too small to need a length", () => {
 
   it("never ends a small game early", () => {
     // The move noughts and crosses would have been cut short at.
-    const state = createGame(
-      settings({ variant: RULE_VARIANTS.tictactoe, drawLimit: DRAW_LIMITS.half }),
-      0,
-    );
+    const state = createGame(settings({ variant: RULE_VARIANTS.tictactoe, drawLimit: DRAW_LIMITS.half }), 0);
     const four = { ...state, moves: new Array(4).fill(null) } as unknown as GameState;
     expect(reachedDrawLimit(four)).toBe(false);
     expect(settleDraw(four)).toBe(four);

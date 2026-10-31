@@ -114,7 +114,11 @@ export function freeTurnsOffered(variant: string): readonly number[] {
  * stale address, a request or a stored row: a head start that could decide the
  * game is not given at all.
  */
-export function normaliseHeadStart(settings: { variant: string; size: number; headStart?: HeadStart | null }): HeadStart {
+export function normaliseHeadStart(settings: {
+  variant: string;
+  size: number;
+  headStart?: HeadStart | null;
+}): HeadStart {
   const { stone, freeTurns, traditional } = headStartOf(settings);
   if (stone !== STONES.black && stone !== STONES.white) return NO_HEAD_START;
   const turns = freeTurnsOffered(settings.variant).includes(freeTurns) ? freeTurns : 0;
@@ -138,7 +142,11 @@ function handicapStones(settings: { variant: string; size: number; headStart?: H
  * colour's opening moves, so the other colour plays next — White first in an
  * ordinary handicap game.
  */
-export function headStartOpener(settings: { variant: string; size: number; headStart?: HeadStart | null }): Stone | null {
+export function headStartOpener(settings: {
+  variant: string;
+  size: number;
+  headStart?: HeadStart | null;
+}): Stone | null {
   const start = headStartOf(settings);
   return start.stone !== null && handicapStones(settings) ? otherStone(start.stone) : null;
 }
@@ -286,5 +294,9 @@ export function owesHeadStart(state: GameState): boolean {
 export function headStartTurnTaken(state: GameState): { stone: Stone; turn: number; of: number } | null {
   const last = state.moves[state.moves.length - 1];
   if (last === undefined || last.headStart !== true || state.status !== GAME_STATUS.playing) return null;
-  return { stone: otherStone(last.stone), turn: headStartTurnsGiven(state.moves), of: headStartOf(state.settings).freeTurns };
+  return {
+    stone: otherStone(last.stone),
+    turn: headStartTurnsGiven(state.moves),
+    of: headStartOf(state.settings).freeTurns,
+  };
 }

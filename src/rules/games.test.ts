@@ -1,5 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { canGrowBoard, canTwist, cellAt, createGame, inMovePhase, isLegalMove, legalPoints, movePiece, pieceMoves, playMove, resolvePlacement, twistBoard } from "../engine.ts";
+import {
+  canGrowBoard,
+  canTwist,
+  cellAt,
+  createGame,
+  inMovePhase,
+  isLegalMove,
+  legalPoints,
+  movePiece,
+  pieceMoves,
+  playMove,
+  resolvePlacement,
+  twistBoard,
+} from "../engine.ts";
 import { replayMoves, undoMove } from "./record.ts";
 import { GAME_STATUS, RULE_VARIANTS, STONES, WIN_REASONS } from "../constants.ts";
 import { fromDiagram, show } from "../test-support.ts";
@@ -20,13 +33,19 @@ describe("tic-tac-toe", () => {
   });
 
   it("wins with three and draws a full board", () => {
-    const won = play(createGame({ variant: RULE_VARIANTS.tictactoe }), [
-      p(0, 0), p(1, 0), p(0, 1), p(1, 1), p(0, 2),
-    ]);
+    const won = play(createGame({ variant: RULE_VARIANTS.tictactoe }), [p(0, 0), p(1, 0), p(0, 1), p(1, 1), p(0, 2)]);
     expect(won.winner).toBe(STONES.black);
 
     const drawn = play(createGame({ variant: RULE_VARIANTS.tictactoe }), [
-      p(0, 0), p(0, 1), p(0, 2), p(1, 1), p(1, 0), p(1, 2), p(2, 1), p(2, 0), p(2, 2),
+      p(0, 0),
+      p(0, 1),
+      p(0, 2),
+      p(1, 1),
+      p(1, 0),
+      p(1, 2),
+      p(2, 1),
+      p(2, 0),
+      p(2, 2),
     ]);
     expect(drawn.status).toBe(GAME_STATUS.draw);
   });

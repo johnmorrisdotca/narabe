@@ -38,7 +38,11 @@ describe("how long a game can get", () => {
      * Chinese Checkers were still playing after sixty thousand random moves,
      * at every size and every seed tried.
      */
-    for (const [variant, size] of [["halma", 16], ["halma", 8], ["chineseCheckers", 17]] as const) {
+    for (const [variant, size] of [
+      ["halma", 16],
+      ["halma", 8],
+      ["chineseCheckers", 17],
+    ] as const) {
       expect(longestPossibleGame(at(variant, size)), variant).toBeNull();
       expect(noBoundReason(at(variant, size)), variant).toBe("pieces-move");
     }

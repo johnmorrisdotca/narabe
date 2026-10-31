@@ -1,15 +1,5 @@
 import { MOVE_KINDS, PIECE_QUEUES, STONES, VARIANT_SPECS } from "../constants.ts";
-import type {
-  Cell,
-  GameSettings,
-  GameState,
-  Move,
-  Piece,
-  PieceCell,
-  PieceQueue,
-  Point,
-  Stone,
-} from "../types.ts";
+import type { Cell, GameSettings, GameState, Move, Piece, PieceCell, PieceQueue, Point, Stone } from "../types.ts";
 import { indexOf, isOnBoard } from "./board.ts";
 import { seededRandom } from "./random.ts";
 
@@ -22,16 +12,54 @@ import { seededRandom } from "./random.ts";
 
 /** The seven tetromino shapes, as cells relative to a top-left corner. */
 const TETROMINOES: readonly (readonly Point[])[] = [
-  [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }, { row: 0, col: 3 }], // I
-  [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 0 }, { row: 1, col: 1 }], // O
-  [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }, { row: 1, col: 1 }], // T
-  [{ row: 0, col: 1 }, { row: 0, col: 2 }, { row: 1, col: 0 }, { row: 1, col: 1 }], // S
-  [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 1 }, { row: 1, col: 2 }], // Z
-  [{ row: 0, col: 0 }, { row: 1, col: 0 }, { row: 2, col: 0 }, { row: 2, col: 1 }], // L
-  [{ row: 0, col: 1 }, { row: 1, col: 1 }, { row: 2, col: 1 }, { row: 2, col: 0 }], // J
+  [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 0, col: 3 },
+  ], // I
+  [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+  ], // O
+  [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 1, col: 1 },
+  ], // T
+  [
+    { row: 0, col: 1 },
+    { row: 0, col: 2 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+  ], // S
+  [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 1, col: 1 },
+    { row: 1, col: 2 },
+  ], // Z
+  [
+    { row: 0, col: 0 },
+    { row: 1, col: 0 },
+    { row: 2, col: 0 },
+    { row: 2, col: 1 },
+  ], // L
+  [
+    { row: 0, col: 1 },
+    { row: 1, col: 1 },
+    { row: 2, col: 1 },
+    { row: 2, col: 0 },
+  ], // J
 ];
 
-const DOMINO: readonly Point[] = [{ row: 0, col: 0 }, { row: 0, col: 1 }];
+const DOMINO: readonly Point[] = [
+  { row: 0, col: 0 },
+  { row: 0, col: 1 },
+];
 
 /** Mixes the variant into the seed so two queues from one seed differ. */
 const QUEUE_SALT: Record<PieceQueue, number> = { domino: 0x1d, tetro: 0x2e };
@@ -67,10 +95,7 @@ export function pieceQueue(settings: GameSettings): Piece[] {
   const random = seededRandom((settings.seed + QUEUE_SALT[queue]) >>> 0);
   const pieces: Piece[] = [];
   for (let i = 0; i < QUEUE_LENGTH; i += 1) {
-    const shape =
-      queue === PIECE_QUEUES.domino
-        ? DOMINO
-        : TETROMINOES[Math.floor(random() * TETROMINOES.length)];
+    const shape = queue === PIECE_QUEUES.domino ? DOMINO : TETROMINOES[Math.floor(random() * TETROMINOES.length)];
     pieces.push({ cells: colour(shape, random, queue) });
   }
   return pieces;

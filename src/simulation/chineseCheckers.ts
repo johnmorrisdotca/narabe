@@ -68,10 +68,9 @@ export function checkStarMove(before: GameState, after: GameState, from: Point, 
   expect(cellAt(before, to), `${where}: landed on a piece`).toBeNull();
   expect(cellAt(after, from), `${where}: piece still at its origin`).toBeNull();
   expect(cellAt(after, to), `${where}: piece did not arrive`).toBe(before.toPlay);
-  expect(
-    reachableByHexHand(before.board, size, from, to),
-    `${where}: not a hex step or a chain of hex jumps`,
-  ).toBe(true);
+  expect(reachableByHexHand(before.board, size, from, to), `${where}: not a hex step or a chain of hex jumps`).toBe(
+    true,
+  );
 
   const changed = after.board.filter((cell, index) => cell !== before.board[index]).length;
   expect(changed, `${where}: more than two cells changed — something was taken, or moved twice`).toBe(2);

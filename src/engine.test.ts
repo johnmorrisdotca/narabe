@@ -18,9 +18,7 @@ function play(state: GameState, points: Point[]): GameState {
  */
 function position(blackPoints: Point[], whitePoints: Point[]): GameState {
   const size = createGame().settings.size;
-  const filler = Array.from({ length: blackPoints.length }, (_, i) =>
-    p(size - 1, i),
-  );
+  const filler = Array.from({ length: blackPoints.length }, (_, i) => p(size - 1, i));
   const whites = [...whitePoints, ...filler];
   const sequence: Point[] = [];
   blackPoints.forEach((point, i) => sequence.push(point, whites[i]));
@@ -91,18 +89,9 @@ describe("winning", () => {
   }
 
   it("detects a win completed in the middle of the line", () => {
-    const game = position(
-      [p(7, 3), p(7, 4), p(7, 6), p(7, 7), p(7, 5)],
-      [],
-    );
+    const game = position([p(7, 3), p(7, 4), p(7, 6), p(7, 7), p(7, 5)], []);
     expect(game.status).toBe(GAME_STATUS.won);
-    expect(game.winningLine).toEqual([
-      p(7, 3),
-      p(7, 4),
-      p(7, 5),
-      p(7, 6),
-      p(7, 7),
-    ]);
+    expect(game.winningLine).toEqual([p(7, 3), p(7, 4), p(7, 5), p(7, 6), p(7, 7)]);
   });
 
   it("detects a win along the board edge", () => {
@@ -117,20 +106,22 @@ describe("winning", () => {
   });
 
   it("does not count a line broken by the other colour", () => {
-    const game = position(
-      [p(7, 3), p(7, 4), p(7, 6), p(7, 7), p(7, 8)],
-      [p(7, 5)],
-    );
+    const game = position([p(7, 3), p(7, 4), p(7, 6), p(7, 7), p(7, 8)], [p(7, 5)]);
     expect(game.status).toBe(GAME_STATUS.playing);
   });
 
   it("lets white win too", () => {
     const game = play(createGame(), [
-      p(0, 0), p(7, 3),
-      p(0, 1), p(7, 4),
-      p(0, 2), p(7, 5),
-      p(0, 3), p(7, 6),
-      p(1, 0), p(7, 7),
+      p(0, 0),
+      p(7, 3),
+      p(0, 1),
+      p(7, 4),
+      p(0, 2),
+      p(7, 5),
+      p(0, 3),
+      p(7, 6),
+      p(1, 0),
+      p(7, 7),
     ]);
     expect(game.winner).toBe(STONES.white);
     expect(game.toPlay).toBe(STONES.white);
@@ -152,11 +143,16 @@ describe("rule variants", () => {
 
   it("freestyle counts an overline as a win", () => {
     const game = play(createGame({ variant: RULE_VARIANTS.freestyle }), [
-      p(7, 3), p(0, 0),
-      p(7, 4), p(0, 2),
-      p(7, 5), p(0, 4),
-      p(7, 6), p(0, 6),
-      p(7, 8), p(0, 8),
+      p(7, 3),
+      p(0, 0),
+      p(7, 4),
+      p(0, 2),
+      p(7, 5),
+      p(0, 4),
+      p(7, 6),
+      p(0, 6),
+      p(7, 8),
+      p(0, 8),
       p(7, 7),
     ]);
     expect(game.status).toBe(GAME_STATUS.won);
@@ -165,11 +161,16 @@ describe("rule variants", () => {
 
   it("standard does not count an overline as a win", () => {
     const game = play(createGame({ variant: RULE_VARIANTS.standard }), [
-      p(7, 3), p(0, 0),
-      p(7, 4), p(0, 2),
-      p(7, 5), p(0, 4),
-      p(7, 6), p(0, 6),
-      p(7, 8), p(0, 8),
+      p(7, 3),
+      p(0, 0),
+      p(7, 4),
+      p(0, 2),
+      p(7, 5),
+      p(0, 4),
+      p(7, 6),
+      p(0, 6),
+      p(7, 8),
+      p(0, 8),
       p(7, 7),
     ]);
     expect(game.status).toBe(GAME_STATUS.playing);
@@ -178,10 +179,14 @@ describe("rule variants", () => {
 
   it("standard still counts exactly five", () => {
     const game = play(createGame({ variant: RULE_VARIANTS.standard }), [
-      p(7, 3), p(0, 0),
-      p(7, 4), p(0, 2),
-      p(7, 5), p(0, 4),
-      p(7, 6), p(0, 6),
+      p(7, 3),
+      p(0, 0),
+      p(7, 4),
+      p(0, 2),
+      p(7, 5),
+      p(0, 4),
+      p(7, 6),
+      p(0, 6),
       p(7, 7),
     ]);
     expect(game.status).toBe(GAME_STATUS.won);

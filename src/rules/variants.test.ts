@@ -1,12 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createGame, playMove, stonesLeft } from "../engine.ts";
 import { undoMove } from "./record.ts";
-import {
-  GAME_STATUS,
-  OPENING_RULES,
-  RULE_VARIANTS,
-  STONES,
-} from "../constants.ts";
+import { GAME_STATUS, OPENING_RULES, RULE_VARIANTS, STONES } from "../constants.ts";
 import { fromDiagram } from "../test-support.ts";
 import type { GameState, Point } from "../types.ts";
 
@@ -151,9 +146,7 @@ describe("connect6", () => {
 describe("variant defaults", () => {
   it("lets freestyle choose a line length and pins it elsewhere", () => {
     expect(createGame({ winLength: 4 }).settings.winLength).toBe(4);
-    expect(
-      createGame({ variant: RULE_VARIANTS.renju, winLength: 4 }).settings.winLength,
-    ).toBe(5);
+    expect(createGame({ variant: RULE_VARIANTS.renju, winLength: 4 }).settings.winLength).toBe(5);
   });
 
   it("starts every game with no captures and a settled opening", () => {

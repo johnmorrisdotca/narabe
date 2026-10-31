@@ -91,14 +91,24 @@ export type SlideMove = {
 export function capturePaths(moves: readonly SlideMove[]): (Point[] | null)[] {
   const paths: (Point[] | null)[] = [];
   moves.forEach((move, at) => {
-    if (move.kind !== MOVE_KINDS.move || move.from === undefined || move.captured === undefined || move.captured.length === 0) {
+    if (
+      move.kind !== MOVE_KINDS.move ||
+      move.from === undefined ||
+      move.captured === undefined ||
+      move.captured.length === 0
+    ) {
       paths.push(null);
       return;
     }
     const before = at > 0 ? paths[at - 1] : null;
     const last = before?.[before.length - 1];
-    const goesOn = move.continuedChain === true && last !== undefined && last.row === move.from.row && last.col === move.from.col;
-    paths.push(goesOn && before !== null ? [...before, { row: move.row, col: move.col }] : [move.from, { row: move.row, col: move.col }]);
+    const goesOn =
+      move.continuedChain === true && last !== undefined && last.row === move.from.row && last.col === move.from.col;
+    paths.push(
+      goesOn && before !== null
+        ? [...before, { row: move.row, col: move.col }]
+        : [move.from, { row: move.row, col: move.col }],
+    );
   });
   return paths;
 }

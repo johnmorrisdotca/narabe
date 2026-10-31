@@ -16,9 +16,14 @@ import { leavesNoStone } from "./stoneless.ts";
  */
 
 const DIRECTIONS: readonly Point[] = [
-  { row: -1, col: -1 }, { row: -1, col: 0 }, { row: -1, col: 1 },
-  { row: 0, col: -1 },                       { row: 0, col: 1 },
-  { row: 1, col: -1 },  { row: 1, col: 0 },  { row: 1, col: 1 },
+  { row: -1, col: -1 },
+  { row: -1, col: 0 },
+  { row: -1, col: 1 },
+  { row: 0, col: -1 },
+  { row: 0, col: 1 },
+  { row: 1, col: -1 },
+  { row: 1, col: 0 },
+  { row: 1, col: 1 },
 ];
 
 function at(board: Cell[], size: number, point: Point): Cell | undefined {
@@ -94,9 +99,7 @@ export function startingDiscs(settings: GameSettings): { point: Point; stone: St
  */
 export function inLayingPhase(state: GameState): boolean {
   if (openingFor(state.settings) !== STARTING_DISCS.laid) return false;
-  return centreSquares(state.settings.size).some(
-    (point) => at(state.board, state.settings.size, point) === null,
-  );
+  return centreSquares(state.settings.size).some((point) => at(state.board, state.settings.size, point) === null);
 }
 
 /**
@@ -242,10 +245,9 @@ export function undoFlip(state: GameState, start: GameState): GameState {
   let rebuilt: GameState = { ...start, opener: state.opener, seats: state.seats, toPlay: state.opener };
   for (const move of state.moves.slice(0, -1)) {
     // A turn with no stone on the record — a head start's pass, or a turn lost on time — turns nothing and hands the move over.
-    rebuilt =
-      leavesNoStone(move.kind)
-        ? { ...rebuilt, moves: [...rebuilt.moves, move], toPlay: other(rebuilt.toPlay) }
-        : playFlip(rebuilt, { row: move.row, col: move.col });
+    rebuilt = leavesNoStone(move.kind)
+      ? { ...rebuilt, moves: [...rebuilt.moves, move], toPlay: other(rebuilt.toPlay) }
+      : playFlip(rebuilt, { row: move.row, col: move.col });
   }
   return { ...rebuilt, swapsUsed: state.swapsUsed };
 }

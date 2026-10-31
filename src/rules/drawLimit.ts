@@ -1,9 +1,4 @@
-import {
-  DRAW_LIMIT_MIN_POINTS,
-  DRAW_LIMIT_SHARE,
-  GAME_STATUS,
-  VARIANT_SPECS,
-} from "../constants.ts";
+import { DRAW_LIMIT_MIN_POINTS, DRAW_LIMIT_SHARE, GAME_STATUS, VARIANT_SPECS } from "../constants.ts";
 import type { GameSettings, GameState } from "../types.ts";
 import { drawnByCheckersRule } from "./checkersDraws.ts";
 import { stalled } from "./noProgress.ts";

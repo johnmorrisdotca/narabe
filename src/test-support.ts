@@ -1,13 +1,6 @@
 import { createGame, indexOf, otherStone } from "./engine.ts";
 import { BLOCKED, STONES } from "./constants.ts";
-import type {
-  Cell,
-  GameSettings,
-  GameState,
-  Move,
-  Point,
-  Stone,
-} from "./types.ts";
+import type { Cell, GameSettings, GameState, Move, Point, Stone } from "./types.ts";
 
 /** Diagram characters, chosen to stay legible in a fixed-width editor. */
 const GLYPHS: Record<string, Cell> = {
@@ -38,10 +31,7 @@ export type DiagramOptions = {
  * `x` is black, `o` is white, `#` an obstacle, `.` empty. Whitespace between
  * cells is ignored; the board is square, sized from the number of rows.
  */
-export function fromDiagram(
-  diagram: string,
-  options: DiagramOptions = {},
-): GameState {
+export function fromDiagram(diagram: string, options: DiagramOptions = {}): GameState {
   const rows = diagram
     .split("\n")
     .map((line) => line.trim())
@@ -51,9 +41,7 @@ export function fromDiagram(
   const size = rows.length;
   const wrong = rows.findIndex((row) => row.length !== size);
   if (wrong !== -1) {
-    throw new Error(
-      `Diagram row ${wrong} has ${rows[wrong].length} cells, expected ${size}`,
-    );
+    throw new Error(`Diagram row ${wrong} has ${rows[wrong].length} cells, expected ${size}`);
   }
 
   const base = createGame({ ...options.settings, size });
@@ -73,10 +61,7 @@ export function fromDiagram(
     ...base,
     board,
     moves: interleave(stones, otherStone(toPlay)),
-    opener:
-      stones.black.length + stones.white.length > 0
-        ? otherStone(toPlay)
-        : toPlay,
+    opener: stones.black.length + stones.white.length > 0 ? otherStone(toPlay) : toPlay,
     toPlay,
   };
 }
@@ -93,9 +78,7 @@ function collectStones(board: Cell[], size: number): Record<Stone, Point[]> {
 
 /** The side with fewer stones is to move; black opens an equal position. */
 function inferToPlay(stones: Record<Stone, Point[]>): Stone {
-  return stones.white.length < stones.black.length
-    ? STONES.white
-    : STONES.black;
+  return stones.white.length < stones.black.length ? STONES.white : STONES.black;
 }
 
 /**
@@ -103,10 +86,7 @@ function inferToPlay(stones: Record<Stone, Point[]>): Stone {
  * but keeping the list consistent stops `suggestMove` treating a mid-game
  * diagram as an empty opening board.
  */
-function interleave(
-  stones: Record<Stone, Point[]>,
-  opener: Stone,
-): Move[] {
+function interleave(stones: Record<Stone, Point[]>, opener: Stone): Move[] {
   const order: Move[] = [];
   const second = otherStone(opener);
   const queues = { [opener]: [...stones[opener]], [second]: [...stones[second]] };

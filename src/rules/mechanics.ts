@@ -1,12 +1,4 @@
-import {
-  DIRECTIONS,
-  GAME_STATUS,
-  MOVE_KINDS,
-  PLACEMENTS,
-  STONES,
-  VARIANT_SPECS,
-  WIN_REASONS,
-} from "../constants.ts";
+import { DIRECTIONS, GAME_STATUS, MOVE_KINDS, PLACEMENTS, STONES, VARIANT_SPECS, WIN_REASONS } from "../constants.ts";
 import type { Cell, GameState, Move, Point, Stone } from "../types.ts";
 import { settleDraw } from "./drawLimit.ts";
 import { cellAtPoint, indexOf, isOnBoard, isStone, otherStone, stepFrom } from "./board.ts";
@@ -30,12 +22,7 @@ import { findAllWins, rotateQuadrant } from "./twist.ts";
  */
 
 /** A finished game. */
-export function won(
-  state: GameState,
-  winner: Stone,
-  winBy: GameState["winBy"],
-  winningLine: Point[],
-): GameState {
+export function won(state: GameState, winner: Stone, winBy: GameState["winBy"], winningLine: Point[]): GameState {
   return { ...state, status: GAME_STATUS.won, winner, winBy, winningLine };
 }
 
@@ -268,7 +255,8 @@ export function pieceMoves(state: GameState, from: Point): Point[] {
   // A turn the other colour's head start takes moves nothing: it is passed.
   if (owesHeadStart(state)) return [];
   if (!inMovePhase(state)) return [];
-  if (!isOnBoard(state.settings.size, from) || state.board[indexOf(state.settings.size, from)] !== state.toPlay) return [];
+  if (!isOnBoard(state.settings.size, from) || state.board[indexOf(state.settings.size, from)] !== state.toPlay)
+    return [];
   const spec = VARIANT_SPECS[state.settings.variant];
   if (spec.camps) return campMoves(state.board, state.settings.size, from);
   if (spec.checkers) return checkersMoves(state, from);
@@ -291,9 +279,7 @@ export function pieceMoves(state: GameState, from: Point): Point[] {
  * ```
  */
 export function movePiece(state: GameState, from: Point, to: Point): GameState {
-  const allowed = pieceMoves(state, from).some(
-    (point) => point.row === to.row && point.col === to.col,
-  );
+  const allowed = pieceMoves(state, from).some((point) => point.row === to.row && point.col === to.col);
   if (!allowed) return state;
 
   const { settings, toPlay } = state;
@@ -315,9 +301,7 @@ export function movePiece(state: GameState, from: Point, to: Point): GameState {
     }
     if (result.crowned) move.crowned = true;
     const captures =
-      result.captured !== null
-        ? { ...state.captures, [toPlay]: state.captures[toPlay] + 1 }
-        : state.captures;
+      result.captured !== null ? { ...state.captures, [toPlay]: state.captures[toPlay] + 1 } : state.captures;
     const moved: GameState = {
       ...state,
       board: result.board,
@@ -356,7 +340,6 @@ export function movePiece(state: GameState, from: Point, to: Point): GameState {
   }
   return settleStone(moved, to) ?? settleDraw({ ...moved, toPlay: otherStone(toPlay) });
 }
-
 
 /**
  * The falling-block rule: a full bottom row vanishes and everything above it

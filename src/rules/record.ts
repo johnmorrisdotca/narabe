@@ -5,13 +5,7 @@ import { rotateQuadrant } from "./twist.ts";
 import { indexOf, otherStone, samePoint } from "./board.ts";
 import { stonesIn } from "./captures.ts";
 import { undoFlip } from "./flips.ts";
-import {
-  GAME_STATUS,
-  MOVE_KINDS,
-  OPENING_STAGES,
-  STONES,
-  VARIANT_SPECS,
-} from "../constants.ts";
+import { GAME_STATUS, MOVE_KINDS, OPENING_STAGES, STONES, VARIANT_SPECS } from "../constants.ts";
 import type { GameState, MoveInput, OpeningChoice, Point, ReplayFacts } from "../types.ts";
 import {
   canForfeit,
@@ -89,12 +83,9 @@ export function skipTarget(state: GameState, roll = 0): Point | null {
     { row: last, col: last },
   ];
   const corner = corners[Math.min(corners.length - 1, Math.floor(roll * 4))];
-  const distance = (point: Point) =>
-    Math.max(Math.abs(point.row - corner.row), Math.abs(point.col - corner.col));
+  const distance = (point: Point) => Math.max(Math.abs(point.row - corner.row), Math.abs(point.col - corner.col));
 
-  return open.reduce((best, point) =>
-    distance(point) < distance(best) ? point : best,
-  );
+  return open.reduce((best, point) => (distance(point) < distance(best) ? point : best));
 }
 
 /** Burns the turn on a corner stone. A no-op when skipping is not allowed.
@@ -300,15 +291,15 @@ export function replayMoves(
         : move.kind === MOVE_KINDS.forfeit
           ? replayForfeit(current, facts)
           : move.cells !== undefined
-          ? placePiece(current, move.cells)
-          : move.from !== undefined
-            ? movePiece(current, { row: move.from.row, col: move.from.col }, point)
-            : playMove(
-                current,
-                point,
-                MOVE_KINDS.place,
-                move.stone === STONES.black || move.stone === STONES.white ? move.stone : null,
-              );
+            ? placePiece(current, move.cells)
+            : move.from !== undefined
+              ? movePiece(current, { row: move.from.row, col: move.from.col }, point)
+              : playMove(
+                  current,
+                  point,
+                  MOVE_KINDS.place,
+                  move.stone === STONES.black || move.stone === STONES.white ? move.stone : null,
+                );
     if (next === current) break;
     timeline.push(next);
     // A recorded twist is part of the same move, and lands in the same replay step.

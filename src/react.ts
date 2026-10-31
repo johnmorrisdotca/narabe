@@ -73,12 +73,16 @@ export function useNarabe(settings: Partial<GameSettings> = {}): NarabeGame {
   const [state, setState] = useState<GameState>(() => createGame(start));
 
   const play = useCallback(
-    (point: Point, kind?: MoveKind, colour?: Stone | null) => setState((now) => playMove(now, point, kind, colour ?? null)),
+    (point: Point, kind?: MoveKind, colour?: Stone | null) =>
+      setState((now) => playMove(now, point, kind, colour ?? null)),
     [],
   );
   const move = useCallback((from: Point, to: Point) => setState((now) => movePiece(now, from, to)), []);
   const place = useCallback((cells: readonly PieceCell[]) => setState((now) => placePiece(now, cells)), []);
-  const twist = useCallback((quadrant: number, clockwise: boolean) => setState((now) => twistBoard(now, quadrant, clockwise)), []);
+  const twist = useCallback(
+    (quadrant: number, clockwise: boolean) => setState((now) => twistBoard(now, quadrant, clockwise)),
+    [],
+  );
   const pass = useCallback(() => setState((now) => passTurn(now)), []);
   const undo = useCallback(() => setState((now) => (canUndo(now) ? undoMove(now) : now)), []);
   const reset = useCallback((next?: Partial<GameSettings>) => setState(createGame(next ?? start)), [start]);

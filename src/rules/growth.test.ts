@@ -55,8 +55,15 @@ describe("canGrowBoard", () => {
 
   it("is unavailable once the game is over", () => {
     const won = play(createGame({ size: 9, allowResize: true }), [
-      p(4, 0), p(0, 0), p(4, 1), p(0, 1),
-      p(4, 2), p(0, 2), p(4, 3), p(0, 3), p(4, 4),
+      p(4, 0),
+      p(0, 0),
+      p(4, 1),
+      p(0, 1),
+      p(4, 2),
+      p(0, 2),
+      p(4, 3),
+      p(0, 3),
+      p(4, 4),
     ]);
     expect(won.winner).toBe(STONES.black);
     expect(canGrowBoard(won)).toBe(false);
@@ -65,8 +72,7 @@ describe("canGrowBoard", () => {
 });
 
 describe("growBoard", () => {
-  const started = () =>
-    play(createGame({ size: 9, allowResize: true }), [p(4, 4), p(3, 3)]);
+  const started = () => play(createGame({ size: 9, allowResize: true }), [p(4, 4), p(3, 3)]);
 
   it("moves to the next size up", () => {
     const grown = growBoard(started());
@@ -83,15 +89,11 @@ describe("growBoard", () => {
     expect(cellAt(grown, p(4 + offset, 4 + offset))).toBe(STONES.black);
     expect(cellAt(grown, p(3 + offset, 3 + offset))).toBe(STONES.white);
     // Two stones before, two stones after: nothing was dropped or invented.
-    expect(grown.board.filter((cell) => cell !== null && cell !== "blocked"))
-      .toHaveLength(2);
+    expect(grown.board.filter((cell) => cell !== null && cell !== "blocked")).toHaveLength(2);
   });
 
   it("keeps the centre stone on the centre", () => {
-    const centred = playMove(
-      createGame({ size: 9, allowResize: true }),
-      tengen(9),
-    );
+    const centred = playMove(createGame({ size: 9, allowResize: true }), tengen(9));
     const grown = growBoard(centred);
 
     expect(cellAt(grown, tengen(13))).toBe(STONES.black);
@@ -156,8 +158,7 @@ describe("previousBoardSize", () => {
 });
 
 describe("canShrinkBoard", () => {
-  const roomy = () =>
-    play(createGame({ size: 13, allowResize: true }), [p(6, 6), p(6, 7)]);
+  const roomy = () => play(createGame({ size: 13, allowResize: true }), [p(6, 6), p(6, 7)]);
 
   it("is off unless the game allows it", () => {
     expect(canShrinkBoard(createGame({ size: 13 }))).toBe(false);
@@ -173,9 +174,7 @@ describe("canShrinkBoard", () => {
 
   it("refuses when a stone stands in the ring that would go", () => {
     // (1,1) is inside the two-deep margin a 13 to 9 step removes.
-    const edged = play(createGame({ size: 13, allowResize: true }), [
-      p(1, 1), p(6, 6),
-    ]);
+    const edged = play(createGame({ size: 13, allowResize: true }), [p(1, 1), p(6, 6)]);
     expect(canShrinkBoard(edged)).toBe(false);
     expect(shrinkBoard(edged)).toBe(edged);
   });
@@ -186,9 +185,7 @@ describe("canShrinkBoard", () => {
    * it is still in the list and would replay outside the smaller board.
    */
   it("refuses when only a captured stone's move is left in the ring", () => {
-    const state = play(createGame({ size: 13, allowResize: true }), [
-      p(6, 6), p(6, 7),
-    ]);
+    const state = play(createGame({ size: 13, allowResize: true }), [p(6, 6), p(6, 7)]);
     const withGhost: typeof state = {
       ...state,
       // The board is untouched; only the record remembers the outer ring.
@@ -201,15 +198,10 @@ describe("canShrinkBoard", () => {
 
   /** And the same for a piece that slid inwards, whose `from` is out there. */
   it("refuses when a slide came from the ring that would go", () => {
-    const state = play(createGame({ size: 13, allowResize: true }), [
-      p(6, 6), p(6, 7),
-    ]);
+    const state = play(createGame({ size: 13, allowResize: true }), [p(6, 6), p(6, 7)]);
     const slid: typeof state = {
       ...state,
-      moves: [
-        ...state.moves,
-        { row: 6, col: 5, stone: "black", kind: "place", from: { row: 0, col: 0 } },
-      ],
+      moves: [...state.moves, { row: 6, col: 5, stone: "black", kind: "place", from: { row: 0, col: 0 } }],
     };
 
     expect(canShrinkBoard(slid)).toBe(false);
@@ -217,8 +209,7 @@ describe("canShrinkBoard", () => {
 });
 
 describe("shrinkBoard", () => {
-  const roomy = () =>
-    play(createGame({ size: 13, allowResize: true }), [p(6, 6), p(6, 7)]);
+  const roomy = () => play(createGame({ size: 13, allowResize: true }), [p(6, 6), p(6, 7)]);
 
   it("steps down to the next size, keeping every stone", () => {
     const shrunk = shrinkBoard(roomy());

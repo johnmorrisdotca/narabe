@@ -1,14 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  canChooseColour,
-  canPass,
-  createGame,
-  extendOpening,
-  forfeitOnRecord,
-  mustPass,
-  playMove,
-} from "../engine.ts";
+import { canChooseColour, canPass, createGame, extendOpening, forfeitOnRecord, mustPass, playMove } from "../engine.ts";
 import { MOVE_KINDS, OPENING_RULES, OPENING_STAGES, SEATS, STONES } from "../constants.ts";
 import type { GameState, MoveInput, Point } from "../types.ts";
 import { passesOwed } from "./forcedPass.ts";
@@ -83,7 +75,12 @@ describe("a missed deadline while a colour choice waits", () => {
   it("replays from a record holding the stones and the forfeit, to the same position", () => {
     const start = createGame({ opening: OPENING_RULES.swap2 });
     const settled = forfeitOnRecord(play(start, three));
-    const record: MoveInput[] = settled.moves.map((move) => ({ row: move.row, col: move.col, kind: move.kind, stone: move.stone }));
+    const record: MoveInput[] = settled.moves.map((move) => ({
+      row: move.row,
+      col: move.col,
+      kind: move.kind,
+      stone: move.stone,
+    }));
 
     // No choices stored, as on a live row, and a clock, since only a clock takes a turn away.
     const timeline = replayMoves(start, record, [], { clocked: true });

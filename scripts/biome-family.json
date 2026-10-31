@@ -1,0 +1,63 @@
+{
+  "$schema": "../node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": [
+      "**",
+      "!**/*.md",
+      "!**/*.html",
+      "!**/*.yml",
+      "!**/*.yaml",
+      "!docs",
+      "!**/*.data.ts",
+      "!**/tsconfig*.json",
+      "!demo/family.css",
+      "!demo/builder.html",
+      "!e2e/docs-site.demo.mjs",
+      "!playwright.config.mjs",
+      "!scripts/api.mjs",
+      "!scripts/biome-family.json",
+      "!scripts/check-readme-examples.mjs",
+      "!scripts/docs-site.mjs",
+      "!scripts/docs.mjs",
+      "!scripts/family-readme.mjs",
+      "!scripts/family-template.mjs",
+      "!scripts/readme-lint.mjs",
+      "!scripts/readme-pictures-lib.mjs",
+      "!scripts/release-notes.mjs",
+      "!**/api.test.js",
+      "!**/docs-site.test.js",
+      "!**/embed-day.ts",
+      "!**/embed-day.test.ts",
+      "!**/family.test.js",
+      "!**/readme.test.js"
+    ]
+  },
+  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 120 },
+  "javascript": { "formatter": { "quoteStyle": "double", "semicolons": "always", "trailingCommas": "all" } },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "linter": {
+    "rules": {
+      "complexity": { "noImportantStyles": "off" },
+      "correctness": { "noUnusedImports": "error", "noUnusedVariables": "error" },
+      "nursery": {
+        "noFloatingPromises": "error",
+        "noMisusedPromises": "error",
+        "useExhaustiveSwitchCases": "error"
+      },
+      "style": {
+        "noDescendingSpecificity": "off",
+        "noNonNullAssertion": "off",
+        "noParameterAssign": "error",
+        "noUselessElse": "error",
+        "useConst": "error",
+        "useExportType": "error",
+        "useImportType": "error",
+        "useNodejsImportProtocol": "error",
+        "useSingleVarDeclarator": "error",
+        "useTemplate": "error"
+      },
+      "suspicious": { "noShadowRestrictedNames": "error" }
+    }
+  }
+}

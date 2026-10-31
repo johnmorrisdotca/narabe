@@ -1,14 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { canSwapSeats, cellAt, createGame, isLegalMove, playMove, resolveOpener, seatToPlay, swapSeats, winOnTime } from "./engine.ts";
-import { canSkip, canUndo, skipMove, skipTarget, undoMove } from "./rules/record.ts";
 import {
-  BLOCKED,
-  FIRST_PLAYERS,
-  OBSTACLE_LAYOUTS,
-  RULE_VARIANTS,
-  SEATS,
-  STONES,
-} from "./constants.ts";
+  canSwapSeats,
+  cellAt,
+  createGame,
+  isLegalMove,
+  playMove,
+  resolveOpener,
+  seatToPlay,
+  swapSeats,
+  winOnTime,
+} from "./engine.ts";
+import { canSkip, canUndo, skipMove, skipTarget, undoMove } from "./rules/record.ts";
+import { BLOCKED, FIRST_PLAYERS, OBSTACLE_LAYOUTS, RULE_VARIANTS, SEATS, STONES } from "./constants.ts";
 import { obstaclePoints, tengen } from "./obstacles.ts";
 import type { Point } from "./types.ts";
 
@@ -49,8 +52,7 @@ describe("resolveOpener", () => {
       firstPlayer: FIRST_PLAYERS.white,
     };
     expect(resolveOpener(settings)).toBe(STONES.black);
-    expect(resolveOpener({ ...settings, firstPlayer: FIRST_PLAYERS.random }, 0.99))
-      .toBe(STONES.black);
+    expect(resolveOpener({ ...settings, firstPlayer: FIRST_PLAYERS.random }, 0.99)).toBe(STONES.black);
   });
 
   it("seats the opener as player one whichever colour that is", () => {
@@ -193,8 +195,10 @@ describe("winOnTime", () => {
   });
 
   it("cannot reopen or overturn a finished game", () => {
-    const won = [p(7, 3), p(0, 0), p(7, 4), p(0, 1), p(7, 5), p(0, 2), p(7, 6), p(0, 3), p(7, 7)]
-      .reduce((state, point) => playMove(state, point), createGame());
+    const won = [p(7, 3), p(0, 0), p(7, 4), p(0, 1), p(7, 5), p(0, 2), p(7, 6), p(0, 3), p(7, 7)].reduce(
+      (state, point) => playMove(state, point),
+      createGame(),
+    );
 
     expect(won.winner).toBe(STONES.black);
     expect(winOnTime(won, STONES.black)).toBe(won);

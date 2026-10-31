@@ -41,15 +41,32 @@ describe("hex", () => {
   it("finds a chain from side to side, and calls a near miss no chain at all", () => {
     const size = 5;
     // A straight column of black joins top to bottom.
-    const straight = boardWith(size, STONES.black, [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2]]);
+    const straight = boardWith(size, STONES.black, [
+      [0, 2],
+      [1, 2],
+      [2, 2],
+      [3, 2],
+      [4, 2],
+    ]);
     expect(hexConnection(straight, size, STONES.black)).toHaveLength(5);
     // The same stones are nothing at all to white, who needs left to right.
     expect(hexConnection(straight, size, STONES.white)).toEqual([]);
     // One stone short of the far side is not a chain.
-    const short = boardWith(size, STONES.black, [[0, 2], [1, 2], [2, 2], [3, 2]]);
+    const short = boardWith(size, STONES.black, [
+      [0, 2],
+      [1, 2],
+      [2, 2],
+      [3, 2],
+    ]);
     expect(hexConnection(short, size, STONES.black)).toEqual([]);
     // A chain may wander, so long as every step touches the last.
-    const winding = boardWith(size, STONES.white, [[2, 0], [2, 1], [1, 2], [1, 3], [0, 4]]);
+    const winding = boardWith(size, STONES.white, [
+      [2, 0],
+      [2, 1],
+      [1, 2],
+      [1, 3],
+      [0, 4],
+    ]);
     expect(hexConnection(winding, size, STONES.white).length).toBeGreaterThan(0);
   });
 

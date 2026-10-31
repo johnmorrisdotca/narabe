@@ -75,7 +75,8 @@ describe("honeycomb", () => {
       // Six corners, all in the hexagon, none of them the same cell twice.
       const corners = hexagonCorners(size);
       expect(new Set(corners.map(key)).size, `${size}: six distinct corners`).toBe(6);
-      for (const corner of corners) expect(inHexagon(size, corner), `${size}: ${key(corner)} is on the board`).toBe(true);
+      for (const corner of corners)
+        expect(inHexagon(size, corner), `${size}: ${key(corner)} is on the board`).toBe(true);
     }
   });
 

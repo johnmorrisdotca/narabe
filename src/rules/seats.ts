@@ -1,11 +1,4 @@
-import {
-  GAME_STATUS,
-  MOVE_KINDS,
-  NO_POINT,
-  OPENING_STAGES,
-  STONES,
-  WIN_REASONS,
-} from "../constants.ts";
+import { GAME_STATUS, MOVE_KINDS, NO_POINT, OPENING_STAGES, STONES, WIN_REASONS } from "../constants.ts";
 import type { GameState, Move, Seat, Stone } from "../types.ts";
 import { otherStone } from "./board.ts";
 import { hasHandicap } from "./handicap.ts";
@@ -151,7 +144,6 @@ export function resign(state: GameState, loser: Stone): GameState {
   if (state.status !== GAME_STATUS.playing) return state;
   return won(state, otherStone(loser), WIN_REASONS.resign, []);
 }
-
 
 /**
  * Takes the turn away from the colour to move without a stone: the graceful

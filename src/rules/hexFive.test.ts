@@ -75,7 +75,11 @@ describe("hexFive", () => {
     // run, and yet not a line — this is the whole point of the game.
     const fakeDiagonal = [p(3, 3), p(4, 4), p(5, 5), p(6, 6), p(7, 7)];
     const board = laid(cleared(game), size, fakeDiagonal, STONES.black);
-    expect(board.every((cell, index) => (fakeDiagonal.some((pt) => pt.row * size + pt.col === index) ? cell === STONES.black : true))).toBe(true);
+    expect(
+      board.every((cell, index) =>
+        fakeDiagonal.some((pt) => pt.row * size + pt.col === index) ? cell === STONES.black : true,
+      ),
+    ).toBe(true);
     expect(findWinningLine(board, game.settings, centre)).toEqual([]);
   });
 

@@ -1,8 +1,4 @@
-import {
-  BOARD_SIZES,
-  GAME_STATUS,
-  OBSTACLE_LAYOUTS,
-} from "../constants.ts";
+import { BOARD_SIZES, GAME_STATUS, OBSTACLE_LAYOUTS } from "../constants.ts";
 import { VARIANT_SPECS } from "../constants.ts";
 import type { Cell, GameState, Move, Point } from "../types.ts";
 import { emptyBoard } from "../obstacles.ts";
@@ -122,10 +118,7 @@ export function growBoard(state: GameState): GameState {
   const board: Cell[] = emptyBoard(settings);
   state.board.forEach((cell, index) => {
     if (cell === null) return;
-    const point = shift(
-      { row: Math.floor(index / from), col: index % from },
-      offset,
-    );
+    const point = shift({ row: Math.floor(index / from), col: index % from }, offset);
     const target = point.row * to + point.col;
     // Obstacles from the old layout are dropped; the new layout replaces them.
     if (cell !== "blocked") board[target] = cell;
@@ -135,9 +128,7 @@ export function growBoard(state: GameState): GameState {
     ...move,
     ...shift(move, offset),
     ...(move.from === undefined ? {} : { from: shift(move.from, offset) }),
-    ...(move.captured === undefined
-      ? {}
-      : { captured: move.captured.map((point) => shift(point, offset)) }),
+    ...(move.captured === undefined ? {} : { captured: move.captured.map((point) => shift(point, offset)) }),
   }));
 
   return {
@@ -177,8 +168,7 @@ export function previousBoardSize(size: number, sizes: readonly number[] = BOARD
  */
 export function ringHoldsMoves(state: GameState, margin: number): boolean {
   const last = state.settings.size - 1 - margin;
-  const outside = (point: Point) =>
-    point.row < margin || point.col < margin || point.row > last || point.col > last;
+  const outside = (point: Point) => point.row < margin || point.col < margin || point.row > last || point.col > last;
 
   return state.moves.some(
     (move) =>
@@ -244,10 +234,7 @@ export function shrinkBoard(state: GameState): GameState {
   const board: Cell[] = emptyBoard(settings);
   state.board.forEach((cell, index) => {
     if (cell === null || cell === "blocked") return;
-    const point = shift(
-      { row: Math.floor(index / from), col: index % from },
-      offset,
-    );
+    const point = shift({ row: Math.floor(index / from), col: index % from }, offset);
     board[point.row * to + point.col] = cell;
   });
 
@@ -255,9 +242,7 @@ export function shrinkBoard(state: GameState): GameState {
     ...move,
     ...shift(move, offset),
     ...(move.from === undefined ? {} : { from: shift(move.from, offset) }),
-    ...(move.captured === undefined
-      ? {}
-      : { captured: move.captured.map((point) => shift(point, offset)) }),
+    ...(move.captured === undefined ? {} : { captured: move.captured.map((point) => shift(point, offset)) }),
   }));
 
   return {

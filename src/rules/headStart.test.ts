@@ -13,14 +13,7 @@ import {
   stonesLeft,
   twistBoard,
 } from "../engine.ts";
-import {
-  GAME_STATUS,
-  MOVE_KINDS,
-  NO_HEAD_START,
-  OPENING_RULES,
-  RULE_VARIANTS,
-  STONES,
-} from "../constants.ts";
+import { GAME_STATUS, MOVE_KINDS, NO_HEAD_START, OPENING_RULES, RULE_VARIANTS, STONES } from "../constants.ts";
 import type { GameState, HeadStart, Point, Stone } from "../types.ts";
 import { fixedOpener } from "./creation.ts";
 import { passesOwed } from "./forcedPass.ts";
@@ -69,8 +62,12 @@ function stonesOf(state: GameState, stone: Stone): number {
 
 describe("a head start, as the settings carry it", () => {
   it("gives nobody anything unless a colour is given a turn or a tradition", () => {
-    expect(normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: NO_HEAD_START })).toEqual(NO_HEAD_START);
-    expect(normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: given(STONES.black, 0) })).toEqual(NO_HEAD_START);
+    expect(normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: NO_HEAD_START })).toEqual(
+      NO_HEAD_START,
+    );
+    expect(
+      normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: given(STONES.black, 0) }),
+    ).toEqual(NO_HEAD_START);
     // A game stored before head starts existed has none at all.
     expect(normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15 })).toEqual(NO_HEAD_START);
   });
@@ -83,12 +80,20 @@ describe("a head start, as the settings carry it", () => {
     expect(freeTurnsOffered(RULE_VARIANTS.reversi)).toEqual([]);
     expect(freeTurnsOffered("not-a-game")).toEqual([]);
 
-    expect(normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: given(STONES.white, 2) })).toEqual(given(STONES.white, 2));
+    expect(
+      normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: given(STONES.white, 2) }),
+    ).toEqual(given(STONES.white, 2));
     // Three gives an open four: refused outright rather than trimmed to two.
-    expect(normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: given(STONES.white, 3) })).toEqual(NO_HEAD_START);
-    expect(normaliseHeadStart({ variant: RULE_VARIANTS.tictactoe, size: 3, headStart: given(STONES.black, 1) })).toEqual(NO_HEAD_START);
+    expect(
+      normaliseHeadStart({ variant: RULE_VARIANTS.freestyle, size: 15, headStart: given(STONES.white, 3) }),
+    ).toEqual(NO_HEAD_START);
+    expect(
+      normaliseHeadStart({ variant: RULE_VARIANTS.tictactoe, size: 3, headStart: given(STONES.black, 1) }),
+    ).toEqual(NO_HEAD_START);
     // Refused free turns leave a tradition the game still has.
-    expect(normaliseHeadStart({ variant: RULE_VARIANTS.reversi, size: 8, headStart: given(STONES.white, 1, 2) })).toEqual(given(STONES.white, 0, 2));
+    expect(
+      normaliseHeadStart({ variant: RULE_VARIANTS.reversi, size: 8, headStart: given(STONES.white, 1, 2) }),
+    ).toEqual(given(STONES.white, 0, 2));
   });
 
   it("offers each game's own traditional head start, and none where it has none", () => {
@@ -118,7 +123,11 @@ describe("a head start, as the settings carry it", () => {
   });
 
   it("plays the free opening, whatever was asked", () => {
-    const game = createGame({ variant: RULE_VARIANTS.renju, opening: OPENING_RULES.swap2, headStart: given(STONES.black, 1) });
+    const game = createGame({
+      variant: RULE_VARIANTS.renju,
+      opening: OPENING_RULES.swap2,
+      headStart: given(STONES.black, 1),
+    });
     expect(game.settings.opening).toBe(OPENING_RULES.free);
     const pro = createGame({ opening: OPENING_RULES.pro, headStart: given(STONES.white, 2) });
     expect(pro.settings.opening).toBe(OPENING_RULES.free);
@@ -236,7 +245,9 @@ describe("free turns", () => {
      * the engine's, so the start is set on the position directly — for White,
      * which does not open.
      */
-    expect(createGame({ variant: RULE_VARIANTS.reversi, headStart: given(STONES.white, 1) }).settings.headStart).toEqual(NO_HEAD_START);
+    expect(
+      createGame({ variant: RULE_VARIANTS.reversi, headStart: given(STONES.white, 1) }).settings.headStart,
+    ).toEqual(NO_HEAD_START);
     const plain = createGame({ variant: RULE_VARIANTS.reversi });
     let state: GameState = { ...plain, settings: { ...plain.settings, headStart: given(STONES.white, 1) } };
     state = playMove(state, anyPoint(state));
@@ -259,7 +270,9 @@ describe("free turns", () => {
     const final = replayed[replayed.length - 1];
     expect(final.board).toEqual(state.board);
     expect(final.toPlay).toBe(state.toPlay);
-    expect(final.moves.map((move) => move.headStart === true)).toEqual(state.moves.map((move) => move.headStart === true));
+    expect(final.moves.map((move) => move.headStart === true)).toEqual(
+      state.moves.map((move) => move.headStart === true),
+    );
   });
 
   it("takes a head start's pass back with the turn it followed", () => {
@@ -291,7 +304,9 @@ describe("Go's handicap stones", () => {
     expect(state.opener).toBe(STONES.white);
     expect(state.toPlay).toBe(STONES.white);
     expect(state.moves).toEqual([]);
-    expect(fixedOpener(RULE_VARIANTS.go, OPENING_RULES.free, { headStart: state.settings.headStart, size: 19 })).toBe(STONES.white);
+    expect(fixedOpener(RULE_VARIANTS.go, OPENING_RULES.free, { headStart: state.settings.headStart, size: 19 })).toBe(
+      STONES.white,
+    );
   });
 
   it("puts two stones on opposite corners and five with the centre", () => {
@@ -305,7 +320,9 @@ describe("Go's handicap stones", () => {
     expect(komiFor(handicapped.settings)).toBe(HEAD_START_KOMI);
     expect(komiFor(createGame({ variant: RULE_VARIANTS.go, size: 9 }).settings)).toBe(KOMI);
     // Free turns alone put no stones down, so they leave the komi alone.
-    expect(komiFor(createGame({ variant: RULE_VARIANTS.go, size: 9, headStart: given(STONES.black, 2) }).settings)).toBe(KOMI);
+    expect(
+      komiFor(createGame({ variant: RULE_VARIANTS.go, size: 9, headStart: given(STONES.black, 2) }).settings),
+    ).toBe(KOMI);
 
     // Two stones and nothing else: 2 against 0.5 of komi is Black's game on the count.
     const ended = passTurn(passTurn(handicapped));

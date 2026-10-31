@@ -65,13 +65,7 @@ function captureDiagonals(stone: Stone, king: boolean, rules: CheckersRules): re
  * squares for the first piece in the way: if it is the other colour's, every
  * empty square beyond it, up to the next thing in the way, is a landing.
  */
-export function jumpsFrom(
-  ground: CaptureGround,
-  at: Point,
-  stone: Stone,
-  king: boolean,
-  rules: CheckersRules,
-): Jump[] {
+export function jumpsFrom(ground: CaptureGround, at: Point, stone: Stone, king: boolean, rules: CheckersRules): Jump[] {
   const enemy = otherStone(stone);
   const flying = king && rules.flyingKings;
   const jumps: Jump[] = [];

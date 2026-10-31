@@ -15,9 +15,11 @@ describe("reversi", () => {
     expect(game.moves).toEqual([]);
     expect(game.toPlay).toBe(STONES.black);
     // d3, c4, f5, e6 in the usual notation: the four squares that bracket a white disc.
-    expect(legalPoints(game).map((pt) => `${pt.row},${pt.col}`).sort()).toEqual(
-      ["2,3", "3,2", "4,5", "5,4"],
-    );
+    expect(
+      legalPoints(game)
+        .map((pt) => `${pt.row},${pt.col}`)
+        .sort(),
+    ).toEqual(["2,3", "3,2", "4,5", "5,4"]);
   });
 
   it("turns the bracketed run and refuses a move that turns nothing", () => {
@@ -36,10 +38,22 @@ describe("reversi", () => {
     game = {
       ...game,
       board: [
-        null, null, null, null,
-        "black", "white", "white", null,
-        "white", "white", null, null,
-        "black", null, null, null,
+        null,
+        null,
+        null,
+        null,
+        "black",
+        "white",
+        "white",
+        null,
+        "white",
+        "white",
+        null,
+        null,
+        "black",
+        null,
+        null,
+        null,
       ],
     } as GameState;
     // Black at (1,3) brackets the row (1,1),(1,2). Nothing else closes.
@@ -55,10 +69,22 @@ describe("reversi", () => {
     game = {
       ...game,
       board: [
-        "black", "black", "black", "black",
-        "black", "black", "black", null,
-        "black", "black", "white", null,
-        "black", null, null, null,
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+        null,
+        "black",
+        "black",
+        "white",
+        null,
+        "black",
+        null,
+        null,
+        null,
       ],
       toPlay: STONES.black,
     } as GameState;
@@ -145,9 +171,11 @@ describe("grand reversi", () => {
     expect(discCount(game.board)).toEqual({ black: 2, white: 2 });
     expect(game.board[4 * 10 + 4]).toBe(STONES.white);
     expect(game.board[4 * 10 + 5]).toBe(STONES.black);
-    expect(legalPoints(game).map((pt) => `${pt.row},${pt.col}`).sort()).toEqual(
-      ["3,4", "4,3", "5,6", "6,5"],
-    );
+    expect(
+      legalPoints(game)
+        .map((pt) => `${pt.row},${pt.col}`)
+        .sort(),
+    ).toEqual(["3,4", "4,3", "5,6", "6,5"]);
     const after = playMove(game, p(3, 4));
     expect(after.board[4 * 10 + 4]).toBe(STONES.black);
     expect(discCount(after.board)).toEqual({ black: 4, white: 1 });

@@ -58,11 +58,7 @@ describe("Toroidal Five", () => {
   });
 
   it("does not award a win to four stones that merely wrap", () => {
-    const state = blackLine(
-      game(),
-      [p(4, 7), p(4, 8), p(4, 0), p(4, 1)],
-      [p(0, 0), p(0, 2), p(0, 4)],
-    );
+    const state = blackLine(game(), [p(4, 7), p(4, 8), p(4, 0), p(4, 1)], [p(0, 0), p(0, 2), p(0, 4)]);
     expect(state.status).toBe("playing");
     expect(state.winner).toBeNull();
   });
@@ -73,11 +69,7 @@ describe("Toroidal Five", () => {
    * called a five.
    */
   it("does not let a short line meet itself around the board", () => {
-    const state = blackLine(
-      game(),
-      [p(4, 0), p(4, 1), p(4, 2)],
-      [p(0, 0), p(0, 2)],
-    );
+    const state = blackLine(game(), [p(4, 0), p(4, 1), p(4, 2)], [p(0, 0), p(0, 2)]);
     expect(state.status).toBe("playing");
   });
 
@@ -93,8 +85,7 @@ describe("Toroidal Five", () => {
 });
 
 describe("Obstacle Five", () => {
-  const game = (seed = 7) =>
-    createGame({ variant: RULE_VARIANTS.obstacleFive, size: 15, seed });
+  const game = (seed = 7) => createGame({ variant: RULE_VARIANTS.obstacleFive, size: 15, seed });
 
   it("scatters the squares the spec asks for", () => {
     const { dead, hot } = randomSquares(game().settings);

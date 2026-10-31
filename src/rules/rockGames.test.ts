@@ -43,7 +43,8 @@ function eightApart(state: GameState): Point[] {
   const clear = clearPoints(state);
   const picked: Point[] = [];
   for (const point of clear) {
-    if (picked.every((other) => Math.max(Math.abs(other.row - point.row), Math.abs(other.col - point.col)) >= 3)) picked.push(point);
+    if (picked.every((other) => Math.max(Math.abs(other.row - point.row), Math.abs(other.col - point.col)) >= 3))
+      picked.push(point);
     if (picked.length === 8) break;
   }
   return picked;
@@ -98,7 +99,9 @@ describe("Scattered Rocks", () => {
       const clear = new Set(clearPoints(state).map(key));
       const four = [1, 2, 3, 4].map((step) => ({ row: hot.row, col: hot.col - step }));
       if (!four.every((point) => point.col >= 0 && clear.has(key(point)))) continue;
-      const whites = clearPoints(state).filter((point) => Math.abs(point.row - hot.row) >= 3 && point.col % 3 === 0).slice(0, 3);
+      const whites = clearPoints(state)
+        .filter((point) => Math.abs(point.row - hot.row) >= 3 && point.col % 3 === 0)
+        .slice(0, 3);
       const won = playAll(state, [four[0], whites[0], four[1], whites[1], four[2], whites[2], four[3]]);
       expect(won.status).toBe(GAME_STATUS.won);
       expect(won.winner).toBe(STONES.black);
@@ -140,7 +143,12 @@ describe("Rockfall", () => {
     const eight = eightApart(state);
     // The first stone goes where a rock would fall.
     const onRock = layout.dead[0];
-    const moves = [onRock, ...eight.filter((point) => Math.max(Math.abs(point.row - onRock.row), Math.abs(point.col - onRock.col)) >= 3).slice(0, 7)];
+    const moves = [
+      onRock,
+      ...eight
+        .filter((point) => Math.max(Math.abs(point.row - onRock.row), Math.abs(point.col - onRock.col)) >= 3)
+        .slice(0, 7),
+    ];
     const fallen = playAll(state, moves);
     expect(at(fallen, onRock)).toBe(STONES.black);
     expect(count(fallen, BLOCKED)).toBe(19);
@@ -193,7 +201,10 @@ describe("Rockfall", () => {
     const state = game(77);
     const eight = eightApart(state);
     const fallen = playAll(state, eight);
-    const timeline = replayMoves(createGame(state.settings), fallen.moves.map((move) => ({ row: move.row, col: move.col })));
+    const timeline = replayMoves(
+      createGame(state.settings),
+      fallen.moves.map((move) => ({ row: move.row, col: move.col })),
+    );
     expect(timeline[timeline.length - 1].board).toEqual(fallen.board);
   });
 

@@ -217,15 +217,25 @@ function forcedFrom(start: GameState, favoured: Stone, budget: number, defences:
  * seed and colour given the turns can force a decision; `unknown` where a search
  * ran past its budget and nothing decided; `safe` otherwise.
  */
-export function measureHeadStart(variant: RuleVariant, freeTurns: number, budget: number = HEAD_START_BUDGET): HeadStartVerdict {
+export function measureHeadStart(
+  variant: RuleVariant,
+  freeTurns: number,
+  budget: number = HEAD_START_BUDGET,
+): HeadStartVerdict {
   for (const size of measuredSizes(variant)) {
     for (const seed of measuredSeeds(variant)) {
       for (const favoured of [STONES.black, STONES.white]) {
         const base = createGame({ variant, size, seed, allowUndo: false });
         // Set on the position directly, past the game's own limit, because the limit is what this measures.
-        const state: GameState = { ...base, settings: { ...base.settings, headStart: { stone: favoured, freeTurns, traditional: 0 } } };
+        const state: GameState = {
+          ...base,
+          settings: { ...base.settings, headStart: { stone: favoured, freeTurns, traditional: 0 } },
+        };
         try {
-          if (forcedFrom(state, favoured, budget, FIRST_DEFENCES) && forcedFrom(state, favoured, budget, Number.POSITIVE_INFINITY)) {
+          if (
+            forcedFrom(state, favoured, budget, FIRST_DEFENCES) &&
+            forcedFrom(state, favoured, budget, Number.POSITIVE_INFINITY)
+          ) {
             return { kind: "decides", favoured, size, seed };
           }
         } catch (error) {

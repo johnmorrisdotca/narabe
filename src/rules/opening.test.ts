@@ -1,15 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { canChooseColour, canExtendOpening, canSwapSeats, chooseColour, createGame, extendOpening, isLegalMove, playMove, resolveOpener, seatToPlay } from "../engine.ts";
+import {
+  canChooseColour,
+  canExtendOpening,
+  canSwapSeats,
+  chooseColour,
+  createGame,
+  extendOpening,
+  isLegalMove,
+  playMove,
+  resolveOpener,
+  seatToPlay,
+} from "../engine.ts";
 import { openingDecidesColours } from "./opening.ts";
 import { replayMoves } from "./record.ts";
-import {
-  FIRST_PLAYERS,
-  OPENING_RULES,
-  OPENING_STAGES,
-  RULE_VARIANTS,
-  SEATS,
-  STONES,
-} from "../constants.ts";
+import { FIRST_PLAYERS, OPENING_RULES, OPENING_STAGES, RULE_VARIANTS, SEATS, STONES } from "../constants.ts";
 import type { GameState, Point } from "../types.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
@@ -184,10 +188,7 @@ describe("swap", () => {
   });
 
   it("blocks the informal seat swap while colours are unsettled", () => {
-    const game = play(
-      createGame({ opening: OPENING_RULES.swap, allowSwap: true }),
-      [centre, p(7, 8), p(8, 8)],
-    );
+    const game = play(createGame({ opening: OPENING_RULES.swap, allowSwap: true }), [centre, p(7, 8), p(8, 8)]);
     expect(canSwapSeats(game)).toBe(false);
   });
 });
@@ -224,11 +225,7 @@ describe("swap2", () => {
 
   it("replays a record through its decisions", () => {
     const start = createGame({ opening: OPENING_RULES.swap2 });
-    const timeline = replayMoves(
-      start,
-      [...three, p(6, 6), p(9, 9), p(0, 0)],
-      ["extend", STONES.black],
-    );
+    const timeline = replayMoves(start, [...three, p(6, 6), p(9, 9), p(0, 0)], ["extend", STONES.black]);
     const last = timeline[timeline.length - 1];
     expect(last.moves).toHaveLength(6);
     expect(last.seats[STONES.black]).toBe(SEATS.one);

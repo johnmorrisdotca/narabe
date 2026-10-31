@@ -87,14 +87,10 @@ export function checkGoMove(before: GameState, after: GameState, played: Point, 
     expect(cellAt(after, stone), `${where}: a stone with no liberties left was not captured`).toBeNull();
   }
   const takenTally = after.captures[mover] - before.captures[mover];
-  expect(takenTally, `${where}: captures tally does not match stones with no liberties`).toBe(
-    capturedByHand.size,
-  );
+  expect(takenTally, `${where}: captures tally does not match stones with no liberties`).toBe(capturedByHand.size);
 
   const changed = after.board.filter((cell, index) => cell !== before.board[index]).length;
-  expect(changed, `${where}: more cells changed than the move and its captures explain`).toBe(
-    1 + capturedByHand.size,
-  );
+  expect(changed, `${where}: more cells changed than the move and its captures explain`).toBe(1 + capturedByHand.size);
 
   const ownGroup = groupByHand(after.board, size, played);
   expect(

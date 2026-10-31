@@ -112,5 +112,4 @@ describe("a game nobody can move in", () => {
     expect(emptyPoints(state).length).toBe(0);
     expect(state.status).toBe(GAME_STATUS.draw);
   });
-
 });

@@ -29,10 +29,7 @@ describe("games that grow mid-play", () => {
       const grown = growBoard(before);
 
       expect(grown.settings.size, `seed ${seed}: did not grow`).toBe(13);
-      expect(
-        grown.board.filter(isStone).length,
-        `seed ${seed}: stones went missing in the growth`,
-      ).toBe(stonesBefore);
+      expect(grown.board.filter(isStone).length, `seed ${seed}: stones went missing in the growth`).toBe(stonesBefore);
       expect(grown.moves).toHaveLength(before.moves.length);
       // The old state is untouched, as every engine transition must leave it.
       expect(before.settings.size).toBe(9);
@@ -45,8 +42,7 @@ describe("games that grow mid-play", () => {
         const point = legal[Math.floor(random() * legal.length)];
         const previous = final;
         final = playMove(final, point);
-        expect(final, `seed ${seed}: a legal move was refused after growing`)
-          .not.toBe(previous);
+        expect(final, `seed ${seed}: a legal move was refused after growing`).not.toBe(previous);
         guard += 1;
       }
 
@@ -68,4 +64,3 @@ describe("games that grow mid-play", () => {
     expect(growBoard(state)).toBe(state);
   });
 });
-

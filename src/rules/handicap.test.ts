@@ -1,13 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  canSwapSeats,
-  cellAt,
-  createGame,
-  forbiddenPoints,
-  isLegalMove,
-  playMove,
-  stonesLeft,
-} from "../engine.ts";
+import { canSwapSeats, cellAt, createGame, forbiddenPoints, isLegalMove, playMove, stonesLeft } from "../engine.ts";
 import {
   FORBIDDEN_PATTERNS,
   GAME_STATUS,
@@ -42,11 +34,7 @@ describe("rulesFor", () => {
     expect(hasHandicap(settings)).toBe(false);
     expect(rulesFor(settings, STONES.black)).toEqual({
       lineRule: LINE_RULES.exact,
-      forbidden: [
-        FORBIDDEN_PATTERNS.doubleThree,
-        FORBIDDEN_PATTERNS.doubleFour,
-        FORBIDDEN_PATTERNS.overline,
-      ],
+      forbidden: [FORBIDDEN_PATTERNS.doubleThree, FORBIDDEN_PATTERNS.doubleFour, FORBIDDEN_PATTERNS.overline],
       captures: false,
       stonesPerTurn: 1,
       winLength: 5,
@@ -65,10 +53,7 @@ describe("rulesFor", () => {
   });
 
   it("never loosens what the variant already imposes", () => {
-    const settings = settingsWith(
-      { exactLine: true, doubleThree: true },
-      { variant: RULE_VARIANTS.caro },
-    );
+    const settings = settingsWith({ exactLine: true, doubleThree: true }, { variant: RULE_VARIANTS.caro });
     // Caro's open-line rule is stricter than exact, and stays.
     expect(rulesFor(settings, STONES.black).lineRule).toBe(LINE_RULES.exactOpen);
 
@@ -315,10 +300,7 @@ describe("turn and capture handicaps", () => {
 
 describe("second stone exclusion", () => {
   it("keeps the handicapped colour's second stone out of the centre", () => {
-    const game = play(
-      createGame({ handicap: blackHandicap({ secondStoneExclusion: 2 }) }),
-      [p(7, 7), p(7, 8)],
-    );
+    const game = play(createGame({ handicap: blackHandicap({ secondStoneExclusion: 2 }) }), [p(7, 7), p(7, 8)]);
     expect(isLegalMove(game, p(8, 8))).toBe(false);
     expect(isLegalMove(game, p(10, 10))).toBe(true);
     // White's second stone is not restricted.
@@ -355,10 +337,7 @@ describe("a handicap and the rest of the settings", () => {
   });
 
   it("switches the informal seat swap off", () => {
-    const game = playMove(
-      createGame({ allowSwap: true, handicap: blackHandicap({ longerLine: true }) }),
-      p(7, 7),
-    );
+    const game = playMove(createGame({ allowSwap: true, handicap: blackHandicap({ longerLine: true }) }), p(7, 7));
     expect(canSwapSeats(game)).toBe(false);
   });
 

@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { canForfeit, canPass, createGame, emptyPoints, forfeitOnRecord, isLegalMove, passTurn, playMove } from "../engine.ts";
+import {
+  canForfeit,
+  canPass,
+  createGame,
+  emptyPoints,
+  forfeitOnRecord,
+  isLegalMove,
+  passTurn,
+  playMove,
+} from "../engine.ts";
 import { GAME_STATUS, MOVE_KINDS, RULE_VARIANTS, STONES } from "../constants.ts";
 import type { GameSettings, GameState, MoveInput, Point } from "../types.ts";
 import { lastMove, replayMoves, undoMove } from "./record.ts";
@@ -73,7 +82,9 @@ describe.each([
 
   it("stopped a turn short when the same turn was written as a pass", () => {
     const live = forfeitOnRecord(play(createGame(settings), 1));
-    const asPass = record(live).map((move) => (move.kind === MOVE_KINDS.forfeit ? { ...move, kind: MOVE_KINDS.pass } : move));
+    const asPass = record(live).map((move) =>
+      move.kind === MOVE_KINDS.forfeit ? { ...move, kind: MOVE_KINDS.pass } : move,
+    );
 
     const back = replayed(settings, asPass);
     // The fault this file exists for: one move, and white still to play.

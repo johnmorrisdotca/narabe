@@ -1,12 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { cellAt, playMove } from "../engine.ts";
 import { undoMove } from "./record.ts";
-import {
-  GAME_STATUS,
-  RULE_VARIANTS,
-  STONES,
-  WIN_REASONS,
-} from "../constants.ts";
+import { GAME_STATUS, RULE_VARIANTS, STONES, WIN_REASONS } from "../constants.ts";
 import { fromDiagram, show } from "../test-support.ts";
 import type { Point } from "../types.ts";
 import { capturesFrom } from "./captures.ts";
@@ -31,8 +26,7 @@ const FLANK = `
 describe("capturesFrom", () => {
   it("takes a flanked pair", () => {
     const state = fromDiagram(FLANK, ninuki);
-    expect(show(capturesFrom(state.board, state.settings, STONES.black, p(4, 4))))
-      .toEqual(show([p(4, 2), p(4, 3)]));
+    expect(show(capturesFrom(state.board, state.settings, STONES.black, p(4, 4)))).toEqual(show([p(4, 2), p(4, 3)]));
   });
 
   it("takes nothing outside the capture variants", () => {

@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { canShrinkBoard, cellAt, createGame, isLegalMove, legalPoints, mustPass, passTurn, placePiece, playMove, singlesLeft } from "../engine.ts";
+import {
+  canShrinkBoard,
+  cellAt,
+  createGame,
+  isLegalMove,
+  legalPoints,
+  mustPass,
+  passTurn,
+  placePiece,
+  playMove,
+  singlesLeft,
+} from "../engine.ts";
 import { replayMoves, undoMove } from "./record.ts";
 import { GAME_STATUS, RULE_VARIANTS, STONES } from "../constants.ts";
 import { fromDiagram } from "../test-support.ts";

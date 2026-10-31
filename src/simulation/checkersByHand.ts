@@ -37,13 +37,51 @@ export type HandRules = {
 
 /** FMJD article 6.3 and 6.4. */
 const FMJD_ENDINGS: HandRules["endings"] = [
-  { kind: "endings", pairs: [["KKK", "K"], ["KKM", "K"], ["KMM", "K"]], restarts: false, movesEach: 16 },
-  { kind: "endings", pairs: [["KK", "K"], ["KM", "K"], ["K", "K"]], restarts: false, movesEach: 5 },
+  {
+    kind: "endings",
+    pairs: [
+      ["KKK", "K"],
+      ["KKM", "K"],
+      ["KMM", "K"],
+    ],
+    restarts: false,
+    movesEach: 16,
+  },
+  {
+    kind: "endings",
+    pairs: [
+      ["KK", "K"],
+      ["KM", "K"],
+      ["K", "K"],
+    ],
+    restarts: false,
+    movesEach: 5,
+  },
 ];
 
 export const HAND_RULES: Record<string, HandRules> = {
-  checkers: { size: 8, rows: 3, backward: false, flying: false, most: false, crown: "stops", idlePlies: 80, repetition: null, endings: [] },
-  internationalDraughts: { size: 10, rows: 4, backward: true, flying: true, most: true, crown: "passes", idlePlies: 50, repetition: 3, endings: FMJD_ENDINGS },
+  checkers: {
+    size: 8,
+    rows: 3,
+    backward: false,
+    flying: false,
+    most: false,
+    crown: "stops",
+    idlePlies: 80,
+    repetition: null,
+    endings: [],
+  },
+  internationalDraughts: {
+    size: 10,
+    rows: 4,
+    backward: true,
+    flying: true,
+    most: true,
+    crown: "passes",
+    idlePlies: 50,
+    repetition: 3,
+    endings: FMJD_ENDINGS,
+  },
   brazilianDraughts: {
     size: 8,
     rows: 3,
@@ -54,9 +92,32 @@ export const HAND_RULES: Record<string, HandRules> = {
     idlePlies: 40,
     repetition: 3,
     // CBJD art. 99.
-    endings: [{ kind: "endings", pairs: [["KK", "KK"], ["KK", "K"], ["KK", "KM"], ["K", "K"], ["K", "KM"]], restarts: false, movesEach: 5 }],
+    endings: [
+      {
+        kind: "endings",
+        pairs: [
+          ["KK", "KK"],
+          ["KK", "K"],
+          ["KK", "KM"],
+          ["K", "K"],
+          ["K", "KM"],
+        ],
+        restarts: false,
+        movesEach: 5,
+      },
+    ],
   },
-  canadianCheckers: { size: 12, rows: 5, backward: true, flying: true, most: true, crown: "passes", idlePlies: 50, repetition: 3, endings: FMJD_ENDINGS },
+  canadianCheckers: {
+    size: 12,
+    rows: 5,
+    backward: true,
+    flying: true,
+    most: true,
+    crown: "passes",
+    idlePlies: 50,
+    repetition: 3,
+    endings: FMJD_ENDINGS,
+  },
   russianDraughts: {
     size: 8,
     rows: 3,
@@ -68,7 +129,12 @@ export const HAND_RULES: Record<string, HandRules> = {
     repetition: 3,
     // The Russian federation's counts: three to twelve kings against one, and the balance of two–three, four–five, six–seven pieces.
     endings: [
-      { kind: "endings", pairs: Array.from({ length: 10 }, (_, n): [string, string] => ["K".repeat(n + 3), "K"]), restarts: true, movesEach: 15 },
+      {
+        kind: "endings",
+        pairs: Array.from({ length: 10 }, (_, n): [string, string] => ["K".repeat(n + 3), "K"]),
+        restarts: true,
+        movesEach: 15,
+      },
       { kind: "balance", pieces: [2, 3], movesEach: 5 },
       { kind: "balance", pieces: [4, 5], movesEach: 30 },
       { kind: "balance", pieces: [6, 7], movesEach: 60 },
@@ -112,7 +178,14 @@ function inside(size: number, row: number, col: number): boolean {
 }
 
 /** Empty for a capture: nothing on it, or the capturing piece's own square — and not a piece already taken. */
-function clear(board: readonly Cell[], size: number, row: number, col: number, taken: readonly number[], origin: number): boolean {
+function clear(
+  board: readonly Cell[],
+  size: number,
+  row: number,
+  col: number,
+  taken: readonly number[],
+  origin: number,
+): boolean {
   const index = row * size + col;
   return !taken.includes(index) && (index === origin || board[index] === null);
 }
@@ -178,7 +251,13 @@ export function bestByHand(
 }
 
 /** The longest capture any of `stone`'s pieces has, or 0 when none can take. */
-export function bestAnywhereByHand(board: readonly Cell[], kings: readonly Point[], size: number, stone: Stone, hand: HandRules): number {
+export function bestAnywhereByHand(
+  board: readonly Cell[],
+  kings: readonly Point[],
+  size: number,
+  stone: Stone,
+  hand: HandRules,
+): number {
   let best = 0;
   board.forEach((cell, index) => {
     if (cell !== stone) return;
@@ -189,7 +268,13 @@ export function bestAnywhereByHand(board: readonly Cell[], kings: readonly Point
 }
 
 /** Whether `stone` has anything at all to play: a capture, or a step. */
-export function anyMoveByHand(board: readonly Cell[], kings: readonly Point[], size: number, stone: Stone, hand: HandRules): boolean {
+export function anyMoveByHand(
+  board: readonly Cell[],
+  kings: readonly Point[],
+  size: number,
+  stone: Stone,
+  hand: HandRules,
+): boolean {
   for (let index = 0; index < board.length; index += 1) {
     if (board[index] !== stone) continue;
     const at = { row: Math.floor(index / size), col: index % size };
@@ -268,9 +353,16 @@ export function drawReasonByHand(state: GameState, hand: HandRules): string | nu
     const inIt = () => {
       const tally = talliesByHand(board, kings);
       if (ending.kind === "balance") {
-        return ending.pieces.includes(tally.black.length + tally.white.length) && tally.black.includes("K") && tally.white.includes("K");
+        return (
+          ending.pieces.includes(tally.black.length + tally.white.length) &&
+          tally.black.includes("K") &&
+          tally.white.includes("K")
+        );
       }
-      return ending.pairs.some(([one, other]) => (tally.black === one && tally.white === other) || (tally.white === one && tally.black === other));
+      return ending.pairs.some(
+        ([one, other]) =>
+          (tally.black === one && tally.white === other) || (tally.white === one && tally.black === other),
+      );
     };
     if (!inIt()) continue;
     const started = talliesByHand(board, kings);

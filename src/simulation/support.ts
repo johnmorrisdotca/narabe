@@ -116,15 +116,12 @@ function playOut(settings: Partial<GameSettings>, seed: number, slideCap: number
     if (canChooseColour(state)) {
       const before = state;
       const takingIt = canExtendOpening(state) && random() < 0.4;
-      const after = takingIt
-        ? extendOpening(state)
-        : chooseColour(state, random() < 0.5 ? STONES.black : STONES.white);
+      const after = takingIt ? extendOpening(state) : chooseColour(state, random() < 0.5 ? STONES.black : STONES.white);
       expect(after, `seed ${seed}: an opening choice was refused`).not.toBe(before);
       // A decision is kept, or a replayed game would take a different turning.
-      expect(
-        after.opening.choices.length,
-        `seed ${seed}: an opening choice went unrecorded`,
-      ).toBe(before.opening.choices.length + 1);
+      expect(after.opening.choices.length, `seed ${seed}: an opening choice went unrecorded`).toBe(
+        before.opening.choices.length + 1,
+      );
       state = after;
       guard += 1;
       expect(guard, `seed ${seed}: the opening did not settle`).toBeLessThanOrEqual(
@@ -246,8 +243,7 @@ function playOut(settings: Partial<GameSettings>, seed: number, slideCap: number
 
     // Everything the engine calls legal must actually be accepted, and nothing else.
     const rejected = legal.find((p) => playMove(state, p) === state);
-    expect(rejected, `seed ${seed}: legalPoints offered a move playMove refused`)
-      .toBeUndefined();
+    expect(rejected, `seed ${seed}: legalPoints offered a move playMove refused`).toBeUndefined();
 
     const point = legal[Math.floor(random() * legal.length)];
     const before = state;
@@ -313,6 +309,5 @@ function quadrantSizeOf(state: GameState): number | null {
   if (state.settings.variant === "twistFour") return 2;
   return null;
 }
-
 
 export { rng, bruteForceWinner, runWinsIndependently, checkMove, playOut };

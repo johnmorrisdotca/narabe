@@ -46,11 +46,7 @@ const NEIGHBOURS: readonly Point[] = [
  * console.log(groupAt(go.board, go.settings.size, {row:4,col:4}).liberties.size);
  * ```
  */
-export function groupAt(
-  board: Cell[],
-  size: number,
-  from: Point,
-): { stones: Point[]; liberties: Set<number> } {
+export function groupAt(board: Cell[], size: number, from: Point): { stones: Point[]; liberties: Set<number> } {
   const colour = cellAtPoint(board, size, from);
   const stones: Point[] = [];
   const liberties = new Set<number>();
@@ -154,13 +150,7 @@ export function applyGoMove(
  * console.log(goLegal(go.board, go.settings.size, point, "white", go.koPoint));
  * ```
  */
-export function goLegal(
-  board: Cell[],
-  size: number,
-  point: Point,
-  stone: Stone,
-  koPoint: Point | null,
-): boolean {
+export function goLegal(board: Cell[], size: number, point: Point, stone: Stone, koPoint: Point | null): boolean {
   if (!isOnBoard(size, point) || cellAtPoint(board, size, point) !== null) return false;
   if (koPoint !== null && koPoint.row === point.row && koPoint.col === point.col) return false;
   return applyGoMove(board, size, point, stone) !== null;

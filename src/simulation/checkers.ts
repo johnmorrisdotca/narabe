@@ -61,7 +61,10 @@ export function checkCheckersMove(before: GameState, after: GameState, from: Poi
     between.push({ row: from.row + Math.sign(rows) * step, col: from.col + Math.sign(cols) * step });
   }
   const standing = between.filter((point) => cellAt(before, point) !== null);
-  expect(standing.every((point) => cellAt(before, point) === enemy), `${where}: jumped a piece of its own`).toBe(true);
+  expect(
+    standing.every((point) => cellAt(before, point) === enemy),
+    `${where}: jumped a piece of its own`,
+  ).toBe(true);
   expect(standing.length, `${where}: passed more than one piece`).toBeLessThanOrEqual(1);
   const over = standing[0] ?? null;
   if (!flies) expect(distance, `${where}: went further than its piece may`).toBe(over === null ? 1 : 2);
@@ -99,7 +102,8 @@ export function checkCheckersMove(before: GameState, after: GameState, from: Poi
     continues = rest > 0;
     if (flies && !continues) {
       const elsewhere = hopsByHand(before.board, size, from, mover, true, hand, takenNow, index(from)).filter(
-        (hop) => hop.over.row === over.row && hop.over.col === over.col && (hop.to.row !== to.row || hop.to.col !== to.col),
+        (hop) =>
+          hop.over.row === over.row && hop.over.col === over.col && (hop.to.row !== to.row || hop.to.col !== to.col),
       );
       expect(
         elsewhere.some((hop) => bestByHand(before.board, size, hop.to, mover, true, hand, afterTaken, index(from)) > 0),
@@ -112,10 +116,17 @@ export function checkCheckersMove(before: GameState, after: GameState, from: Poi
 
   const changed = after.board.filter((cell, at) => cell !== before.board[at]).length;
   expect(changed, `${where}: more cells changed than a step or a capture explains`).toBe(over === null ? 2 : 3);
-  expect(after.captures[mover] - before.captures[mover], `${where}: captures tally does not match`).toBe(over === null ? 0 : 1);
-  expect(isKingByHand(after.kings, to), `${where}: king status at the landing square is wrong`).toBe(wasKing || crowned);
+  expect(after.captures[mover] - before.captures[mover], `${where}: captures tally does not match`).toBe(
+    over === null ? 0 : 1,
+  );
+  expect(isKingByHand(after.kings, to), `${where}: king status at the landing square is wrong`).toBe(
+    wasKing || crowned,
+  );
   expect(isKingByHand(after.kings, from), `${where}: a king was left behind at the square it moved from`).toBe(false);
-  expect(after.moves[after.moves.length - 1].crowned === true, `${where}: the record says the wrong thing about crowning`).toBe(crowned);
+  expect(
+    after.moves[after.moves.length - 1].crowned === true,
+    `${where}: the record says the wrong thing about crowning`,
+  ).toBe(crowned);
 
   if (continues && over !== null) {
     expect(after.chainAt, `${where}: a waiting capture did not keep the turn`).toEqual(to);

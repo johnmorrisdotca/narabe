@@ -17,27 +17,14 @@ export function stonesPlacedThisTurn(moves: readonly Move[], stone: Stone): numb
 }
 
 /** Stones the colour to move gets this turn. Connect6 opens with one, then two. */
-export function stonesThisTurn(
-  settings: GameSettings,
-  moves: readonly Move[],
-  stone: Stone,
-): number {
+export function stonesThisTurn(settings: GameSettings, moves: readonly Move[], stone: Stone): number {
   const perTurn = rulesFor(settings, stone).stonesPerTurn;
   const placed = stonesPlacedThisTurn(moves, stone);
   const isFirstTurn = placed === moves.length;
-  return isFirstTurn
-    ? Math.min(VARIANT_SPECS[settings.variant].firstTurnStones, perTurn)
-    : perTurn;
+  return isFirstTurn ? Math.min(VARIANT_SPECS[settings.variant].firstTurnStones, perTurn) : perTurn;
 }
 
 /** Stones still to place before the turn passes. */
-export function stonesLeftInTurn(
-  settings: GameSettings,
-  moves: readonly Move[],
-  stone: Stone,
-): number {
-  return Math.max(
-    0,
-    stonesThisTurn(settings, moves, stone) - stonesPlacedThisTurn(moves, stone),
-  );
+export function stonesLeftInTurn(settings: GameSettings, moves: readonly Move[], stone: Stone): number {
+  return Math.max(0, stonesThisTurn(settings, moves, stone) - stonesPlacedThisTurn(moves, stone));
 }

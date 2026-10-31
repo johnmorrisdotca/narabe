@@ -20,11 +20,22 @@ const seeded = ({ seed }) => {
 
 /** Press "Random move" `count` times, waiting each time for the page (the board or the line of status) to change. */
 const randomMoves = (count) => async (page) => {
-  const look = () => page.evaluate(() => document.querySelector('[data-testid="board"]').innerHTML + document.querySelector('[data-testid="status"]').textContent);
+  const look = () =>
+    page.evaluate(
+      () =>
+        document.querySelector('[data-testid="board"]').innerHTML +
+        document.querySelector('[data-testid="status"]').textContent,
+    );
   for (let at = 0; at < count; at += 1) {
     const before = await look();
     await page.locator('[data-testid="hint"]').click();
-    await page.waitForFunction((was) => document.querySelector('[data-testid="board"]').innerHTML + document.querySelector('[data-testid="status"]').textContent !== was, before);
+    await page.waitForFunction(
+      (was) =>
+        document.querySelector('[data-testid="board"]').innerHTML +
+          document.querySelector('[data-testid="status"]').textContent !==
+        was,
+      before,
+    );
   }
 };
 
@@ -36,7 +47,15 @@ const clicked = (size, moves) => async (page) => {
 
 /** One game, cropped to its board. */
 const game = (subject, key, size, moves, seed = 7) => ({
-  subject, views: ["desk"], scale: 1, url: `/?lang=en&game=${key}&size=${size}`, init: seeded, state: { seed }, ready: `${BOARD} svg`, target: BOARD, prepare: randomMoves(moves),
+  subject,
+  views: ["desk"],
+  scale: 1,
+  url: `/?lang=en&game=${key}&size=${size}`,
+  init: seeded,
+  state: { seed },
+  ready: `${BOARD} svg`,
+  target: BOARD,
+  prepare: randomMoves(moves),
 });
 
 await takePictures({
@@ -53,10 +72,40 @@ await takePictures({
         if (view === "phone") {
           await page.goto("http://narabe.test/?lang=ja&game=hex&size=11");
           await page.waitForSelector(`${BOARD} svg`);
-          await clicked(11, [[5, 5], [4, 6], [6, 4], [3, 6], [4, 5], [5, 6], [3, 5], [6, 6], [2, 6], [7, 5]])(page);
-          await page.locator('[data-testid="status"]').evaluate((element) => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 16));
+          await clicked(11, [
+            [5, 5],
+            [4, 6],
+            [6, 4],
+            [3, 6],
+            [4, 5],
+            [5, 6],
+            [3, 5],
+            [6, 6],
+            [2, 6],
+            [7, 5],
+          ])(page);
+          await page
+            .locator('[data-testid="status"]')
+            .evaluate((element) => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 16));
         } else {
-          await clicked(15, [[7, 7], [6, 8], [8, 6], [7, 6], [7, 8], [8, 8], [6, 6], [5, 5], [9, 7], [6, 7], [8, 7], [5, 7], [4, 4], [9, 5], [5, 6], [5, 8]])(page);
+          await clicked(15, [
+            [7, 7],
+            [6, 8],
+            [8, 6],
+            [7, 6],
+            [7, 8],
+            [8, 8],
+            [6, 6],
+            [5, 5],
+            [9, 7],
+            [6, 7],
+            [8, 7],
+            [5, 7],
+            [4, 4],
+            [9, 5],
+            [5, 6],
+            [5, 8],
+          ])(page);
           await page.evaluate(() => window.scrollTo(0, 0));
         }
       },

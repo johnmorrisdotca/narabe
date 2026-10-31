@@ -217,7 +217,10 @@ describe("every game with a head start", () => {
       for (const size of boardSizesFor(variant)) {
         for (const traditional of traditionalCounts(variant, size)) {
           for (const stone of [STONES.black, STONES.white]) {
-            checkHeadStartStart(createGame({ variant, size, headStart: { stone, freeTurns: 0, traditional } }), traditional);
+            checkHeadStartStart(
+              createGame({ variant, size, headStart: { stone, freeTurns: 0, traditional } }),
+              traditional,
+            );
             checked += 1;
           }
         }
@@ -261,10 +264,7 @@ describe("every game with a handicap laid over it", () => {
     for (const [index, variant] of EVERY_VARIANT.entries()) {
       const stone = index % 2 === 0 ? STONES.black : STONES.white;
       const what = `${variant} with ${stone} handicapped`;
-      const final = playOut(
-        { variant, handicap: heavy(stone) },
-        seedFor(variant, `handicap-${stone}`, index + 23),
-      );
+      const final = playOut({ variant, handicap: heavy(stone) }, seedFor(variant, `handicap-${stone}`, index + 23));
       expect(final.settings.handicap.stone, `${what}: the handicap was dropped`).toBe(stone);
       replays(final, what);
     }

@@ -53,9 +53,7 @@ const SWAPPING_OPENINGS: readonly GameSettings["opening"][] = [
 export function availableOpenings(settings: GameSettings): OpeningRule[] {
   const offered = VARIANT_SPECS[settings.variant].openings;
   if (hasHeadStart(settings)) return offered.filter((opening) => opening === OPENING_RULES.free);
-  return hasHandicap(settings)
-    ? offered.filter((opening) => !SWAPPING_OPENINGS.includes(opening))
-    : [...offered];
+  return hasHandicap(settings) ? offered.filter((opening) => !SWAPPING_OPENINGS.includes(opening)) : [...offered];
 }
 
 /**
@@ -94,9 +92,7 @@ export function normaliseSettings(settings: GameSettings): GameSettings {
     ...settled,
     capturesToWin: spec.capturesToWin ?? settings.capturesToWin,
     winLength: spec.winLength ?? settings.winLength,
-    opening: availableOpenings(settled).includes(settings.opening)
-      ? settings.opening
-      : OPENING_RULES.free,
+    opening: availableOpenings(settled).includes(settings.opening) ? settings.opening : OPENING_RULES.free,
   };
 }
 
@@ -155,7 +151,9 @@ export function fixedOpener(
   opening: string,
   start?: { headStart: HeadStart; size: number },
 ): Stone | null {
-  const spec = VARIANT_SPECS[variant as keyof typeof VARIANT_SPECS] as (typeof VARIANT_SPECS)[keyof typeof VARIANT_SPECS] | undefined;
+  const spec = VARIANT_SPECS[variant as keyof typeof VARIANT_SPECS] as
+    | (typeof VARIANT_SPECS)[keyof typeof VARIANT_SPECS]
+    | undefined;
   if (spec === undefined) return null;
   const given = start === undefined ? null : headStartOpener({ variant, ...start });
   if (given !== null) return given;
@@ -200,10 +198,7 @@ export function resolveOpener(settings: GameSettings, roll = 0): Stone {
  * console.log(createGame({variant:"reversi"}).board.length);
  * ```
  */
-export function createGame(
-  overrides: Partial<GameSettings> = {},
-  roll = 0,
-): GameState {
+export function createGame(overrides: Partial<GameSettings> = {}, roll = 0): GameState {
   // A game asked for without a seed draws one from the roll, and keeps it.
   const seed = overrides.seed ?? seedFromRoll(roll, SEED_RANGE);
   const settings = normaliseSettings({ ...DEFAULT_SETTINGS, ...overrides, seed });
@@ -236,4 +231,3 @@ export function createGame(
     winningLine: [],
   };
 }
-

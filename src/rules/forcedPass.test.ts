@@ -14,7 +14,13 @@ import { replayMoves } from "./record.ts";
 const p = (row: number, col: number): Point => ({ row, col });
 
 /** A board sealed everywhere but `open`, so no line can ever be made across it and nothing but the pass is under test. */
-function sealed(variant: RuleVariant, size: number, open: Point[], moves: Move[] = [], toPlay: Stone = STONES.black): GameState {
+function sealed(
+  variant: RuleVariant,
+  size: number,
+  open: Point[],
+  moves: Move[] = [],
+  toPlay: Stone = STONES.black,
+): GameState {
   const game = createGame({ variant, size });
   const board: Cell[] = new Array(size * size).fill(BLOCKED);
   for (const point of open) board[point.row * size + point.col] = null;
@@ -39,7 +45,12 @@ describe("a pass the rules force", () => {
     expect(endedWithNoMoves(settled)).toBe(true);
 
     // And a replay of those rows reaches the same end, passes and all.
-    const record: MoveInput[] = settled.moves.map((move) => ({ row: move.row, col: move.col, kind: move.kind, cells: move.cells }));
+    const record: MoveInput[] = settled.moves.map((move) => ({
+      row: move.row,
+      col: move.col,
+      kind: move.kind,
+      cells: move.cells,
+    }));
     const replayed = replayMoves(start, record);
     const last = replayed[replayed.length - 1];
     expect(last.status).toBe(GAME_STATUS.draw);
@@ -48,7 +59,11 @@ describe("a pass the rules force", () => {
 
   it("passes only the stuck side in blockFive, when the other still has singles to lay", () => {
     // White has spent its six singles; black has all of its own. No four-point piece fits anywhere.
-    const whiteSingles: Move[] = Array.from({ length: 6 }, (_, at) => ({ ...p(12, at), stone: STONES.white, kind: MOVE_KINDS.place }));
+    const whiteSingles: Move[] = Array.from({ length: 6 }, (_, at) => ({
+      ...p(12, at),
+      stone: STONES.white,
+      kind: MOVE_KINDS.place,
+    }));
     const start = sealed(RULE_VARIANTS.blockFive, 13, [p(1, 1), p(3, 3), p(5, 5)], whiteSingles);
 
     const single = playMove(start, p(1, 1));

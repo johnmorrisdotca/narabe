@@ -138,7 +138,9 @@ describe("checkers", () => {
       kings: [p(4, 4)],
       toPlay: STONES.black,
     };
-    const moves = pieceMoves(game, p(4, 4)).map((point) => `${point.row},${point.col}`).sort();
+    const moves = pieceMoves(game, p(4, 4))
+      .map((point) => `${point.row},${point.col}`)
+      .sort();
     expect(moves).toEqual(["3,3", "3,5", "5,3", "5,5"]);
   });
 

@@ -6,11 +6,7 @@ import { rulesFor } from "../rules/handicap.ts";
 import { checkConnectionMove, isConnection } from "./connections.ts";
 import { checkGoMove, isGo } from "./go.ts";
 import { stonesPlacedThisTurn } from "../rules/turns.ts";
-import {
-  bruteForceWinner,
-  longestRunThrough,
-  runWinsIndependently,
-} from "./scan.ts";
+import { bruteForceWinner, longestRunThrough, runWinsIndependently } from "./scan.ts";
 import { GAME_STATUS } from "../constants.ts";
 import type { Cell, GameState, Point, Stone } from "../types.ts";
 
@@ -38,8 +34,7 @@ function ranOutOfLength(state: GameState): boolean {
 
 function checkMove(before: GameState, after: GameState, played: Point, seed: number) {
   const where =
-    `${after.settings.variant} seed ${seed}, move ${after.moves.length} ` +
-    `at ${played.row},${played.col}`;
+    `${after.settings.variant} seed ${seed}, move ${after.moves.length} ` + `at ${played.row},${played.col}`;
 
   // The flipping games play by their own rules, restated by hand below.
   if (isFlipping(after.settings.variant)) {
@@ -59,9 +54,7 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
 
   // The previous state is untouched: the engine returns new states, never edits.
   expect(cellAt(before, played), `${where}: input state was mutated`).toBeNull();
-  expect(before.moves.length, `${where}: input move list grew`).toBe(
-    after.moves.length - 1,
-  );
+  expect(before.moves.length, `${where}: input move list grew`).toBe(after.moves.length - 1);
 
   /*
    * A cleared row moves everything, so the placed-stone checks are made on
@@ -69,9 +62,7 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
    */
   const lastMove = after.moves[after.moves.length - 1];
   const afterBoard =
-    lastMove.cleared !== undefined
-      ? after.board.slice(after.settings.size).concat(lastMove.cleared)
-      : after.board;
+    lastMove.cleared !== undefined ? after.board.slice(after.settings.size).concat(lastMove.cleared) : after.board;
   const seen = (index: number) => afterBoard[index];
 
   /*
@@ -96,13 +87,13 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
 
   // Rockfall's rocks and hotspots, if this is the stone they fall after; nothing anywhere else.
   const fallen = changed.filter(
-    (index) => index !== playedIndex && before.board[index] === null && (seen(index) === "blocked" || seen(index) === "hot"),
+    (index) =>
+      index !== playedIndex && before.board[index] === null && (seen(index) === "blocked" || seen(index) === "hot"),
   );
   checkFall(after, fallen, where);
   const lifted = changed.filter((index) => index !== playedIndex && !fallen.includes(index));
   for (const index of lifted) {
-    expect(before.board[index], `${where}: lifted a stone that was not the opponent's`)
-      .toBe(otherStone(placedStone));
+    expect(before.board[index], `${where}: lifted a stone that was not the opponent's`).toBe(otherStone(placedStone));
     expect(seen(index), `${where}: a lifted stone was not removed`).toBeNull();
   }
 
@@ -126,10 +117,7 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
    */
   const stones = after.board.filter(isStone).length;
   const captured = after.captures.black + after.captures.white;
-  const clearedStones = after.moves.reduce(
-    (total, move) => total + (move.cleared?.filter(isStone).length ?? 0),
-    0,
-  );
+  const clearedStones = after.moves.reduce((total, move) => total + (move.cleared?.filter(isStone).length ?? 0), 0);
   // Each move laid one stone, a piece's worth of stones, or none at all: a pass lays none, and
   // nor does a slide, which a head start's free turns can bring one colour to while the other still places.
   const laid = after.moves.reduce(
@@ -164,9 +152,7 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
     expect(after.winner, `${where}: capture win without a winner`).not.toBeNull();
   } else if (after.status === GAME_STATUS.won && after.winBy === "trap") {
     // The mover made the forbidden line: the other player wins.
-    expect(after.winner, `${where}: trap win went to the wrong colour`).toBe(
-      otherStone(before.toPlay),
-    );
+    expect(after.winner, `${where}: trap win went to the wrong colour`).toBe(otherStone(before.toPlay));
     if (isMisere(after.settings.variant)) {
       // In the giveaway games the forbidden line is the winning length itself.
       expect(brute, `${where}: giveaway loss without a line on the board`).toBe(placedStone);
@@ -203,24 +189,18 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
       // Handled above.
     } else if (after.settings.variant !== "hotDrop") {
       // Through a hotspot, a stone can finish the other colour's line.
-      expect(after.winner, `${where}: winner is not the player who moved`).toBe(
-        before.toPlay,
-      );
+      expect(after.winner, `${where}: winner is not the player who moved`).toBe(before.toPlay);
     }
-    expect(
-      after.winningLine.length,
-      `${where}: winning line is too short`,
-    ).toBeGreaterThanOrEqual(after.settings.winLength);
+    expect(after.winningLine.length, `${where}: winning line is too short`).toBeGreaterThanOrEqual(
+      after.settings.winLength,
+    );
     for (const point of after.winningLine) {
       const held = cellAt(after, point);
       // In the choose-a-colour games the line may be of either colour.
       if (choosesColour(after.settings.variant)) {
         expect(isStone(held), `${where}: winning line holds a non-stone`).toBe(true);
       } else {
-        expect(
-          held === "hot" ? after.winner : held,
-          `${where}: winning line holds a wrong stone`,
-        ).toBe(after.winner);
+        expect(held === "hot" ? after.winner : held, `${where}: winning line holds a wrong stone`).toBe(after.winner);
       }
     }
   } else {
@@ -246,12 +226,8 @@ function checkMove(before: GameState, after: GameState, played: Point, seed: num
   // Undo is an exact inverse.
   if (after.settings.allowUndo) {
     const undone = undoMove(after);
-    expect(undone.board, `${where}: undo did not restore the board`).toEqual(
-      before.board,
-    );
-    expect(undone.toPlay, `${where}: undo did not restore the turn`).toBe(
-      before.toPlay,
-    );
+    expect(undone.board, `${where}: undo did not restore the board`).toEqual(before.board);
+    expect(undone.toPlay, `${where}: undo did not restore the turn`).toBe(before.toPlay);
     expect(undone.moves.length).toBe(before.moves.length);
   }
 }
@@ -318,9 +294,7 @@ function checkTwist(before: GameState, after: GameState, seed: number) {
   }
   if (after.settings.allowUndo) {
     const undone = undoMove(after);
-    expect(undone.board, `${where}: undo did not turn the quadrant back`).toEqual(
-      undoMove(before).board,
-    );
+    expect(undone.board, `${where}: undo did not turn the quadrant back`).toEqual(undoMove(before).board);
   }
 }
 
@@ -329,7 +303,9 @@ function checkSlide(before: GameState, after: GameState, from: Point, to: Point,
   const where = `${after.settings.variant} seed ${seed}, slide ${from.row},${from.col} to ${to.row},${to.col}`;
   expect(cellAt(after, from), `${where}: piece still at its origin`).toBeNull();
   expect(cellAt(after, to), `${where}: piece did not arrive`).toBe(before.toPlay);
-  expect(Math.max(Math.abs(from.row - to.row), Math.abs(from.col - to.col)), `${where}: slid more than one step`).toBe(1);
+  expect(Math.max(Math.abs(from.row - to.row), Math.abs(from.col - to.col)), `${where}: slid more than one step`).toBe(
+    1,
+  );
   const changed = after.board.filter((cell, index) => cell !== before.board[index]).length;
   expect(changed, `${where}: more than two cells changed`).toBe(2);
   expect(after.moves[after.moves.length - 1], `${where}: slide not recorded`).toMatchObject({ kind: "move", from });
@@ -352,7 +328,8 @@ function isRace(variant: string): boolean {
 
 /** Whether `to` is reachable from `from` by one step or a chain of jumps, worked out by hand. */
 function reachableByHand(board: readonly Cell[], size: number, from: Point, to: Point): boolean {
-  const at = (row: number, col: number) => (row < 0 || col < 0 || row >= size || col >= size ? undefined : board[row * size + col]);
+  const at = (row: number, col: number) =>
+    row < 0 || col < 0 || row >= size || col >= size ? undefined : board[row * size + col];
   if (Math.max(Math.abs(from.row - to.row), Math.abs(from.col - to.col)) === 1) return true;
   const seen = new Set<number>([from.row * size + from.col]);
   const stack: Point[] = [from];
@@ -384,7 +361,9 @@ function checkRaceMove(before: GameState, after: GameState, from: Point, to: Poi
   expect(cellAt(after, from), `${where}: piece still at its origin`).toBeNull();
   expect(cellAt(after, to), `${where}: piece did not arrive`).toBe(before.toPlay);
   // A step is one square; anything further must be a chain of jumps over pieces on the board before the move.
-  expect(reachableByHand(before.board, after.settings.size, from, to), `${where}: not a step or a jump chain`).toBe(true);
+  expect(reachableByHand(before.board, after.settings.size, from, to), `${where}: not a step or a jump chain`).toBe(
+    true,
+  );
   const changed = after.board.filter((cell, index) => cell !== before.board[index]).length;
   expect(changed, `${where}: more than two cells changed`).toBe(2);
   expect(after.moves[after.moves.length - 1], `${where}: move not recorded`).toMatchObject({ kind: "move", from });
@@ -395,7 +374,12 @@ function checkRaceMove(before: GameState, after: GameState, from: Point, to: Poi
 }
 
 /** What must hold after a piece is laid: every cell placed with its colour, nothing else. */
-function checkPiece(before: GameState, after: GameState, cells: readonly { row: number; col: number; stone: Stone }[], seed: number) {
+function checkPiece(
+  before: GameState,
+  after: GameState,
+  cells: readonly { row: number; col: number; stone: Stone }[],
+  seed: number,
+) {
   const where = `${after.settings.variant} seed ${seed}, piece after move ${after.moves.length}`;
   for (const cell of cells) {
     expect(cellAt(before, cell), `${where}: laid on an occupied point`).toBeNull();
@@ -423,7 +407,6 @@ function checkPass(before: GameState, after: GameState, seed: number) {
   expect(after.moves[after.moves.length - 1].kind, `${where}: pass not recorded`).toBe("pass");
   if (after.status === GAME_STATUS.playing) expect(after.toPlay).toBe(otherStone(before.toPlay));
 }
-
 
 export {
   bruteForceWinner,

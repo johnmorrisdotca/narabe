@@ -7,11 +7,18 @@ import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 
 const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
-const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml" };
+const TYPES = {
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".svg": "image/svg+xml",
+};
 
 /** Open the demo (or another page of it), the computers moving at once, and collect anything the page complains of. */
 async function open(page, address = "?lang=en") {
-  if (!existsSync(join(site, "index.html"))) throw new Error("site/ is not built: run `pnpm site` first (`pnpm test:demo` does)");
+  if (!existsSync(join(site, "index.html")))
+    throw new Error("site/ is not built: run `pnpm site` first (`pnpm test:demo` does)");
   const errors = [];
   page.on("pageerror", (error) => errors.push(String(error)));
   page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
@@ -19,7 +26,10 @@ async function open(page, address = "?lang=en") {
     const { pathname } = new URL(route.request().url());
     const file = join(site, pathname === "/" ? "index.html" : pathname);
     if (!existsSync(file)) return route.fulfill({ status: 404, body: "" });
-    return route.fulfill({ body: readFileSync(file), contentType: TYPES[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream" });
+    return route.fulfill({
+      body: readFileSync(file),
+      contentType: TYPES[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream",
+    });
   });
   await page.goto(`http://narabe.test/${address}`);
   if (!address.startsWith("api")) await expect(page.locator("html")).toHaveAttribute("data-ready", "true");
@@ -43,7 +53,10 @@ async function sound(page, errors) {
     };
     const small = [...document.querySelectorAll("button:not(:disabled), input, select, nav a, footer .family a")]
       .filter(seen)
-      .map((el) => ({ what: el.id || el.className || el.textContent.trim().slice(0, 20), box: el.getBoundingClientRect() }))
+      .map((el) => ({
+        what: el.id || el.className || el.textContent.trim().slice(0, 20),
+        box: el.getBoundingClientRect(),
+      }))
       .filter(({ box }) => box.width < 43.5 || box.height < 43.5)
       .map(({ what, box }) => `${what} ${Math.round(box.width)}×${Math.round(box.height)}`);
     return { over: document.documentElement.scrollWidth - window.innerWidth, small };
@@ -62,7 +75,9 @@ test("opens on gomoku, in the family's look, with an empty board to play on", as
   await expect(cells(page)).toHaveCount(81);
   await expect(page.locator('[data-testid="status"]')).toHaveText("Black to play.");
   await expect(page.locator("footer .family a[aria-current='page']")).toHaveText("Narabe");
-  expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toMatch(/^rgb\((244, 239, 228|20, 22, 20)\)$/);
+  expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toMatch(
+    /^rgb\((244, 239, 228|20, 22, 20)\)$/,
+  );
   await sound(page, errors);
 });
 
@@ -108,7 +123,8 @@ test("against the random mover, it answers a move of yours", async ({ page }) =>
 
 test("the board keeps one steady size as games change, and fits the screen", async ({ page }) => {
   await open(page);
-  const box = async () => page.locator('[data-testid="board"]').evaluate((el) => Math.round(el.getBoundingClientRect().width));
+  const box = async () =>
+    page.locator('[data-testid="board"]').evaluate((el) => Math.round(el.getBoundingClientRect().width));
   const first = await box();
   for (const game of ["tictactoe", "go", "honeycomb", "checkers"]) {
     await page.locator('[data-testid="game"]').selectOption(game);
@@ -149,7 +165,10 @@ test("every game's Japanese rule and group name is there", async ({ page }) => {
   await open(page, "?lang=ja");
   const missing = await page.evaluate(async () => {
     const { GAMES, GROUPS } = await import("/games.js");
-    return [...GAMES.filter((game) => !game.ruleJa || !game.kanji).map((game) => game.key), ...GROUPS.filter((group) => !group.nameJa).map((group) => group.name)];
+    return [
+      ...GAMES.filter((game) => !game.ruleJa || !game.kanji).map((game) => game.key),
+      ...GROUPS.filter((group) => !group.nameJa).map((group) => group.name),
+    ];
   });
   expect(missing).toEqual([]);
 });
@@ -160,19 +179,21 @@ test("the API reference is in the family's frame and links back", async ({ page 
   expect(await page.locator("article[id]").count()).toBeGreaterThan(100);
   await expect(page.locator("#main-createGame")).toBeVisible();
   await sound(page, errors);
-  await tap(page, '#main-createGame h3 a');
+  await tap(page, "#main-createGame h3 a");
   await expect(page.locator("h1")).toContainText("createGame");
   await expect(page.locator("main")).toContainText("overrides");
   await tap(page, 'header .lang a[data-lang="ja"]');
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");
-  await tap(page, page.getByRole("link", {name:"デモ",exact:true}));
+  await tap(page, page.getByRole("link", { name: "デモ", exact: true }));
   await expect(page.locator('[data-testid="board"] svg')).toBeVisible();
   await sound(page, errors);
 });
 
 // The Help switch in the family header (scripts/family-template.mjs): off, the page is as it was; on, every
 // option row says in one line what it does, in the page's language, and every control in it has hover words.
-test("Help is off at first, and on it shows a line under each option row, in either language, without resizing the play area", async ({ page }) => {
+test("Help is off at first, and on it shows a line under each option row, in either language, without resizing the play area", async ({
+  page,
+}) => {
   const errors = await open(page);
   const lines = page.locator(".fam-help");
   const rows = page.locator("[data-help-en]");
@@ -187,8 +208,16 @@ test("Help is off at first, and on it shows a line under each option row, in eit
     // A row in a tab that is not showing has its line, and shows it when the tab opens.
     if (await row.isVisible()) {
       const shown = await row.evaluate((el) => {
-        const line = el.classList.contains("fam-seg") || el.hasAttribute("data-help-after") ? el.nextElementSibling : el.querySelector(":scope > .fam-help");
-        return line !== null && line.classList.contains("fam-help") && window.getComputedStyle(line).display !== "none" && line.textContent.length > 10;
+        const line =
+          el.classList.contains("fam-seg") || el.hasAttribute("data-help-after")
+            ? el.nextElementSibling
+            : el.querySelector(":scope > .fam-help");
+        return (
+          line !== null &&
+          line.classList.contains("fam-help") &&
+          window.getComputedStyle(line).display !== "none" &&
+          line.textContent.length > 10
+        );
       });
       expect(shown).toBe(true);
     }
@@ -200,7 +229,9 @@ test("Help is off at first, and on it shows a line under each option row, in eit
   expect(Math.abs(after.width - before.width)).toBeLessThan(0.5);
   expect(Math.abs(after.height - before.height)).toBeLessThan(0.5);
   // Every button in an option row says what it does on hover.
-  const untitled = await page.evaluate(() => [...document.querySelectorAll("[data-help-en] button")].filter((b) => !b.title).map((b) => b.textContent.trim()));
+  const untitled = await page.evaluate(() =>
+    [...document.querySelectorAll("[data-help-en] button")].filter((b) => !b.title).map((b) => b.textContent.trim()),
+  );
   expect(untitled).toEqual([]);
   const english = await lines.first().textContent();
   await page.locator('[data-lang="ja"]').click();
@@ -214,7 +245,7 @@ test("Help is off at first, and on it shows a line under each option row, in eit
 });
 
 for (const path of ["/", "/builder.html"]) {
-  test(`Docs follows the selected language on ${path}`, async ({page}) => {
+  test(`Docs follows the selected language on ${path}`, async ({ page }) => {
     const errors = await open(page, `${path.slice(1)}?lang=ja`);
     const docs = page.locator('[data-say="pageDocs"]');
     await expect(docs).toHaveText("ドキュメント");
@@ -224,7 +255,7 @@ for (const path of ["/", "/builder.html"]) {
     await tap(page, '[data-lang="ja"]');
     await tap(page, '[data-say="pageDocs"]');
     await expect(page).toHaveURL("http://narabe.test/docs/ja/index.html");
-    await expect(page.locator("html")).toHaveAttribute("lang","ja");
+    await expect(page.locator("html")).toHaveAttribute("lang", "ja");
     expect(errors).toEqual([]);
   });
 }

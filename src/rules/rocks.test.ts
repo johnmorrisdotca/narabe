@@ -30,7 +30,9 @@ describe("rockLayout, scattered", () => {
 
   it("lands in the same places for the same seed, so a replay sees the same board", () => {
     expect(rockLayout(rules({ rocks: 6, hot: 2 }), 15, 42)).toEqual(rockLayout(rules({ rocks: 6, hot: 2 }), 15, 42));
-    expect(rockLayout(rules({ rocks: 6, hot: 2 }), 15, 42)).not.toEqual(rockLayout(rules({ rocks: 6, hot: 2 }), 15, 43));
+    expect(rockLayout(rules({ rocks: 6, hot: 2 }), 15, 42)).not.toEqual(
+      rockLayout(rules({ rocks: 6, hot: 2 }), 15, 43),
+    );
   });
 
   it("refuses more furniture than the board has room for", () => {
@@ -67,7 +69,13 @@ describe("landRocks", () => {
   it("puts furniture on the empty points and leaves a stone where a rock falls on one", () => {
     const board: Cell[] = new Array<Cell>(9).fill(null);
     board[0] = STONES.black;
-    const landed = landRocks(board, 3, { dead: [{ row: 0, col: 0 }, { row: 1, col: 1 }], hot: [{ row: 2, col: 2 }] });
+    const landed = landRocks(board, 3, {
+      dead: [
+        { row: 0, col: 0 },
+        { row: 1, col: 1 },
+      ],
+      hot: [{ row: 2, col: 2 }],
+    });
     expect(landed[0]).toBe(STONES.black);
     expect(landed[4]).toBe(BLOCKED);
     expect(landed[8]).toBe(HOT);

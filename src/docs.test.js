@@ -12,7 +12,18 @@ import * as narabe from "./index.ts";
 import * as react from "./react.ts";
 import { NARABE_VERSION } from "./version.ts";
 
-const { ALL_BOARD_SIZES, OPENING_RULE_LIST, RULE_VARIANT_LIST, SEED_RANGE, VARIANT_SPECS, createGame, playMove, pointName, replayMoves, turnChoices } = narabe;
+const {
+  ALL_BOARD_SIZES,
+  OPENING_RULE_LIST,
+  RULE_VARIANT_LIST,
+  SEED_RANGE,
+  VARIANT_SPECS,
+  createGame,
+  playMove,
+  pointName,
+  replayMoves,
+  turnChoices,
+} = narabe;
 
 const readme = readFileSync("README.md", "utf8");
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
@@ -24,7 +35,13 @@ function table(header, doc = readme) {
   if (from < 0) throw new Error(`no “${header}”`);
   const rows = [];
   for (const line of doc.slice(from).split("\n")) {
-    if (line.startsWith("|")) rows.push(line.split(/(?<!\\)\|/).slice(1, -1).map(cell));
+    if (line.startsWith("|"))
+      rows.push(
+        line
+          .split(/(?<!\\)\|/)
+          .slice(1, -1)
+          .map(cell),
+      );
     else if (rows.length > 0) break;
   }
   return rows.slice(2);
@@ -62,7 +79,9 @@ describe("how many games", () => {
 
   it("the hand-typed counts of the features are the engine's own", () => {
     expect(OPENING_RULE_LIST.filter((opening) => opening !== "free")).toHaveLength(7);
-    expect(readme.replace(/\s+/g, " ")).toContain("seven opening protocols (pro, long pro, swap, swap2, RIF, Sakata, Tarannikov)");
+    expect(readme.replace(/\s+/g, " ")).toContain(
+      "seven opening protocols (pro, long pro, swap, swap2, RIF, Sakata, Tarannikov)",
+    );
     expect(Object.values(VARIANT_SPECS).filter((spec) => spec.checkers)).toHaveLength(6);
     expect(readme).toContain("checkers and five draughts rule sets");
   });
@@ -71,7 +90,10 @@ describe("how many games", () => {
     expect(readme).toContain("Hundreds of tests in all.");
     expect(readme).not.toMatch(/\b\d{3,} tests\b/);
     const files = readdirSync("src", { recursive: true }).filter((path) => /\.test\.(ts|js)$/.test(path));
-    const cases = files.reduce((sum, path) => sum + (readFileSync(`src/${path}`, "utf8").match(/^\s*it\(/gm) ?? []).length, 0);
+    const cases = files.reduce(
+      (sum, path) => sum + (readFileSync(`src/${path}`, "utf8").match(/^\s*it\(/gm) ?? []).length,
+      0,
+    );
     expect(cases).toBeGreaterThanOrEqual(300);
   });
 });
@@ -87,7 +109,12 @@ describe("the README's examples", () => {
     says('game.status;                                 // "playing"');
     says('pointName(15, { row: 7, col: 7 });           // "H8"');
     says("playMove(game, { row: 7, col: 7 }) === game; // true: an occupied point changes nothing");
-    expect([game.toPlay, game.status, pointName(15, { row: 7, col: 7 }), playMove(game, { row: 7, col: 7 }) === game]).toEqual(["black", "playing", "H8", true]);
+    expect([
+      game.toPlay,
+      game.status,
+      pointName(15, { row: 7, col: 7 }),
+      playMove(game, { row: 7, col: 7 }) === game,
+    ]).toEqual(["black", "playing", "H8", true]);
   });
 
   it("the pieces-that-move example answers as it says", () => {
@@ -113,7 +140,8 @@ describe("the README's examples", () => {
   });
 
   it("every entry point the README names is in package.json, and every explicit one is named", () => {
-    for (const key of Object.keys(pkg.exports).filter((one) => one !== "." && !one.includes("*"))) expect(readme, key).toContain(`@johnmorrisdotca/narabe/${key.slice(2)}`);
+    for (const key of Object.keys(pkg.exports).filter((one) => one !== "." && !one.includes("*")))
+      expect(readme, key).toContain(`@johnmorrisdotca/narabe/${key.slice(2)}`);
     for (const name of readme.match(/@johnmorrisdotca\/narabe\/[\w/-]+/g) ?? []) {
       const path = name.replace("@johnmorrisdotca/narabe/", "");
       // A named entry, or a file reached by path through the wildcard.
@@ -128,7 +156,8 @@ describe("the README's examples", () => {
     const calls = new Set([...api.matchAll(/(?<![\w.])([a-z][A-Za-z]+)(?=\()/g)].map((match) => match[1]));
     // The members of what the hook returns are not exports of their own.
     const members = new Set(["play", "move", "place", "twist", "pass", "undo", "reset"]);
-    for (const name of calls) if (!members.has(name)) expect(real.has(name), `${name} is in the API section and not exported`).toBe(true);
+    for (const name of calls)
+      if (!members.has(name)) expect(real.has(name), `${name} is in the API section and not exported`).toBe(true);
     expect(calls.size).toBeGreaterThan(40);
   });
 });
@@ -138,9 +167,14 @@ describe("the README's Limits", () => {
   const named = (start) => rows.find((row) => row[0].startsWith(start));
 
   it("are the engine's own", () => {
-    expect(named("Board sides")[1]).toBe(`${ALL_BOARD_SIZES[0]} to ${ALL_BOARD_SIZES.at(-1)}; each game offers some of them`);
-    for (const game of RULE_VARIANT_LIST) for (const size of narabe.boardSizesFor(game)) expect(ALL_BOARD_SIZES, game).toContain(size);
-    expect(named("A seed")[1]).toBe(`a whole number below ${SEED_RANGE.toLocaleString("en-US")}, when the engine draws one`);
+    expect(named("Board sides")[1]).toBe(
+      `${ALL_BOARD_SIZES[0]} to ${ALL_BOARD_SIZES.at(-1)}; each game offers some of them`,
+    );
+    for (const game of RULE_VARIANT_LIST)
+      for (const size of narabe.boardSizesFor(game)) expect(ALL_BOARD_SIZES, game).toContain(size);
+    expect(named("A seed")[1]).toBe(
+      `a whole number below ${SEED_RANGE.toLocaleString("en-US")}, when the engine draws one`,
+    );
     expect(named("The command line's seed")[1]).toBe("a whole number from 0 to 2,147,483,647");
     expect(runCli(["board", "renju", "--seed", "2147483647"]).code).toBe(0);
     expect(runCli(["board", "renju", "--seed", "2147483648"]).code).toBe(2);
@@ -151,7 +185,9 @@ describe("the README's Limits", () => {
   });
 
   it("every constant it names exists", () => {
-    for (const row of rows) for (const name of row[2].match(/`([A-Z][A-Z_]+)`/g) ?? []) expect(Object.keys(narabe), name).toContain(name.replaceAll("`", ""));
+    for (const row of rows)
+      for (const name of row[2].match(/`([A-Z][A-Z_]+)`/g) ?? [])
+        expect(Object.keys(narabe), name).toContain(name.replaceAll("`", ""));
   });
 
   it("a game that is not offered a board size is not drawn on it by the command line", () => {
@@ -166,7 +202,8 @@ describe("the README's theming", () => {
     const used = new Set([...code.matchAll(/--nb-([a-z-]+)/g)].map((match) => `--nb-${match[1]}`));
     // The palette is named in camel case and written in kebab case: read the table of colours too.
     const palette = code.slice(code.indexOf("const PALETTE"), code.indexOf("} as const;"));
-    for (const [, name] of palette.matchAll(/^\s+(\w+):/gm)) used.add(`--nb-${name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`);
+    for (const [, name] of palette.matchAll(/^\s+(\w+):/gm))
+      used.add(`--nb-${name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`);
     const listed = new Set(section("## Theming").match(/--nb-[\w-]+/g));
     expect([...listed].sort()).toEqual([...used].sort());
     expect(draw.boardSvg(createGame({ variant: "hex", size: 11 }))).toContain("var(--nb-wood, ");
@@ -179,8 +216,10 @@ describe("the README's command line", () => {
   it("lists the options and commands the help does", () => {
     const rows = table("| Command or option | What it does |").map((row) => row[0]);
     const flags = [...usage.matchAll(/^\s+(?:-\w, )?(--[\w-]+)/gm)].map((match) => match[1]);
-    for (const flag of flags.filter((one) => one !== "--help" && one !== "--version")) expect(rows.join(" "), flag).toContain(flag);
-    for (const command of ["games", "board", "play", "replay", "simulate"]) expect(rows.join(" ")).toContain(`\`${command}`);
+    for (const flag of flags.filter((one) => one !== "--help" && one !== "--version"))
+      expect(rows.join(" "), flag).toContain(flag);
+    for (const command of ["games", "board", "play", "replay", "simulate"])
+      expect(rows.join(" ")).toContain(`\`${command}`);
   });
 
   it("the two helps list the same options, commands and examples, in the same order", () => {
@@ -188,13 +227,18 @@ describe("the README's command line", () => {
     expect(options(CLI_STRINGS.ja.usage)).toEqual(options(CLI_STRINGS.en.usage));
     const examples = (text) => text.split("\n").filter((line) => line.startsWith("  narabe "));
     expect(examples(CLI_STRINGS.ja.usage)).toEqual(examples(CLI_STRINGS.en.usage));
-    const commands = (text) => [...text.matchAll(/^ {2}(games|board|play|replay|simulate)\b/gm)].map((match) => match[1]);
+    const commands = (text) =>
+      [...text.matchAll(/^ {2}(games|board|play|replay|simulate)\b/gm)].map((match) => match[1]);
     expect(commands(CLI_STRINGS.ja.usage)).toEqual(commands(CLI_STRINGS.en.usage));
   });
 
   it("the commands in the README run", () => {
     for (const line of readme.match(/^npx @johnmorrisdotca\/narabe (games|board|play|simulate)\b.*$/gm)) {
-      const words = line.replace(/\s+#.*$/, "").replace(/ > \S+$/, "").split(" ").slice(2);
+      const words = line
+        .replace(/\s+#.*$/, "")
+        .replace(/ > \S+$/, "")
+        .split(" ")
+        .slice(2);
       const ran = runCli(words);
       expect(ran.code, line).toBe(0);
     }
@@ -262,7 +306,13 @@ describe("the version", () => {
 
 describe("package.json", () => {
   it("names built files directly, and ships what it names", () => {
-    const pointed = [pkg.main, pkg.module, pkg.types, ...Object.values(pkg.bin), ...Object.values(pkg.exports).flatMap((entry) => Object.values(entry))];
+    const pointed = [
+      pkg.main,
+      pkg.module,
+      pkg.types,
+      ...Object.values(pkg.bin),
+      ...Object.values(pkg.exports).flatMap((entry) => Object.values(entry)),
+    ];
     for (const file of pointed) expect(/^\.?\/?(dist|bin)\//.test(file), file).toBe(true);
     expect(pkg.dependencies).toBeUndefined();
     for (const file of ["dist", "src", "bin"]) expect(pkg.files).toContain(file);
@@ -288,12 +338,23 @@ describe("the family's look", () => {
   });
 
   it("scripts/family-template.mjs is the family's file too", () => {
-    expect(createHash("sha256").update(readFileSync("scripts/family-template.mjs")).digest("hex")).toBe("fcc192026cf284303344e108b20e6181126607c670a881a6b3bf8479da26ab03");
+    expect(createHash("sha256").update(readFileSync("scripts/family-template.mjs")).digest("hex")).toBe(
+      "fcc192026cf284303344e108b20e6181126607c670a881a6b3bf8479da26ab03",
+    );
   });
 
   it("the site script uses the family's header and footer", () => {
     const site = readFileSync("scripts/site.mjs", "utf8");
-    for (const part of ["familyHead(", "familyHeader(", "familyUnreviewed(", "familyFooter(", "FAMILY_SCRIPT", 'href="family.css"', 'href="narabe.css"']) expect(site).toContain(part);
+    for (const part of [
+      "familyHead(",
+      "familyHeader(",
+      "familyUnreviewed(",
+      "familyFooter(",
+      "FAMILY_SCRIPT",
+      'href="family.css"',
+      'href="narabe.css"',
+    ])
+      expect(site).toContain(part);
     expect(site.indexOf('href="family.css"')).toBeLessThan(site.indexOf('href="narabe.css"'));
   });
 });

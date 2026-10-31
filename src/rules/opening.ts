@@ -1,19 +1,6 @@
-import {
-  GAME_STATUS,
-  OPENING_CHOICE_EXTEND,
-  OPENING_RULES,
-  OPENING_STAGES,
-} from "../constants.ts";
+import { GAME_STATUS, OPENING_CHOICE_EXTEND, OPENING_RULES, OPENING_STAGES } from "../constants.ts";
 import { tengen } from "../obstacles.ts";
-import type {
-  GameSettings,
-  GameState,
-  OpeningChoice,
-  OpeningState,
-  Point,
-  Seat,
-  Stone,
-} from "../types.ts";
+import type { GameSettings, GameState, OpeningChoice, OpeningState, Point, Seat, Stone } from "../types.ts";
 import { chebyshev, otherStone, samePoint } from "./board.ts";
 import { rulesFor } from "./handicap.ts";
 
@@ -42,10 +29,7 @@ const TARANNIKOV_STONES = 5;
 const SWAP_STONES = 3;
 const SWAP2_EXTENDED_STONES = 5;
 
-const SWAP_OPENINGS: readonly GameSettings["opening"][] = [
-  OPENING_RULES.swap,
-  OPENING_RULES.swap2,
-];
+const SWAP_OPENINGS: readonly GameSettings["opening"][] = [OPENING_RULES.swap, OPENING_RULES.swap2];
 
 /** The renju protocols: colours alternate as usual, and a swap is offered along the way. */
 const RENJU_OPENINGS: readonly GameSettings["opening"][] = [
@@ -76,11 +60,7 @@ export function openingDecidesColours(opening: GameSettings["opening"]): boolean
   return SWAP_OPENINGS.includes(opening) || RENJU_OPENINGS.includes(opening);
 }
 
-export function initialOpening(
-  settings: GameSettings,
-  opener: Stone,
-  seats: Record<Stone, Seat>,
-): OpeningState {
+export function initialOpening(settings: GameSettings, opener: Stone, seats: Record<Stone, Seat>): OpeningState {
   if (SWAP_OPENINGS.includes(settings.opening)) {
     return { stage: OPENING_STAGES.placing, actor: seats[opener], choices: [] };
   }
@@ -181,10 +161,7 @@ export function openingAfterMove(state: GameState): OpeningState {
  * ```
  */
 export function canChooseColour(state: GameState): boolean {
-  return (
-    state.status === GAME_STATUS.playing &&
-    state.opening.stage === OPENING_STAGES.choosing
-  );
+  return state.status === GAME_STATUS.playing && state.opening.stage === OPENING_STAGES.choosing;
 }
 
 /** Swap2 only: the first chooser may add two stones and pass the choice back.
@@ -200,11 +177,7 @@ export function canChooseColour(state: GameState): boolean {
  * ```
  */
 export function canExtendOpening(state: GameState): boolean {
-  return (
-    canChooseColour(state) &&
-    state.settings.opening === OPENING_RULES.swap2 &&
-    state.moves.length === SWAP_STONES
-  );
+  return canChooseColour(state) && state.settings.opening === OPENING_RULES.swap2 && state.moves.length === SWAP_STONES;
 }
 
 /**
@@ -227,15 +200,10 @@ export function chooseColour(state: GameState, stone: Stone): GameState {
   const actor = state.opening.actor;
   if (actor === null) return state;
 
-  const seats =
-    state.seats[stone] === actor
-      ? state.seats
-      : { black: state.seats.white, white: state.seats.black };
+  const seats = state.seats[stone] === actor ? state.seats : { black: state.seats.white, white: state.seats.black };
 
   // Tarannikov offers the swap again after the next stone, until five are down.
-  const more =
-    state.settings.opening === OPENING_RULES.tarannikov &&
-    state.moves.length < TARANNIKOV_STONES;
+  const more = state.settings.opening === OPENING_RULES.tarannikov && state.moves.length < TARANNIKOV_STONES;
 
   return {
     ...state,
@@ -274,7 +242,5 @@ export function extendOpening(state: GameState): GameState {
 
 /** Replays one recorded decision. */
 export function applyOpeningChoice(state: GameState, choice: OpeningChoice): GameState {
-  return choice === OPENING_CHOICE_EXTEND
-    ? extendOpening(state)
-    : chooseColour(state, choice);
+  return choice === OPENING_CHOICE_EXTEND ? extendOpening(state) : chooseColour(state, choice);
 }

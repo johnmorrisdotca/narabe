@@ -134,9 +134,7 @@ describe("go", () => {
     expect(score.white).toBe(9 + 3 * size);
     // Column 4 — nine points touching both walls — counts for neither.
     expect(score.black + score.white).toBe(size * size - size);
-    expect(areaWinner(board, size, KOMI)).toBe(
-      score.black > score.white + KOMI ? "black" : "white",
-    );
+    expect(areaWinner(board, size, KOMI)).toBe(score.black > score.white + KOMI ? "black" : "white");
   });
 
   it("finds a group's stones and liberties as one connected unit", () => {

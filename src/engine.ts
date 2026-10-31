@@ -1,15 +1,7 @@
 import { settleDraw } from "./rules/drawLimit.ts";
 export { canBeDrawn, drawnByLength, movesBeforeDraw } from "./rules/drawLimit.ts";
 import { flipLegal, playFlip } from "./rules/flips.ts";
-import {
-  GAME_STATUS,
-  MOVE_KINDS,
-  NO_POINT,
-  PLACEMENTS,
-  STONES,
-  VARIANT_SPECS,
-  WIN_REASONS,
-} from "./constants.ts";
+import { GAME_STATUS, MOVE_KINDS, NO_POINT, PLACEMENTS, STONES, VARIANT_SPECS, WIN_REASONS } from "./constants.ts";
 import { indexOf, isOnBoard, otherStone, pointOf } from "./rules/board.ts";
 import { capturesFrom, removeStones, stonesIn } from "./rules/captures.ts";
 import { forbiddenAt } from "./rules/forbidden.ts";
@@ -25,26 +17,13 @@ import {
   settleStone,
   won,
 } from "./rules/mechanics.ts";
-import {
-  footprintFits,
-  isPieceInHand,
-  piecePlacements,
-  singlesUsedBy,
-} from "./rules/queue.ts";
+import { footprintFits, isPieceInHand, piecePlacements, singlesUsedBy } from "./rules/queue.ts";
 import { winningLineFor } from "./rules/lines.ts";
 import { fallRocks } from "./rules/rockfall.ts";
 import { stonesLeftInTurn } from "./rules/turns.ts";
 import { forfeitTurn } from "./rules/seats.ts";
 import { komiFor, owesHeadStart } from "./rules/headStart.ts";
-import type {
-  Cell,
-  ForbiddenPattern,
-  GameState,
-  Move,
-  PieceCell,
-  Point,
-  Stone,
-} from "./types.ts";
+import type { Cell, ForbiddenPattern, GameState, Move, PieceCell, Point, Stone } from "./types.ts";
 
 /*
  * The rules of the game. Every function here takes a `GameState` and returns
@@ -154,7 +133,8 @@ export function isLegalMove(state: GameState, point: Point): boolean {
   // The flipping games: legal means "turns something", and nothing else applies.
   if (VARIANT_SPECS[state.settings.variant].flips) return flipLegal(state, point);
   // Go: legal means not suicide and not the ko point; no opening, no forbidden shape.
-  if (VARIANT_SPECS[state.settings.variant].go) return goLegal(state.board, state.settings.size, point, state.toPlay, state.koPoint);
+  if (VARIANT_SPECS[state.settings.variant].go)
+    return goLegal(state.board, state.settings.size, point, state.toPlay, state.koPoint);
   if (inMovePhase(state)) return false;
   // In a piece game a lone stone is a single, and there are only so many.
   if (VARIANT_SPECS[state.settings.variant].queue !== null && singlesLeft(state) <= 0) return false;
@@ -163,10 +143,7 @@ export function isLegalMove(state: GameState, point: Point): boolean {
   const spec = VARIANT_SPECS[state.settings.variant];
   if (spec.placement === PLACEMENTS.edge && !restsOnSomething(state, point)) return false;
   if (spec.misere && spec.placement === PLACEMENTS.drop && blockedByGiveaway(state, point)) return false;
-  return (
-    openingAllows(state, point) &&
-    forbiddenAt(state.board, state.settings, state.toPlay, point) === null
-  );
+  return openingAllows(state, point) && forbiddenAt(state.board, state.settings, state.toPlay, point) === null;
 }
 
 /** Why the colour to move may not play `point`, when a forbidden shape is why.
@@ -408,7 +385,12 @@ export function passTurn(state: GameState): GameState {
   // Two passes end a game; a pass the head start took is not one of them.
   if (previous !== undefined && previous.kind === MOVE_KINDS.pass && previous.headStart !== true) {
     if (VARIANT_SPECS[state.settings.variant].go) {
-      return won(passed, areaWinner(passed.board, passed.settings.size, komiFor(passed.settings)), WIN_REASONS.territory, []);
+      return won(
+        passed,
+        areaWinner(passed.board, passed.settings.size, komiFor(passed.settings)),
+        WIN_REASONS.territory,
+        [],
+      );
     }
     return noPlayLeft(passed, WIN_REASONS.blocked);
   }

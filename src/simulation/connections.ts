@@ -40,7 +40,14 @@ function joinedByHand(board: readonly Cell[], size: number, stone: Stone): boole
   while (stack.length > 0) {
     const [row, col] = stack.pop() as [number, number];
     if (stone === "black" ? row === size - 1 : col === size - 1) return true;
-    for (const [dr, dc] of [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0]] as const) {
+    for (const [dr, dc] of [
+      [-1, 0],
+      [-1, 1],
+      [0, -1],
+      [0, 1],
+      [1, -1],
+      [1, 0],
+    ] as const) {
       const next: [number, number] = [row + dr, col + dc];
       const key = next[0] * size + next[1];
       if (at(next[0], next[1]) !== stone || seen.has(key)) continue;

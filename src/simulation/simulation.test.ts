@@ -70,7 +70,8 @@ describe("simulated games", () => {
   it("never gives a colour more stones in a turn than its variant allows", () => {
     for (const variant of Object.values(RULE_VARIANTS)) {
       // The flipping games pass a stuck colour by, so one colour may move twice; restated by hand.
-      if (["reversi", "classicReversi", "antiReversi", "miniReversi", "grandReversi", "honeycomb"].includes(variant)) continue;
+      if (["reversi", "classicReversi", "antiReversi", "miniReversi", "grandReversi", "honeycomb"].includes(variant))
+        continue;
       // The checkers family plays a whole capture chain as several moves by the same colour before the
       // turn passes; checkCheckersMove restates that rule by hand, move by move, instead.
       if (isCheckers(variant)) continue;
@@ -85,10 +86,9 @@ describe("simulated games", () => {
           const mover = move.by ?? move.stone;
           run = mover === previous ? run + 1 : 1;
           previous = mover;
-          expect(
-            run,
-            `${variant} seed ${seed}: ${run} stones in one turn`,
-          ).toBeLessThanOrEqual(rulesFor(final.settings, mover).stonesPerTurn);
+          expect(run, `${variant} seed ${seed}: ${run} stones in one turn`).toBeLessThanOrEqual(
+            rulesFor(final.settings, mover).stonesPerTurn,
+          );
         }
       }
     }
@@ -122,8 +122,7 @@ describe("simulated games", () => {
         );
         const replayed = timeline[timeline.length - 1];
 
-        expect(replayed.board, `${variant} seed ${seed}: replayed board differs`)
-          .toEqual(final.board);
+        expect(replayed.board, `${variant} seed ${seed}: replayed board differs`).toEqual(final.board);
         expect(replayed.status).toBe(final.status);
         expect(replayed.winner).toBe(final.winner);
         expect(replayed.captures).toEqual(final.captures);
@@ -142,8 +141,7 @@ describe("simulated games", () => {
         { row: 0, col: size },
         { row: size, col: size },
       ]) {
-        expect(playMove(state, point), `${variant}: off-board move was accepted`)
-          .toBe(state);
+        expect(playMove(state, point), `${variant}: off-board move was accepted`).toBe(state);
       }
       const taken = state.moves[0];
       if (taken !== undefined) {
@@ -155,15 +153,10 @@ describe("simulated games", () => {
   it("only ever forbids empty points, and only where a variant says so", () => {
     for (const variant of Object.values(RULE_VARIANTS)) {
       const state = playOut({ size: 9, variant }, 555 + variant.length);
-      const empties = new Set(
-        emptyPoints(state).map((point) => `${point.row},${point.col}`),
-      );
+      const empties = new Set(emptyPoints(state).map((point) => `${point.row},${point.col}`));
 
       for (const point of forbiddenPoints(state)) {
-        expect(
-          empties.has(`${point.row},${point.col}`),
-          `${variant}: forbade a point that is not empty`,
-        ).toBe(true);
+        expect(empties.has(`${point.row},${point.col}`), `${variant}: forbade a point that is not empty`).toBe(true);
       }
     }
   });
@@ -180,7 +173,17 @@ describe("simulated games", () => {
 describe("the brute force scanner", () => {
   it("finds a win the engine would also find", () => {
     let state = createGame({ size: 9 });
-    for (const [row, col] of [[4, 0], [0, 0], [4, 1], [0, 1], [4, 2], [0, 2], [4, 3], [0, 3], [4, 4]]) {
+    for (const [row, col] of [
+      [4, 0],
+      [0, 0],
+      [4, 1],
+      [0, 1],
+      [4, 2],
+      [0, 2],
+      [4, 3],
+      [0, 3],
+      [4, 4],
+    ]) {
       state = playMove(state, { row, col });
     }
     expect(state.winner).toBe("black");
@@ -223,7 +226,10 @@ describe("a game given a length", () => {
 
   it("never runs past the share of the board it was given", () => {
     for (const variant of ALL) {
-      for (const [limit, share] of [["half", 1 / 2], ["threeQuarters", 3 / 4]] as const) {
+      for (const [limit, share] of [
+        ["half", 1 / 2],
+        ["threeQuarters", 3 / 4],
+      ] as const) {
         const final = playOut({ size: 9, variant, drawLimit: limit }, 77 + variant.length);
         const allowed = lengthByHand(final, share);
         if (allowed === null) continue;
@@ -243,9 +249,7 @@ describe("a game given a length", () => {
            * somebody may have won on the very move that reached it, and a win
            * beats a length. Either way it is over.
            */
-          expect(final.status, `${variant} reached its length and kept playing`).not.toBe(
-            GAME_STATUS.playing,
-          );
+          expect(final.status, `${variant} reached its length and kept playing`).not.toBe(GAME_STATUS.playing);
           if (final.status === GAME_STATUS.draw) {
             expect(final.winner, `${variant} was drawn but has a winner`).toBeNull();
           }
@@ -272,9 +276,7 @@ describe("a game given a length", () => {
       const plain = playOut({ size: 9, variant }, 404 + variant.length);
       expect(limited.moves.length).toBe(plain.moves.length);
       expect(limited.status).toBe(plain.status);
-      expect(limited.status, `${variant} was drawn, which its board forbids`).not.toBe(
-        GAME_STATUS.draw,
-      );
+      expect(limited.status, `${variant} was drawn, which its board forbids`).not.toBe(GAME_STATUS.draw);
     }
   });
 

@@ -7,18 +7,19 @@ import { GAMES, GROUPS } from "./games.js";
 const SVG = "http://www.w3.org/2000/svg";
 const SQRT3_2 = Math.sqrt(3) / 2;
 
-
 // The page's own words, in the two languages the family speaks. The Japanese has not yet been read by a native
 // reader: the page says so in Japanese only. Set as text, never as HTML.
 const WORDS = {
   en: {
-    pitch: "Forty-eight board games, one rules engine. Pick a game and play it here, two to a screen or against a random mover.",
+    pitch:
+      "Forty-eight board games, one rules engine. Pick a game and play it here, two to a screen or against a random mover.",
     name: "Narabe is Japanese for “line them up”: the verb in gomoku-narabe, five in a row.",
     nameLink: "About the name",
     pageDocs: "Docs",
     pageApi: "API reference",
     pageBack: "The games",
-    pageApiIntro: "Every export of every entry point, with its signature and its doc comment. Made from the source when the site is built, so it cannot fall behind the code.",
+    pageApiIntro:
+      "Every export of every entry point, with its signature and its doc comment. Made from the source when the site is built, so it cannot fall behind the code.",
     game: "Game",
     board: "Board",
     opponent: "Opponent",
@@ -67,13 +68,15 @@ const WORDS = {
     foot: "Made by John Morris for Itsutsu. Nothing here is stored or sent anywhere.",
   },
   ja: {
-    pitch: "48種類の盤上ゲームを、ひとつのルールエンジンで。ゲームを選んで、ここで遊べます。ひとつの画面で二人で、またはランダムに打つ相手と。",
+    pitch:
+      "48種類の盤上ゲームを、ひとつのルールエンジンで。ゲームを選んで、ここで遊べます。ひとつの画面で二人で、またはランダムに打つ相手と。",
     name: "「並べ」は、五目並べの「並べ」。石を並べる、という意味です。",
     nameLink: "名前について（英語）",
     pageDocs: "ドキュメント",
     pageApi: "API リファレンス",
     pageBack: "ゲーム",
-    pageApiIntro: "すべてのエントリポイントのすべてのエクスポートを、シグネチャとドキュメントコメントつきで載せています。サイトをビルドするときにソースから作るので、コードとずれません。",
+    pageApiIntro:
+      "すべてのエントリポイントのすべてのエクスポートを、シグネチャとドキュメントコメントつきで載せています。サイトをビルドするときにソースから作るので、コードとずれません。",
     game: "ゲーム",
     board: "盤",
     opponent: "相手",
@@ -157,7 +160,8 @@ const colourName = (stone) => t(stone === N.STONES.black ? "black" : "white");
 // ---------- words ----------
 
 let page;
-const t = (key, values = {}) => page.word(key).replace(/\{(\w+)\}/g, (whole, name) => (name in values ? String(values[name]) : whole));
+const t = (key, values = {}) =>
+  page.word(key).replace(/\{(\w+)\}/g, (whole, name) => (name in values ? String(values[name]) : whole));
 const japanese = () => page.lang === "ja";
 page = familyLanguage({
   id: "narabe",
@@ -179,7 +183,8 @@ function fillGames() {
   for (const group of GROUPS) {
     const optgroup = document.createElement("optgroup");
     optgroup.label = japanese() ? group.nameJa : group.name;
-    for (const game of group.games) optgroup.append(new Option(japanese() ? `${game.kanji}  ${game.name}` : `${game.name}  ${game.kanji}`, game.key));
+    for (const game of group.games)
+      optgroup.append(new Option(japanese() ? `${game.kanji}  ${game.name}` : `${game.name}  ${game.kanji}`, game.key));
     el.game.append(optgroup);
   }
   if (chosen !== "") el.game.value = chosen;
@@ -194,7 +199,9 @@ function fillSizes() {
   const sizes = N.boardSizesFor(variant);
   el.size.replaceChildren(...sizes.map((size) => new Option(`${size} × ${size}`, String(size))));
   const wanted = Number(params.get("size"));
-  el.size.value = String(sizes.includes(wanted) ? wanted : variant === N.RULE_VARIANTS.go ? 9 : N.defaultBoardFor(variant));
+  el.size.value = String(
+    sizes.includes(wanted) ? wanted : variant === N.RULE_VARIANTS.go ? 9 : N.defaultBoardFor(variant),
+  );
   el.size.disabled = sizes.length < 2;
   const game = GAMES.find((one) => one.key === variant);
   el.rule.textContent = (japanese() ? game?.ruleJa : game?.rule) ?? "";
@@ -203,7 +210,10 @@ function fillSizes() {
 
 function newGame() {
   const variant = el.game.value;
-  state = N.createGame({ variant, size: Number(el.size.value), seed: Math.floor(Math.random() * N.SEED_RANGE) }, Math.random());
+  state = N.createGame(
+    { variant, size: Number(el.size.value), seed: Math.floor(Math.random() * N.SEED_RANGE) },
+    Math.random(),
+  );
   selected = null;
   hover = null;
   const address = new URL(location.href);
@@ -245,7 +255,11 @@ function commit(next) {
 function randomAction(s) {
   const spec = specOf(s);
   if (N.canTwist(s)) {
-    return N.twistBoard(s, Math.floor(Math.random() * N.quadrantCount(s.settings.size, spec.quadrantSize)), Math.random() < 0.5);
+    return N.twistBoard(
+      s,
+      Math.floor(Math.random() * N.quadrantCount(s.settings.size, spec.quadrantSize)),
+      Math.random() < 0.5,
+    );
   }
   if (N.mustPass(s)) return N.passTurn(s);
   if (spec.queue !== null) {
@@ -260,10 +274,20 @@ function randomAction(s) {
   }
   const points = N.legalPoints(s);
   // A random Go player would fill its own eyes for ever; it passes once the board is mostly settled.
-  if (spec.go && (points.length === 0 || points.length < (s.settings.size * s.settings.size) / 4) && Math.random() < 0.5) {
+  if (
+    spec.go &&
+    (points.length === 0 || points.length < (s.settings.size * s.settings.size) / 4) &&
+    Math.random() < 0.5
+  ) {
     return N.passTurn(s);
   }
-  if (points.length > 0) return N.playMove(s, pick(points), N.MOVE_KINDS.place, spec.anyColour ? pick([N.STONES.black, N.STONES.white]) : null);
+  if (points.length > 0)
+    return N.playMove(
+      s,
+      pick(points),
+      N.MOVE_KINDS.place,
+      spec.anyColour ? pick([N.STONES.black, N.STONES.white]) : null,
+    );
   return N.canPass(s) ? N.passTurn(s) : s;
 }
 
@@ -353,7 +377,12 @@ function layout(s) {
   }
   const xs = shown.map((p) => at(p).x);
   const ys = shown.map((p) => at(p).y);
-  return { lattice, at, shown, box: { left: Math.min(...xs), right: Math.max(...xs), top: Math.min(...ys), bottom: Math.max(...ys) } };
+  return {
+    lattice,
+    at,
+    shown,
+    box: { left: Math.min(...xs), right: Math.max(...xs), top: Math.min(...ys), bottom: Math.max(...ys) },
+  };
 }
 
 function hexagon(cx, cy, r) {
@@ -374,7 +403,18 @@ function render() {
     role: "img",
     "aria-label": t("boardLabel", { game: gameName(s.settings.variant), size }),
   });
-  const wood = node("rect", { x: box.left - pad, y: box.top - pad, width: box.right - box.left + pad * 2, height: box.bottom - box.top + pad * 2, rx: 0.3, fill: "var(--wood)" }, svg);
+  const wood = node(
+    "rect",
+    {
+      x: box.left - pad,
+      y: box.top - pad,
+      width: box.right - box.left + pad * 2,
+      height: box.bottom - box.top + pad * 2,
+      rx: 0.3,
+      fill: "var(--wood)",
+    },
+    svg,
+  );
   wood.setAttribute("stroke", "var(--wood-deep)");
   wood.setAttribute("stroke-width", "0.08");
 
@@ -384,11 +424,29 @@ function render() {
     for (const p of shown) {
       const { x, y } = at(p);
       if (spec.chineseCheckers) node("circle", { cx: x, cy: y, r: 0.2, fill: "var(--line)", opacity: 0.35 }, grid);
-      else node("polygon", { points: hexagon(x, y, 0.575), fill: "var(--cell-light)", stroke: "var(--line)", "stroke-width": 0.04 }, grid);
+      else
+        node(
+          "polygon",
+          { points: hexagon(x, y, 0.575), fill: "var(--cell-light)", stroke: "var(--line)", "stroke-width": 0.04 },
+          grid,
+        );
     }
     if (spec.connects) {
       // Black joins top to bottom, White left to right: the sides are drawn in their colours.
-      const edge = (from, to, colour) => node("line", { x1: at(from).x, y1: at(from).y, x2: at(to).x, y2: at(to).y, stroke: colour, "stroke-width": 0.16, "stroke-linecap": "round" }, grid);
+      const edge = (from, to, colour) =>
+        node(
+          "line",
+          {
+            x1: at(from).x,
+            y1: at(from).y,
+            x2: at(to).x,
+            y2: at(to).y,
+            stroke: colour,
+            "stroke-width": 0.16,
+            "stroke-linecap": "round",
+          },
+          grid,
+        );
       const n = size - 1;
       const lift = (p, dy) => ({ ...p, row: p.row + dy });
       edge(lift({ row: 0, col: 0 }, -0.65), lift({ row: 0, col: n }, -0.65), "var(--black)");
@@ -399,13 +457,33 @@ function render() {
   } else if (cells) {
     for (const p of shown) {
       const dark = spec.checkers ? N.isDarkSquare(p) : (p.row + p.col) % 2 === 1;
-      node("rect", { x: p.col - 0.5, y: p.row - 0.5, width: 1, height: 1, fill: dark && (spec.checkers || spec.camps) ? "var(--cell-dark)" : "var(--cell-light)", stroke: "var(--line)", "stroke-width": 0.03 }, grid);
+      node(
+        "rect",
+        {
+          x: p.col - 0.5,
+          y: p.row - 0.5,
+          width: 1,
+          height: 1,
+          fill: dark && (spec.checkers || spec.camps) ? "var(--cell-dark)" : "var(--cell-light)",
+          stroke: "var(--line)",
+          "stroke-width": 0.03,
+        },
+        grid,
+      );
     }
     if (spec.quadrantSize !== null) {
       const q = spec.quadrantSize;
       for (let k = q; k < size; k += q) {
-        node("line", { x1: k - 0.5, y1: -0.5, x2: k - 0.5, y2: size - 0.5, stroke: "var(--line)", "stroke-width": 0.1 }, grid);
-        node("line", { x1: -0.5, y1: k - 0.5, x2: size - 0.5, y2: k - 0.5, stroke: "var(--line)", "stroke-width": 0.1 }, grid);
+        node(
+          "line",
+          { x1: k - 0.5, y1: -0.5, x2: k - 0.5, y2: size - 0.5, stroke: "var(--line)", "stroke-width": 0.1 },
+          grid,
+        );
+        node(
+          "line",
+          { x1: -0.5, y1: k - 0.5, x2: size - 0.5, y2: k - 0.5, stroke: "var(--line)", "stroke-width": 0.1 },
+          grid,
+        );
       }
     }
   } else {
@@ -413,7 +491,8 @@ function render() {
       node("line", { x1: 0, y1: k, x2: size - 1, y2: k, stroke: "var(--line)", "stroke-width": 0.035 }, grid);
       node("line", { x1: k, y1: 0, x2: k, y2: size - 1, stroke: "var(--line)", "stroke-width": 0.035 }, grid);
     }
-    for (const p of N.STAR_POINTS[size] ?? []) node("circle", { cx: p.col, cy: p.row, r: 0.09, fill: "var(--line)" }, grid);
+    for (const p of N.STAR_POINTS[size] ?? [])
+      node("circle", { cx: p.col, cy: p.row, r: 0.09, fill: "var(--line)" }, grid);
   }
 
   // Camps and star points in the race games, faintly, so a player can see where they are going.
@@ -422,7 +501,11 @@ function render() {
       const camp = spec.camps ? N.campOf(size, p) : N.starCampOf(N.STAR_RADIUS, p);
       if (camp === null) continue;
       const { x, y } = at(p);
-      node("circle", { cx: x, cy: y, r: 0.46, fill: camp === N.STONES.black ? "var(--black)" : "var(--white)", opacity: 0.12 }, grid);
+      node(
+        "circle",
+        { cx: x, cy: y, r: 0.46, fill: camp === N.STONES.black ? "var(--black)" : "var(--white)", opacity: 0.12 },
+        grid,
+      );
     }
   }
 
@@ -443,33 +526,81 @@ function render() {
     const cell = s.board[N.indexOf(size, p)];
     if (cell === N.BLOCKED) {
       if (lattice) node("polygon", { points: hexagon(x, y, 0.575), fill: "var(--line)", opacity: 0.85 }, marks);
-      else node("rect", { x: x - 0.45, y: y - 0.45, width: 0.9, height: 0.9, rx: 0.12, fill: "var(--line)", opacity: 0.85 }, marks);
+      else
+        node(
+          "rect",
+          { x: x - 0.45, y: y - 0.45, width: 0.9, height: 0.9, rx: 0.12, fill: "var(--line)", opacity: 0.85 },
+          marks,
+        );
     } else if (cell === N.HOT) {
       node("circle", { cx: x, cy: y, r: 0.36, fill: "none", stroke: "var(--hot)", "stroke-width": 0.12 }, marks);
       node("circle", { cx: x, cy: y, r: 0.12, fill: "var(--hot)" }, marks);
     } else if (cell === N.WORM) {
-      node("circle", { cx: x, cy: y, r: 0.36, fill: "none", stroke: "var(--worm)", "stroke-width": 0.1, "stroke-dasharray": "0.2 0.1" }, marks);
+      node(
+        "circle",
+        {
+          cx: x,
+          cy: y,
+          r: 0.36,
+          fill: "none",
+          stroke: "var(--worm)",
+          "stroke-width": 0.1,
+          "stroke-dasharray": "0.2 0.1",
+        },
+        marks,
+      );
     } else if (cell === N.STONES.black || cell === N.STONES.white) {
       const fresh = same(p, last) ? " fresh" : "";
-      node("circle", { class: `stone${fresh}`, cx: x, cy: y, r: 0.43, fill: cell === N.STONES.black ? "var(--black)" : "var(--white)", stroke: "var(--stone-edge)", "stroke-width": 0.03 }, marks);
-      if (kings.some((k) => same(k, p))) node("circle", { cx: x, cy: y, r: 0.22, fill: "none", stroke: "var(--king)", "stroke-width": 0.09 }, marks);
+      node(
+        "circle",
+        {
+          class: `stone${fresh}`,
+          cx: x,
+          cy: y,
+          r: 0.43,
+          fill: cell === N.STONES.black ? "var(--black)" : "var(--white)",
+          stroke: "var(--stone-edge)",
+          "stroke-width": 0.03,
+        },
+        marks,
+      );
+      if (kings.some((k) => same(k, p)))
+        node("circle", { cx: x, cy: y, r: 0.22, fill: "none", stroke: "var(--king)", "stroke-width": 0.09 }, marks);
     }
     if (same(p, last)) node("circle", { cx: x, cy: y, r: 0.1, fill: "var(--accent)" }, marks);
-    if (winning.some((w) => same(w, p))) node("circle", { cx: x, cy: y, r: 0.47, fill: "none", stroke: "var(--accent)", "stroke-width": 0.08 }, marks);
-    if (showLegal && legal.some((l) => same(l, p))) node("circle", { cx: x, cy: y, r: 0.11, fill: "var(--good)", opacity: 0.7 }, marks);
+    if (winning.some((w) => same(w, p)))
+      node("circle", { cx: x, cy: y, r: 0.47, fill: "none", stroke: "var(--accent)", "stroke-width": 0.08 }, marks);
+    if (showLegal && legal.some((l) => same(l, p)))
+      node("circle", { cx: x, cy: y, r: 0.11, fill: "var(--good)", opacity: 0.7 }, marks);
     if (forbidden.some((f) => same(f, p))) {
-      node("path", { d: `M${x - 0.18} ${y - 0.18}L${x + 0.18} ${y + 0.18}M${x + 0.18} ${y - 0.18}L${x - 0.18} ${y + 0.18}`, stroke: "var(--accent)", "stroke-width": 0.07 }, marks);
+      node(
+        "path",
+        {
+          d: `M${x - 0.18} ${y - 0.18}L${x + 0.18} ${y + 0.18}M${x + 0.18} ${y - 0.18}L${x - 0.18} ${y + 0.18}`,
+          stroke: "var(--accent)",
+          "stroke-width": 0.07,
+        },
+        marks,
+      );
     }
-    if (same(p, selected)) node("circle", { cx: x, cy: y, r: 0.48, fill: "none", stroke: "var(--good)", "stroke-width": 0.09 }, marks);
+    if (same(p, selected))
+      node("circle", { cx: x, cy: y, r: 0.48, fill: "none", stroke: "var(--good)", "stroke-width": 0.09 }, marks);
     if (targets.some((t) => same(t, p))) node("circle", { cx: x, cy: y, r: 0.15, fill: "var(--good)" }, marks);
     const piece = hovered.find((c) => same(c, p));
-    if (piece) node("circle", { cx: x, cy: y, r: 0.4, fill: piece.stone === N.STONES.black ? "var(--black)" : "var(--white)", opacity: 0.45 }, marks);
+    if (piece)
+      node(
+        "circle",
+        { cx: x, cy: y, r: 0.4, fill: piece.stone === N.STONES.black ? "var(--black)" : "var(--white)", opacity: 0.45 },
+        marks,
+      );
   }
 
   const hits = node("g", {}, svg);
   for (const p of shown) {
     const { x, y } = at(p);
-    const hit = lattice ? node("polygon", { points: hexagon(x, y, 0.58), class: "hit" }, hits) : node("rect", { x: x - 0.5, y: y - 0.5, width: 1, height: 1, class: "hit" }, hits);
+    const hit = lattice
+      ? node("polygon", { points: hexagon(x, y, 0.58), class: "hit" }, hits)
+      : node("rect", { x: x - 0.5, y: y - 0.5, width: 1, height: 1, class: "hit" }, hits);
     hit.addEventListener("click", () => clickAt(p));
     if (spec.queue !== null) {
       hit.addEventListener("mouseenter", () => {
@@ -489,9 +620,29 @@ function render() {
       const cy = origin.row + (q - 1) / 2;
       for (const clockwise of [false, true]) {
         const bx = cx + (clockwise ? 0.42 : -0.42);
-        const button = node("g", { class: "turn", role: "button", "aria-label": t("turnLabel", { n: quadrant + 1, way: t(clockwise ? "clockwise" : "anticlockwise") }), style: "cursor:pointer" }, svg);
+        const button = node(
+          "g",
+          {
+            class: "turn",
+            role: "button",
+            "aria-label": t("turnLabel", { n: quadrant + 1, way: t(clockwise ? "clockwise" : "anticlockwise") }),
+            style: "cursor:pointer",
+          },
+          svg,
+        );
         node("circle", { cx: bx, cy, r: 0.36, fill: "var(--accent)", opacity: 0.92 }, button);
-        const text = node("text", { x: bx, y: cy + 0.15, "text-anchor": "middle", "font-size": 0.44, fill: "var(--accent-ink)", "font-weight": 700 }, button);
+        const text = node(
+          "text",
+          {
+            x: bx,
+            y: cy + 0.15,
+            "text-anchor": "middle",
+            "font-size": 0.44,
+            fill: "var(--accent-ink)",
+            "font-weight": 700,
+          },
+          button,
+        );
         text.textContent = clockwise ? "↻" : "↺";
         button.addEventListener("click", () => {
           commit(N.twistBoard(state, quadrant, clockwise));
@@ -510,7 +661,11 @@ function renderText() {
   const spec = specOf(s);
   const playing = s.status === N.GAME_STATUS.playing;
   let status;
-  if (s.status === N.GAME_STATUS.won) status = t("wins", { who: colourName(s.winner), reason: t(`reason_${s.winBy}`) === `reason_${s.winBy}` ? s.winBy : t(`reason_${s.winBy}`) });
+  if (s.status === N.GAME_STATUS.won)
+    status = t("wins", {
+      who: colourName(s.winner),
+      reason: t(`reason_${s.winBy}`) === `reason_${s.winBy}` ? s.winBy : t(`reason_${s.winBy}`),
+    });
   else if (s.status === N.GAME_STATUS.draw) status = t("draw");
   else if (N.canTwist(s)) status = t("twist", { who: colourName(s.toPlay) });
   else if (s.chainAt !== null) status = t("jumping", { who: colourName(s.toPlay) });
@@ -546,7 +701,11 @@ function renderText() {
       item.className = move.by ?? move.stone;
       const stoneless = N.stonelessWord(move.kind);
       const word = stoneless === null ? null : t(stoneless === "pass" ? "pass_word" : "forfeit_word");
-      const where = word ?? (move.kind === N.MOVE_KINDS.piece && move.cells ? move.cells.map((c) => N.pointName(size, c)).join(" ") : N.pointName(size, move));
+      const where =
+        word ??
+        (move.kind === N.MOVE_KINDS.piece && move.cells
+          ? move.cells.map((c) => N.pointName(size, c)).join(" ")
+          : N.pointName(size, move));
       const from = move.from ? `${N.pointName(size, move.from)}${move.captured?.length ? "×" : "–"}` : "";
       const twist = move.twist ? ` ${move.twist.clockwise ? "↻" : "↺"}${move.twist.quadrant + 1}` : "";
       item.textContent = t("moveBy", { who: colourName(move.by ?? move.stone), text: `${from}${where}${twist}` });
@@ -560,5 +719,9 @@ fillSizes();
 newGame();
 document.documentElement.dataset.ready = "true";
 
-function docsLink() { document.querySelector('[data-say="pageDocs"]')?.setAttribute("href", page.lang === "ja" ? "docs/ja/index.html" : "docs/index.html"); }
+function docsLink() {
+  document
+    .querySelector('[data-say="pageDocs"]')
+    ?.setAttribute("href", page.lang === "ja" ? "docs/ja/index.html" : "docs/index.html");
+}
 docsLink();

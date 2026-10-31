@@ -35,12 +35,7 @@ export function countStones(board: Cell[], stone: Stone): number {
  * The 2×2 square of `stone` that includes `point`, if there is one. There are
  * four squares a point can belong to, one per corner it could occupy.
  */
-export function squareThrough(
-  board: Cell[],
-  size: number,
-  point: Point,
-  stone: Stone,
-): Point[] {
+export function squareThrough(board: Cell[], size: number, point: Point, stone: Stone): Point[] {
   for (const dr of [-1, 0]) {
     for (const dc of [-1, 0]) {
       const corner = { row: point.row + dr, col: point.col + dc };

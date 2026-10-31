@@ -1,21 +1,6 @@
 import { DIRECTIONS, FORBIDDEN_PATTERNS } from "../constants.ts";
-import type {
-  Cell,
-  ForbiddenPattern,
-  GameSettings,
-  GameState,
-  Point,
-  Stone,
-} from "../types.ts";
-import {
-  cellAtPoint,
-  indexOf,
-  isOnBoard,
-  pointOf,
-  samePoint,
-  stepFrom,
-  withStone,
-} from "./board.ts";
+import type { Cell, ForbiddenPattern, GameSettings, GameState, Point, Stone } from "../types.ts";
+import { cellAtPoint, indexOf, isOnBoard, pointOf, samePoint, stepFrom, withStone } from "./board.ts";
 import { rulesFor } from "./handicap.ts";
 import { findWinningLine, runThrough, runWins } from "./lines.ts";
 
@@ -105,12 +90,7 @@ export function forbiddenAt(
  * Every shape here needs another friendly stone within reach along one of the
  * four lines, so a point with none nearby can be passed over without reading.
  */
-function nearOwnStone(
-  board: Cell[],
-  settings: GameSettings,
-  stone: Stone,
-  point: Point,
-): boolean {
+function nearOwnStone(board: Cell[], settings: GameSettings, stone: Stone, point: Point): boolean {
   const reach = rulesFor(settings, stone).winLength - 1;
   for (const step of DIRECTIONS) {
     for (let k = -reach; k <= reach; k += 1) {
@@ -129,13 +109,7 @@ function nearOwnStone(
  * stone*. A straight four — four in a row open at both ends — has two such
  * cells but is one four, not two, so it is counted once.
  */
-function foursAlong(
-  board: Cell[],
-  settings: GameSettings,
-  stone: Stone,
-  point: Point,
-  step: Point,
-): number {
+function foursAlong(board: Cell[], settings: GameSettings, stone: Stone, point: Point, step: Point): number {
   const { size } = settings;
   const { lineRule: rule, winLength } = rulesFor(settings, stone);
   const completions: Point[] = [];
@@ -156,10 +130,7 @@ function foursAlong(
     const last = own.cells[own.cells.length - 1];
     const straight =
       own.cells.length === winLength - 1 &&
-      completions.every(
-        (q) =>
-          samePoint(q, stepFrom(first, step, -1)) || samePoint(q, stepFrom(last, step, 1)),
-      );
+      completions.every((q) => samePoint(q, stepFrom(first, step, -1)) || samePoint(q, stepFrom(last, step, 1)));
     if (straight) return 1;
   }
   return completions.length;
@@ -193,17 +164,9 @@ function threeAlong(
     if (!run.cells.some((cell) => samePoint(cell, point))) continue;
     if (run.ends[0] !== null || run.ends[1] !== null) continue;
 
-    const ends = [
-      stepFrom(run.cells[0], step, -1),
-      stepFrom(run.cells[run.cells.length - 1], step, 1),
-    ];
+    const ends = [stepFrom(run.cells[0], step, -1), stepFrom(run.cells[run.cells.length - 1], step, 1)];
     const straight = ends.every((end) =>
-      runWins(
-        rule,
-        runThrough(withStone(test, size, end, stone), size, end, step, stone),
-        winLength,
-        stone,
-      ),
+      runWins(rule, runThrough(withStone(test, size, end, stone), size, end, step, stone), winLength, stone),
     );
     if (!straight) continue;
 

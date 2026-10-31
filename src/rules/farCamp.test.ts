@@ -37,7 +37,10 @@ describe("the camp a colour is filling", () => {
       if (!racesForCamp(VARIANT_SPECS[variant])) continue;
       for (const size of boardSizesFor(variant)) {
         for (const stone of [STONES.black, STONES.white]) {
-          expect(farCampSquares(size, stone).length, `${variant} on ${size}: ${stone} has no camp to race for`).toBeGreaterThan(0);
+          expect(
+            farCampSquares(size, stone).length,
+            `${variant} on ${size}: ${stone} has no camp to race for`,
+          ).toBeGreaterThan(0);
         }
       }
     }

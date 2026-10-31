@@ -32,7 +32,9 @@ describe("the command line", () => {
     expect(runCli(["board", "renju", "--size", "9"]).out).toBe(text);
     expect(runCli(["board", "Renju", "--size", "9"]).out).toBe(text);
     const withStones = createGame({ variant: "reversi", seed: 0 });
-    expect((boardText(withStones).match(/[XO]/g) ?? []).length).toBe(withStones.board.filter((cell) => cell === "black" || cell === "white").length);
+    expect((boardText(withStones).match(/[XO]/g) ?? []).length).toBe(
+      withStones.board.filter((cell) => cell === "black" || cell === "white").length,
+    );
   });
 
   it("plays the same game for the same seed, and says a fresh seed when it drew one", () => {
@@ -62,7 +64,9 @@ describe("the command line", () => {
     record.moves[1] = { ...record.moves[0] };
     expect(runCli(["replay", "x"], { readFile: () => JSON.stringify(record) })).toMatchObject({ code: 1, out: "" });
     expect(runCli(["replay", "--stdin"], { stdin: "not json" }).code).toBe(1);
-    expect(runCli(["replay", "--stdin"], { stdin: JSON.stringify({ settings: { variant: "chess" }, moves: [] }) }).code).toBe(1);
+    expect(
+      runCli(["replay", "--stdin"], { stdin: JSON.stringify({ settings: { variant: "chess" }, moves: [] }) }).code,
+    ).toBe(1);
     expect(runCli(["replay", "x"], { readFile: () => null }).code).toBe(1);
     expect(runCli(["replay"]).code).toBe(2);
   });
@@ -71,7 +75,9 @@ describe("the command line", () => {
     const data = JSON.parse(runCli(["simulate", "reversi", "--games", "20", "--seed", "1", "--json"]).out);
     expect(data.black + data.white + data.drawn + data.open).toBe(20);
     expect(data.longest).toBeGreaterThan(0);
-    expect(runCli(["simulate", "reversi", "--games", "20", "--seed", "1"]).out).toMatch(/^reversi, 20 random games on 8 by 8 from seed 1: Black won \d+, White won \d+/);
+    expect(runCli(["simulate", "reversi", "--games", "20", "--seed", "1"]).out).toMatch(
+      /^reversi, 20 random games on 8 by 8 from seed 1: Black won \d+, White won \d+/,
+    );
   });
 
   it("refuses what is wrong, with exit code 2, and says so in the language asked for", () => {
@@ -91,6 +97,8 @@ describe("the command line", () => {
     expect(cliLanguage(undefined, { LC_ALL: "ja_JP.UTF-8", LANG: "en_US" })).toBe("ja");
     expect(cliLanguage(undefined, { LANG: "C" }, "ja-JP")).toBe("ja");
     expect(cliLanguage(undefined, {})).toBe("en");
-    expect(runCli(["play", "renju", "--size", "9", "--seed", "7", "--lang", "ja"]).out).toMatch(/^renju 9×9、シード 7: \d+手。/);
+    expect(runCli(["play", "renju", "--size", "9", "--seed", "7", "--lang", "ja"]).out).toMatch(
+      /^renju 9×9、シード 7: \d+手。/,
+    );
   });
 });

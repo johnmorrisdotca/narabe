@@ -366,15 +366,7 @@ export type RuleVariant =
  * console.log(value);
  * ```
  */
-export type OpeningRule =
-  | "free"
-  | "pro"
-  | "longPro"
-  | "swap"
-  | "swap2"
-  | "rif"
-  | "sakata"
-  | "tarannikov";
+export type OpeningRule = "free" | "pro" | "longPro" | "swap" | "swap2" | "rif" | "sakata" | "tarannikov";
 
 /**
  * How a won game was won. Null while nobody has. `trap` is the loser's doing:
@@ -390,7 +382,19 @@ export type OpeningRule =
  * console.log(value);
  * ```
  */
-export type WinReason = "line" | "captures" | "time" | "resign" | "trap" | "square" | "full" | "count" | "camp" | "connection" | "blocked" | "territory";
+export type WinReason =
+  | "line"
+  | "captures"
+  | "time"
+  | "resign"
+  | "trap"
+  | "square"
+  | "full"
+  | "count"
+  | "camp"
+  | "connection"
+  | "blocked"
+  | "territory";
 
 /**
  * Where a swap-style opening stands. `placing` and `extending` are stretches

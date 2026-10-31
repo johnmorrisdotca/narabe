@@ -32,12 +32,7 @@ function isFlipping(variant: string): boolean {
 /** The four centre squares of an even board, by hand. */
 function centreByHand(size: number): number[] {
   const half = size / 2;
-  return [
-    (half - 1) * size + half - 1,
-    (half - 1) * size + half,
-    half * size + half - 1,
-    half * size + half,
-  ];
+  return [(half - 1) * size + half - 1, (half - 1) * size + half, half * size + half - 1, half * size + half];
 }
 
 /**
@@ -56,8 +51,7 @@ function checkFlipMove(before: GameState, after: GameState, played: Point, where
   expect(after.board[playedIndex], `${where}: mover's disc missing`).toBe(mover);
 
   const laying =
-    after.settings.variant === "classicReversi" &&
-    centreByHand(size).some((index) => before.board[index] === null);
+    after.settings.variant === "classicReversi" && centreByHand(size).some((index) => before.board[index] === null);
   const directions = flipDirectionsByHand(after.settings.variant);
   const expected = laying ? [] : flipsByHand(before.board, size, mover, played, directions);
   if (laying) {
@@ -85,8 +79,7 @@ function checkFlipMove(before: GameState, after: GameState, played: Point, where
   const opponentCan = canFlipAnywhereByHand(after.board, size, otherStone(mover), directions);
   const moverCan = canFlipAnywhereByHand(after.board, size, mover, directions);
   const stillLaying =
-    after.settings.variant === "classicReversi" &&
-    centreByHand(size).some((index) => after.board[index] === null);
+    after.settings.variant === "classicReversi" && centreByHand(size).some((index) => after.board[index] === null);
   /*
    * A game given a length may be drawn with moves still available, which is
    * the one thing that overrides "somebody can move, so play continues".

@@ -188,9 +188,7 @@ export function bruteForceWinner(board: Cell[], settings: GameSettings): Stone |
     // Columns fold on a cylinder and a torus; rows only on a torus.
     const c = wrap === "none" ? col : fold(col);
     const r = wrap === "both" ? fold(row) : row;
-    return r < 0 || r >= size || c < 0 || c >= size
-      ? "edge"
-      : board[indexOf(size, { row: r, col: c })];
+    return r < 0 || r >= size || c < 0 || c >= size ? "edge" : board[indexOf(size, { row: r, col: c })];
   };
   /*
    * Where a step lands after passing through a wormhole mouth: the cell past
@@ -212,45 +210,35 @@ export function bruteForceWinner(board: Cell[], settings: GameSettings): Stone |
       // A hotspot can start a run for either colour.
       const colours: Stone[] = isStone(cell) ? [cell] : ["black", "white"];
 
-      for (const stone of colours) for (const step of scanDirections) {
-        /*
-         * On a plain board, only measure from the start of a run so each run
-         * is counted once. Where edges join there may be no start at all — a
-         * run can circle the board — so every cell is a starting point and a
-         * run is simply measured forwards. That reaches the same answer for
-         * "is there a winning run", which is all this is asked, and it is the
-         * honest way to say "a wrapped run has no beginning".
-         */
-        if (wrap === "none" && matches(at(row - step.row, col - step.col), stone)) continue;
+      for (const stone of colours)
+        for (const step of scanDirections) {
+          /*
+           * On a plain board, only measure from the start of a run so each run
+           * is counted once. Where edges join there may be no start at all — a
+           * run can circle the board — so every cell is a starting point and a
+           * run is simply measured forwards. That reaches the same answer for
+           * "is there a winning run", which is all this is asked, and it is the
+           * honest way to say "a wrapped run has no beginning".
+           */
+          if (wrap === "none" && matches(at(row - step.row, col - step.col), stone)) continue;
 
-        let length = 0;
-        let [r, c] = [row, col];
-        while (matches(at(r, c), stone) && length < size) {
-          length += 1;
-          [r, c] = through(r + step.row, c + step.col, step);
+          let length = 0;
+          let [r, c] = [row, col];
+          while (matches(at(r, c), stone) && length < size) {
+            length += 1;
+            [r, c] = through(r + step.row, c + step.col, step);
+          }
+
+          const [br, bc] = through(row - step.row, col - step.col, { row: -step.row, col: -step.col });
+          const ends = [at(br, bc), at(r, c)];
+          // Empty and the edge both leave a line open; a stone or obstacle seals it.
+          const blockedEnds = ends.filter((end) => end !== null && end !== "edge").length;
+
+          const winLength = rulesFor(settings, stone).winLength;
+          if (runWinsIndependently(settings.variant, stone, length, blockedEnds, winLength, settings.handicap)) {
+            return stone;
+          }
         }
-
-        const [br, bc] = through(row - step.row, col - step.col, { row: -step.row, col: -step.col });
-        const ends = [at(br, bc), at(r, c)];
-        // Empty and the edge both leave a line open; a stone or obstacle seals it.
-        const blockedEnds = ends.filter(
-          (end) => end !== null && end !== "edge",
-        ).length;
-
-        const winLength = rulesFor(settings, stone).winLength;
-        if (
-          runWinsIndependently(
-            settings.variant,
-            stone,
-            length,
-            blockedEnds,
-            winLength,
-            settings.handicap,
-          )
-        ) {
-          return stone;
-        }
-      }
     }
   }
   return null;
@@ -281,12 +269,24 @@ export function longestRunThrough(board: Cell[], size: number, point: Point, sto
  * here.
  */
 const EIGHT: readonly [number, number][] = [
-  [-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1],
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
 ];
 
 /** The honeycomb's six, by hand: the four orthogonal steps and the two along the lattice's slant. */
 const SIX: readonly [number, number][] = [
-  [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
 ];
 
 export function flipsByHand(

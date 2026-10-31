@@ -23,7 +23,11 @@ describe("halma", () => {
   });
 
   it("keeps the camps as mirror images in the two corners, on every board", () => {
-    for (const [size, pieces] of [[8, 10], [10, 13], [16, 19]] as const) {
+    for (const [size, pieces] of [
+      [8, 10],
+      [10, 13],
+      [16, 19],
+    ] as const) {
       const black = campSquares(size, STONES.black);
       const white = campSquares(size, STONES.white);
       expect(black).toHaveLength(pieces);

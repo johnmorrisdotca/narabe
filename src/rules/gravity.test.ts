@@ -1,14 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { cellAt, createGame, isLegalMove, legalPoints, playMove } from "../engine.ts";
 import { replayMoves, undoMove } from "./record.ts";
-import {
-  BLOCKED,
-  GAME_STATUS,
-  HOT,
-  RULE_VARIANTS,
-  STONES,
-  WIN_REASONS,
-} from "../constants.ts";
+import { BLOCKED, GAME_STATUS, HOT, RULE_VARIANTS, STONES, WIN_REASONS } from "../constants.ts";
 import { randomSquares } from "../obstacles.ts";
 import { fromDiagram } from "../test-support.ts";
 import type { GameState, Point } from "../types.ts";
@@ -289,7 +282,13 @@ describe("edge drop", () => {
 
   it("wins with four along an edge", () => {
     const game = play(createGame({ variant: RULE_VARIANTS.edgeDrop, seed: 1 }), [
-      p(0, 0), p(6, 0), p(0, 1), p(6, 1), p(0, 2), p(6, 2), p(0, 3),
+      p(0, 0),
+      p(6, 0),
+      p(0, 1),
+      p(6, 1),
+      p(0, 2),
+      p(6, 2),
+      p(0, 3),
     ]);
     expect(game.winner).toBe(STONES.black);
   });
