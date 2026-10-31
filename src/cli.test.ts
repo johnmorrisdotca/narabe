@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { boardText, cliLanguage, runCli } from "./cli.ts";
-import { RULE_VARIANT_LIST, boardSizesFor } from "./constants.ts";
+import { boardSizesFor, RULE_VARIANT_LIST } from "./constants.ts";
 import { createGame } from "./engine.ts";
 import { NARABE_VERSION } from "./version.ts";
 

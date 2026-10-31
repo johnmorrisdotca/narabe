@@ -1,12 +1,4 @@
-import { createGame } from "./creation.ts";
-import { applyOpeningChoice } from "./opening.ts";
-import { restoreBottomRow, twistBoard } from "./mechanics.ts";
-import { rotateQuadrant } from "./twist.ts";
-import { indexOf, otherStone, samePoint } from "./board.ts";
-import { stonesIn } from "./captures.ts";
-import { undoFlip } from "./flips.ts";
 import { GAME_STATUS, MOVE_KINDS, OPENING_STAGES, STONES, VARIANT_SPECS } from "../constants.ts";
-import type { GameState, MoveInput, OpeningChoice, Point, ReplayFacts } from "../types.ts";
 import {
   canForfeit,
   emptyPoints,
@@ -18,8 +10,16 @@ import {
   placePiece,
   playMove,
 } from "../engine.ts";
-import { leavesNoStone } from "./stoneless.ts";
+import type { GameState, MoveInput, OpeningChoice, Point, ReplayFacts } from "../types.ts";
+import { indexOf, otherStone, samePoint } from "./board.ts";
+import { stonesIn } from "./captures.ts";
+import { createGame } from "./creation.ts";
+import { undoFlip } from "./flips.ts";
+import { restoreBottomRow, twistBoard } from "./mechanics.ts";
+import { applyOpeningChoice } from "./opening.ts";
 import { liftFallenRocks } from "./rockfall.ts";
+import { leavesNoStone } from "./stoneless.ts";
+import { rotateQuadrant } from "./twist.ts";
 
 /** A record nothing says ran a clock: a forfeit on it is refused. */
 const NO_CLOCK: ReplayFacts = { clocked: false };

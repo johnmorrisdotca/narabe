@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-
+import { GAME_STATUS, MOVE_KINDS, RULE_VARIANTS, STONES } from "../constants.ts";
 import {
   canForfeit,
   canPass,
@@ -10,7 +10,6 @@ import {
   passTurn,
   playMove,
 } from "../engine.ts";
-import { GAME_STATUS, MOVE_KINDS, RULE_VARIANTS, STONES } from "../constants.ts";
 import type { GameSettings, GameState, MoveInput, Point } from "../types.ts";
 import { lastMove, replayMoves, undoMove } from "./record.ts";
 

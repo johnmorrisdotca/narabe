@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { endsOnItsOwn, longestPossibleGame, noBoundReason } from "./length.ts";
 import { DEFAULT_SETTINGS, RULE_VARIANT_LIST, VARIANT_SPECS } from "./constants.ts";
+import { endsOnItsOwn, longestPossibleGame, noBoundReason } from "./length.ts";
 import type { GameSettings } from "./types.ts";
 
 /**

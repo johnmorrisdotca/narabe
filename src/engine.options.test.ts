@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { BLOCKED, FIRST_PLAYERS, OBSTACLE_LAYOUTS, RULE_VARIANTS, SEATS, STONES } from "./constants.ts";
 import {
   canSwapSeats,
   cellAt,
@@ -10,9 +11,8 @@ import {
   swapSeats,
   winOnTime,
 } from "./engine.ts";
-import { canSkip, canUndo, skipMove, skipTarget, undoMove } from "./rules/record.ts";
-import { BLOCKED, FIRST_PLAYERS, OBSTACLE_LAYOUTS, RULE_VARIANTS, SEATS, STONES } from "./constants.ts";
 import { obstaclePoints, tengen } from "./obstacles.ts";
+import { canSkip, canUndo, skipMove, skipTarget, undoMove } from "./rules/record.ts";
 import type { Point } from "./types.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });

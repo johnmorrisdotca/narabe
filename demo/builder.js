@@ -1,9 +1,10 @@
-import { RULE_VARIANT_LIST, ALL_BOARD_SIZES } from "./dist/index.js";
+import { NARABE_DRAW_OPTION_KEYS, NARABE_EMBED_OPTION_KEYS, NarabeBoard, parseEmbedMoves } from "./dist/element.js";
+import { ALL_BOARD_SIZES, RULE_VARIANT_LIST } from "./dist/index.js";
 import { NARABE_VERSION } from "./dist/version.js";
-import { NarabeBoard, NARABE_EMBED_OPTION_KEYS, NARABE_DRAW_OPTION_KEYS, parseEmbedMoves } from "./dist/element.js";
 import { GAMES } from "./games.js";
 import "./dist/element-define.js";
-import { familyEmbedBuilder, FAMILY_EMBED_BUILDER_WORDS } from "./family-embed-builder.js";
+import { FAMILY_EMBED_BUILDER_WORDS, familyEmbedBuilder } from "./family-embed-builder.js";
+
 const words = {
   en: {
     ...FAMILY_EMBED_BUILDER_WORDS.en,
@@ -158,14 +159,14 @@ for (const name of ["state", "settings", "choices", "clocked", "draw", "onChange
   leftOut[`mount.${name}`] = "Structured host state, native engine/drawing options and callbacks belong to options.";
 let mounted;
 const page = globalThis.familyLanguage({
-    id: "narabe",
-    words,
-    onChange: () => {
-      docsLink();
-      mounted?.draw();
-    },
-  }),
-  heights = {};
+  id: "narabe",
+  words,
+  onChange: () => {
+    docsLink();
+    mounted?.draw();
+  },
+});
+const heights = {};
 const key = (settings) => JSON.stringify(settings);
 const builder = familyEmbedBuilder({
   id: "narabe",

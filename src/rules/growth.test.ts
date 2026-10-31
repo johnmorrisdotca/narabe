@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-
+import { STONES } from "../constants.ts";
+import { cellAt, createGame, playMove } from "../engine.ts";
+import { tengen } from "../obstacles.ts";
+import type { GameState, Point } from "../types.ts";
 import {
   canGrowBoard,
   canShrinkBoard,
@@ -9,10 +12,6 @@ import {
   previousBoardSize,
   shrinkBoard,
 } from "./growth.ts";
-import { cellAt, createGame, playMove } from "../engine.ts";
-import { STONES } from "../constants.ts";
-import { tengen } from "../obstacles.ts";
-import type { GameState, Point } from "../types.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
 

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { cellAt, playMove } from "../engine.ts";
-import { undoMove } from "./record.ts";
 import { GAME_STATUS, RULE_VARIANTS, STONES, WIN_REASONS } from "../constants.ts";
+import { cellAt, playMove } from "../engine.ts";
 import { fromDiagram, show } from "../test-support.ts";
 import type { Point } from "../types.ts";
 import { capturesFrom } from "./captures.ts";
+import { undoMove } from "./record.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
 

@@ -10,14 +10,15 @@
  * Deeper pieces (each rule module on its own) are reachable by path as well,
  * for example `@johnmorrisdotca/narabe/rules/go`.
  */
-export * from "./engine.ts";
+
 export * from "./constants.ts";
-export type * from "./types.ts";
+export * from "./engine.ts";
+export * from "./length.ts";
 export * from "./notation.ts";
 export * from "./replay.ts";
-export * from "./length.ts";
-export { canSkip, canUndo, lastMove, replayMoves, skipMove, skipTarget, undoMove } from "./rules/record.ts";
 export { turnChoices } from "./rules/choices.ts";
 export { endedWithNoMoves, passesOwed, turnPassedBy } from "./rules/forcedPass.ts";
 export { seededRandom } from "./rules/random.ts";
+export { canSkip, canUndo, lastMove, replayMoves, skipMove, skipTarget, undoMove } from "./rules/record.ts";
 export { leavesNoStone, stonelessWord } from "./rules/stoneless.ts";
+export type * from "./types.ts";

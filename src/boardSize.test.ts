@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { BOARD_SIZES, RULE_VARIANT_LIST, VARIANT_SPECS, sizeForVariant } from "./constants.ts";
+import { BOARD_SIZES, RULE_VARIANT_LIST, sizeForVariant, VARIANT_SPECS } from "./constants.ts";
 import { createGame } from "./engine.ts";
 
 /**

@@ -1,8 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, movePiece, pieceMoves } from "../engine.ts";
-import { undoMove } from "./record.ts";
 import { GAME_STATUS, STONES, WIN_REASONS } from "../constants.ts";
+import { createGame, movePiece, pieceMoves } from "../engine.ts";
 import type { GameState } from "../types.ts";
 import {
   applyCheckersMove,
@@ -12,6 +10,7 @@ import {
   isDarkSquare,
   isKingAt,
 } from "./checkers.ts";
+import { undoMove } from "./record.ts";
 
 const p = (row: number, col: number) => ({ row, col });
 

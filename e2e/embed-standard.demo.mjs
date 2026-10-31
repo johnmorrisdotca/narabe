@@ -2,16 +2,17 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site"),
-  moves = [
-    { row: 7, col: 7 },
-    { row: 7, col: 8 },
-    { row: 8, col: 7 },
-  ];
+
+const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
+const moves = [
+  { row: 7, col: 7 },
+  { row: 7, col: 8 },
+  { row: 8, col: 7 },
+];
 async function serve(page) {
   await page.route("http://narabe.test/**", (route) => {
-    const { pathname } = new URL(route.request().url()),
-      file = join(site, pathname.endsWith("/") ? `${pathname}index.html` : pathname);
+    const { pathname } = new URL(route.request().url());
+    const file = join(site, pathname.endsWith("/") ? `${pathname}index.html` : pathname);
     if (!existsSync(file)) return route.fulfill({ status: 404, body: "" });
     return route.fulfill({
       body: readFileSync(file),
@@ -41,9 +42,9 @@ test("the viewer's positions match the engine and every native game draws", asyn
   await expect(page.locator("svg")).toBeVisible();
   const result = await page.locator("narabe-board").evaluate(async (element) => {
     const { createGame, replayMoves, RULE_VARIANT_LIST } = await import("../dist/index.js");
-    const moves = JSON.parse(element.moves),
-      wanted = replayMoves(createGame({ variant: "freestyle", seed: 0 }), moves)[2],
-      match = JSON.stringify(element.state) === JSON.stringify(wanted);
+    const moves = JSON.parse(element.moves);
+    const wanted = replayMoves(createGame({ variant: "freestyle", seed: 0 }), moves)[2];
+    const match = JSON.stringify(element.state) === JSON.stringify(wanted);
     element.moves = null;
     let count = 0;
     for (const game of RULE_VARIANT_LIST) {
@@ -82,8 +83,8 @@ test("custom tags, properties, host state and composed events work in a shadow r
     const { createGame } = await import("../dist/index.js");
     defineBoard("article-position");
     defineBoard("article-position");
-    const host = document.createElement("div"),
-      shadow = host.attachShadow({ mode: "open" });
+    const host = document.createElement("div");
+    const shadow = host.attachShadow({ mode: "open" });
     document.body.append(host);
     const board = document.createElement("article-position");
     shadow.append(board);

@@ -1,11 +1,10 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, isLegalMove, legalPoints, playMove } from "../engine.ts";
 import { BLOCKED, GAME_STATUS, HOT, MOVE_KINDS, RULE_VARIANTS, STONES, VARIANT_SPECS } from "../constants.ts";
+import { createGame, isLegalMove, legalPoints, playMove } from "../engine.ts";
 import type { GameState, Point, RuleVariant } from "../types.ts";
 import { replayMoves, undoMove } from "./record.ts";
-import { rockLayoutFor } from "./rocks.ts";
 import { stonesPlayed } from "./rockfall.ts";
+import { rockLayoutFor } from "./rocks.ts";
 
 /**
  * The two rock games the obstacle playtest named: Scattered Rocks, whose

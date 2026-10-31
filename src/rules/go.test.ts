@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, passTurn, playMove } from "../engine.ts";
 import { GAME_STATUS, STONES, WIN_REASONS } from "../constants.ts";
+import { createGame, passTurn, playMove } from "../engine.ts";
 import type { GameState } from "../types.ts";
 import { areaWinner, groupAt, KOMI, scoreArea, walledIn } from "./go.ts";
 

@@ -10,8 +10,8 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { createGame, movePiece, passTurn, placePiece, playMove, twistBoard } from "./engine.ts";
-import { canUndo, undoMove } from "./rules/record.ts";
 import { turnChoices } from "./rules/choices.ts";
+import { canUndo, undoMove } from "./rules/record.ts";
 import type { GameSettings, GameState, MoveKind, PieceCell, Point, Stone, TurnChoices } from "./types.ts";
 
 /** A React game state and its native move, replay and reset actions.

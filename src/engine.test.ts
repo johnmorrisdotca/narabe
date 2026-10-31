@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { GAME_STATUS, RULE_VARIANTS, STONES } from "./constants.ts";
 import { cellAt, createGame, findWinningLine, isLegalMove, playMove } from "./engine.ts";
 import { canUndo, lastMove, undoMove } from "./rules/record.ts";
-import { GAME_STATUS, RULE_VARIANTS, STONES } from "./constants.ts";
 import type { GameState, Point } from "./types.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
@@ -21,7 +21,9 @@ function position(blackPoints: Point[], whitePoints: Point[]): GameState {
   const filler = Array.from({ length: blackPoints.length }, (_, i) => p(size - 1, i));
   const whites = [...whitePoints, ...filler];
   const sequence: Point[] = [];
-  blackPoints.forEach((point, i) => sequence.push(point, whites[i]));
+  blackPoints.forEach((point, i) => {
+    sequence.push(point, whites[i]);
+  });
   return play(createGame(), sequence);
 }
 

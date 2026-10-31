@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, emptyPoints, forfeitOnRecord, isLegalMove, movePiece, pieceMoves, playMove } from "../engine.ts";
 import { GAME_STATUS, MOVE_KINDS, STONES } from "../constants.ts";
+import { createGame, emptyPoints, forfeitOnRecord, isLegalMove, movePiece, pieceMoves, playMove } from "../engine.ts";
 import type { GameState, MoveInput, Point } from "../types.ts";
 import { replayMoves } from "./record.ts";
 

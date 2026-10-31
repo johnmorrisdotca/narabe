@@ -1,7 +1,7 @@
 // The documents that are made from the source, or that quote it, checked against it.
 // Plain JavaScript, so that reading files needs no Node types. `pnpm docs:make` rewrites what is made.
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import process from "node:process";
 
 import { describe, expect, it } from "vitest";
@@ -249,7 +249,7 @@ describe("the README's command line", () => {
 });
 
 describe("docs/strings-ja.md", () => {
-  const escape = (text) => text.replaceAll("|", "\\|").replaceAll("\n", "<br>");
+  const escapeCell = (text) => text.replaceAll("|", "\\|").replaceAll("\n", "<br>");
   const keys = Object.keys(CLI_STRINGS.en).filter((key) => key !== "usage");
   const lines = [
     "# Narabe's command line, in English and Japanese",
@@ -262,7 +262,7 @@ describe("docs/strings-ja.md", () => {
     "",
     "| Name | English | Japanese |",
     "| --- | --- | --- |",
-    ...keys.map((key) => `| \`${key}\` | ${escape(CLI_STRINGS.en[key])} | ${escape(CLI_STRINGS.ja[key])} |`),
+    ...keys.map((key) => `| \`${key}\` | ${escapeCell(CLI_STRINGS.en[key])} | ${escapeCell(CLI_STRINGS.ja[key])} |`),
     "",
     "## The help",
     "",

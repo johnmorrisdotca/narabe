@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, movePiece } from "./engine.ts";
 import { STONES } from "./constants.ts";
-import type { GameState } from "./types.ts";
+import { createGame, movePiece } from "./engine.ts";
 import { capturePaths, columnLetter, pointName, rowNumber, slideWord } from "./notation.ts";
+import type { GameState } from "./types.ts";
 
 describe("notation", () => {
   it("skips the letter I", () => {

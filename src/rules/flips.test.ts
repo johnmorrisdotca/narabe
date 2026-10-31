@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, discCount, isLegalMove, legalPoints, playMove } from "../engine.ts";
-import { undoMove } from "./record.ts";
 import { GAME_STATUS, STONES, WIN_REASONS } from "../constants.ts";
+import { createGame, discCount, isLegalMove, legalPoints, playMove } from "../engine.ts";
 import type { Cell, GameState } from "../types.ts";
+import { undoMove } from "./record.ts";
 
 const p = (row: number, col: number) => ({ row, col });
 

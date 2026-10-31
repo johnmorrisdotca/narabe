@@ -1,16 +1,16 @@
-import type { OpeningRule, PieceQueue, Stone } from "./types.ts";
 import type { RockSpec } from "./rules/rocks.types.ts";
 import type {
   BoardGrid,
   CheckersRules,
   ForbiddenPattern,
+  HeadStartTurns,
   LineRule,
   Placement,
-  HeadStartTurns,
   StartingDiscs,
   TraditionalHeadStart,
   WrapMode,
 } from "./spec.types.ts";
+import type { OpeningRule, PieceQueue, Stone } from "./types.ts";
 
 /*
  * The row a rule set is written as, on its own.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createGame } from "../engine.ts";
 import { STONES } from "../constants.ts";
+import { createGame } from "../engine.ts";
 import { fromDiagram, show } from "../test-support.ts";
 import type { Cell, Point } from "../types.ts";
 import { dropTarget, landingPoints } from "./drop.ts";

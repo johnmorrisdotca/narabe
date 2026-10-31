@@ -1,6 +1,6 @@
 import { GAME_STATUS, TURN_CHOICE_KINDS, VARIANT_SPECS } from "../constants.ts";
-import type { GameState, Point, TurnChoices } from "../types.ts";
 import { inMovePhase, legalPoints, pieceMoves, pointOf } from "../engine.ts";
+import type { GameState, Point, TurnChoices } from "../types.ts";
 import { checkersNarrowing } from "./checkers.ts";
 
 /**

@@ -1,4 +1,5 @@
 import { expect } from "vitest";
+import { GAME_STATUS, STONES } from "../constants.ts";
 import {
   canPass,
   createGame,
@@ -8,20 +9,16 @@ import {
   movePiece,
   mustPass,
   passTurn,
-  piecePlacements,
   pieceMoves,
+  piecePlacements,
   placePiece,
   playMove,
   singlesLeft,
   twistBoard,
 } from "../engine.ts";
-import { GAME_STATUS, STONES } from "../constants.ts";
-import type { GameSettings, GameState, Point } from "../types.ts";
 import { canChooseColour, canExtendOpening, chooseColour, extendOpening } from "../rules/opening.ts";
+import type { GameSettings, GameState, Point } from "../types.ts";
 import { checkCheckersMove, isCheckers } from "./checkers.ts";
-import { checkStarMove, isChineseCheckers } from "./chineseCheckers.ts";
-import { checkGoPass, isGo } from "./go.ts";
-import { checkHeadStartPass, checkHeadStartStart, headStartDueByHand } from "./headStart.ts";
 import {
   bruteForceWinner,
   checkMove,
@@ -34,6 +31,9 @@ import {
   runWinsIndependently,
   SLIDE_CAP,
 } from "./checks.ts";
+import { checkStarMove, isChineseCheckers } from "./chineseCheckers.ts";
+import { checkGoPass, isGo } from "./go.ts";
+import { checkHeadStartPass, checkHeadStartStart, headStartDueByHand } from "./headStart.ts";
 
 /**
  * The whole-game simulation harness, shared by the simulation specs.
@@ -310,4 +310,4 @@ function quadrantSizeOf(state: GameState): number | null {
   return null;
 }
 
-export { rng, bruteForceWinner, runWinsIndependently, checkMove, playOut };
+export { bruteForceWinner, checkMove, playOut, rng, runWinsIndependently };

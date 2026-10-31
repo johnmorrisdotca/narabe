@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { FIRST_PLAYERS, OPENING_RULES, OPENING_STAGES, RULE_VARIANTS, SEATS, STONES } from "../constants.ts";
 import {
   canChooseColour,
   canExtendOpening,
@@ -11,10 +12,9 @@ import {
   resolveOpener,
   seatToPlay,
 } from "../engine.ts";
+import type { GameState, Point } from "../types.ts";
 import { openingDecidesColours } from "./opening.ts";
 import { replayMoves } from "./record.ts";
-import { FIRST_PLAYERS, OPENING_RULES, OPENING_STAGES, RULE_VARIANTS, SEATS, STONES } from "../constants.ts";
-import type { GameState, Point } from "../types.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
 const centre = p(7, 7);

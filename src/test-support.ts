@@ -1,5 +1,5 @@
-import { createGame, indexOf, otherStone } from "./engine.ts";
 import { BLOCKED, STONES } from "./constants.ts";
+import { createGame, indexOf, otherStone } from "./engine.ts";
 import type { Cell, GameSettings, GameState, Move, Point, Stone } from "./types.ts";
 
 /** Diagram characters, chosen to stay legible in a fixed-width editor. */

@@ -1,12 +1,11 @@
 import { describe, expect, it } from "vitest";
-
+import { GAME_STATUS, RULE_VARIANTS, VARIANT_SPECS } from "../constants.ts";
 import { createGame, emptyPoints, forbiddenPoints, playMove, pointOf } from "../engine.ts";
+import { rulesFor } from "../rules/handicap.ts";
 import { replayMoves } from "../rules/record.ts";
 import type { Stone } from "../types.ts";
-import { GAME_STATUS, RULE_VARIANTS, VARIANT_SPECS } from "../constants.ts";
-import { rulesFor } from "../rules/handicap.ts";
-import { bruteForceWinner, playOut } from "./support.ts";
 import { isCheckers } from "./checkers.ts";
+import { bruteForceWinner, playOut } from "./support.ts";
 
 describe("simulated games", () => {
   const GAMES = 120;

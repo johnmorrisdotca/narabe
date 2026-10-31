@@ -1,19 +1,17 @@
 import { describe, expect, it } from "vitest";
-
+import { boardSizesFor, GAME_STATUS, RULE_VARIANTS, STONES, VARIANT_SPECS } from "../constants.ts";
+import { createGame, movePiece, pieceMoves } from "../engine.ts";
+import type { GameState, Move, Point, RuleVariant } from "../types.ts";
+import { STAR_RADIUS, starCampSquares } from "./chineseCheckers.ts";
 import {
-  NO_PROGRESS_RULES,
-  PROGRESS_MEASURES,
   canStall,
   distanceHome,
+  NO_PROGRESS_RULES,
+  PROGRESS_MEASURES,
   pliesWithoutProgress,
   stalled,
   stalledDrawOf,
 } from "./noProgress.ts";
-import { STAR_RADIUS, starCampSquares } from "./chineseCheckers.ts";
-import { RULE_VARIANTS, STONES, VARIANT_SPECS, boardSizesFor } from "../constants.ts";
-import { GAME_STATUS } from "../constants.ts";
-import { createGame, movePiece, pieceMoves } from "../engine.ts";
-import type { GameState, Move, Point, RuleVariant } from "../types.ts";
 
 /**
  * A game nobody is getting anywhere in is a draw.

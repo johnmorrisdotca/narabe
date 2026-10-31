@@ -1,6 +1,6 @@
-import { farCampSquares } from "./farCamp.ts";
 import { GAME_STATUS, RULE_VARIANTS, VARIANT_SPECS } from "../constants.ts";
 import type { GameState, Move, Point, RuleVariant, Stone } from "../types.ts";
+import { farCampSquares } from "./farCamp.ts";
 
 /**
  * A game nobody is getting anywhere in is a draw.

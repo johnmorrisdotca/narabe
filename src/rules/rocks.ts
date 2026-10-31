@@ -1,8 +1,8 @@
 import { BLOCKED, HOT, VARIANT_SPECS } from "../constants.ts";
 import type { Cell, GameSettings, Point, VariantSpec } from "../types.ts";
+import { drawDistinct, seededRandom } from "./random.ts";
 import { ROCK_PLACEMENTS } from "./rocks.constants.ts";
 import type { RockLayout, RockRules } from "./rocks.types.ts";
-import { drawDistinct, seededRandom } from "./random.ts";
 
 /**
  * The obstacle games' furniture as rules to tune.

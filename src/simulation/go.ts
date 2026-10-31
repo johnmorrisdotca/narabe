@@ -1,9 +1,9 @@
-import { handicapStonesByHand } from "./headStart.ts";
 import { expect } from "vitest";
+import { GAME_STATUS, MOVE_KINDS } from "../constants.ts";
 import { cellAt, otherStone } from "../engine.ts";
 import { undoMove } from "../rules/record.ts";
-import { GAME_STATUS, MOVE_KINDS } from "../constants.ts";
 import type { Cell, GameState, Point, Stone } from "../types.ts";
+import { handicapStonesByHand } from "./headStart.ts";
 
 /**
  * Go, restated by hand: liberties, capture, suicide, the ko point and the

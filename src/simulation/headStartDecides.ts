@@ -1,3 +1,4 @@
+import { GAME_STATUS, LINE_RULES, MOVE_KINDS, PLACEMENTS, STONES, VARIANT_SPECS } from "../constants.ts";
 import {
   createGame,
   inMovePhase,
@@ -10,11 +11,10 @@ import {
   singlesLeft,
   twistBoard,
 } from "../engine.ts";
-import { GAME_STATUS, LINE_RULES, MOVE_KINDS, PLACEMENTS, STONES, VARIANT_SPECS } from "../constants.ts";
-import type { GameState, Point, RuleVariant, Stone } from "../types.ts";
 import { otherStone } from "../rules/board.ts";
 import { passesOwed } from "../rules/forcedPass.ts";
 import { headStartTurnsGiven } from "../rules/headStart.ts";
+import type { GameState, Point, RuleVariant, Stone } from "../types.ts";
 import { cannotDecide, hasBegun, inOpenRuns, narrowsToOpenRuns } from "./headStartBounds.ts";
 
 /*

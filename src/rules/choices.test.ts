@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, movePiece } from "../engine.ts";
 import { GAME_STATUS, MOVE_NARROWINGS, RULE_VARIANTS, STONES, TURN_CHOICE_KINDS } from "../constants.ts";
+import { createGame, movePiece } from "../engine.ts";
 import type { GameState, Point, RuleVariant, Stone } from "../types.ts";
 import { turnChoices } from "./choices.ts";
 

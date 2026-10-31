@@ -1,12 +1,15 @@
 import { settleDraw } from "./rules/drawLimit.ts";
+
 export { canBeDrawn, drawnByLength, movesBeforeDraw } from "./rules/drawLimit.ts";
-import { flipLegal, playFlip } from "./rules/flips.ts";
+
 import { GAME_STATUS, MOVE_KINDS, NO_POINT, PLACEMENTS, STONES, VARIANT_SPECS, WIN_REASONS } from "./constants.ts";
 import { indexOf, isOnBoard, otherStone, pointOf } from "./rules/board.ts";
 import { capturesFrom, removeStones, stonesIn } from "./rules/captures.ts";
+import { flipLegal, playFlip } from "./rules/flips.ts";
 import { forbiddenAt } from "./rules/forbidden.ts";
 import { areaWinner, goLegal, playGoMove } from "./rules/go.ts";
-import { applyOpeningChoice, canChooseColour, openingAfterMove, openingAllows } from "./rules/opening.ts";
+import { komiFor, owesHeadStart } from "./rules/headStart.ts";
+import { winningLineFor } from "./rules/lines.ts";
 import {
   blockedByGiveaway,
   clearBottomRow,
@@ -17,12 +20,11 @@ import {
   settleStone,
   won,
 } from "./rules/mechanics.ts";
+import { applyOpeningChoice, canChooseColour, openingAfterMove, openingAllows } from "./rules/opening.ts";
 import { footprintFits, isPieceInHand, piecePlacements, singlesUsedBy } from "./rules/queue.ts";
-import { winningLineFor } from "./rules/lines.ts";
 import { fallRocks } from "./rules/rockfall.ts";
-import { stonesLeftInTurn } from "./rules/turns.ts";
 import { forfeitTurn } from "./rules/seats.ts";
-import { komiFor, owesHeadStart } from "./rules/headStart.ts";
+import { stonesLeftInTurn } from "./rules/turns.ts";
 import type { Cell, ForbiddenPattern, GameState, Move, PieceCell, Point, Stone } from "./types.ts";
 
 /*
@@ -33,28 +35,18 @@ import type { Cell, ForbiddenPattern, GameState, Move, PieceCell, Point, Stone }
  */
 
 export { indexOf, isOnBoard, isStone, otherStone, pointOf } from "./rules/board.ts";
+export { campOf, campSize, campSquares, piecesHome } from "./rules/camps.ts";
+export { checkersHasCapture, isDarkSquare, isKingAt } from "./rules/checkers.ts";
+export { STAR_RADIUS, starCampOf, starCampSize, starPiecesHome, starSize } from "./rules/chineseCheckers.ts";
 export {
   availableOpenings,
   createGame,
   normaliseSettings,
   resolveOpener,
 } from "./rules/creation.ts";
-export {
-  canSwapSeats,
-  forfeitTurn,
-  resign,
-  seatOf,
-  seatToPlay,
-  swapSeats,
-  winOnTime,
-} from "./rules/seats.ts";
-export { findWinningLine } from "./rules/lines.ts";
-export { hasHandicap, rulesFor } from "./rules/handicap.ts";
-export { forbiddenAt, forbiddenPoints } from "./rules/forbidden.ts";
+export { dropTarget, landingPoints } from "./rules/drop.ts";
 export { centreSquares, discCount, flipsAt, hasFlipMove, inLayingPhase } from "./rules/flips.ts";
-export { campOf, campSize, campSquares, piecesHome } from "./rules/camps.ts";
-export { checkersHasCapture, isDarkSquare, isKingAt } from "./rules/checkers.ts";
-export { STAR_RADIUS, starCampOf, starCampSize, starPiecesHome, starSize } from "./rules/chineseCheckers.ts";
+export { forbiddenAt, forbiddenPoints } from "./rules/forbidden.ts";
 export { groupAt, KOMI, scoreArea } from "./rules/go.ts";
 export {
   canGrowBoard,
@@ -64,8 +56,8 @@ export {
   previousBoardSize,
   shrinkBoard,
 } from "./rules/growth.ts";
-export { dropTarget, landingPoints } from "./rules/drop.ts";
-export { quadrantCount, quadrantOrigin } from "./rules/twist.ts";
+export { hasHandicap, rulesFor } from "./rules/handicap.ts";
+export { findWinningLine } from "./rules/lines.ts";
 export {
   canTwist,
   inMovePhase,
@@ -75,20 +67,30 @@ export {
   twistBoard,
 } from "./rules/mechanics.ts";
 export {
-  footprintAt,
-  footprintFits,
-  orientCells,
-  orientations,
-  piecePlacements,
-  queuedPiece,
-  upcomingPieces,
-} from "./rules/queue.ts";
-export {
   canChooseColour,
   canExtendOpening,
   chooseColour,
   extendOpening,
 } from "./rules/opening.ts";
+export {
+  footprintAt,
+  footprintFits,
+  orientations,
+  orientCells,
+  piecePlacements,
+  queuedPiece,
+  upcomingPieces,
+} from "./rules/queue.ts";
+export {
+  canSwapSeats,
+  forfeitTurn,
+  resign,
+  seatOf,
+  seatToPlay,
+  swapSeats,
+  winOnTime,
+} from "./rules/seats.ts";
+export { quadrantCount, quadrantOrigin } from "./rules/twist.ts";
 
 /** Read a cell from a valid zero-based board point; null means empty.
  *

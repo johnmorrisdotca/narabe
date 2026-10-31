@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  boardSizesFor,
   GAME_STATUS,
   NO_HANDICAP,
   NO_HEAD_START,
@@ -8,12 +9,11 @@ import {
   RULE_VARIANTS,
   STONES,
   VARIANT_SPECS,
-  boardSizesFor,
 } from "../constants.ts";
 import { createGame } from "../engine.ts";
+import { traditionalCounts } from "../rules/headStart.ts";
 import { replayMoves } from "../rules/record.ts";
 import type { Handicap, RuleVariant } from "../types.ts";
-import { traditionalCounts } from "../rules/headStart.ts";
 import { checkHeadStartRecord, checkHeadStartStart } from "./headStart.ts";
 import { playOut } from "./support.ts";
 

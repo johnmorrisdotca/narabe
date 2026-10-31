@@ -1,7 +1,7 @@
 import { expect } from "vitest";
+import { GAME_STATUS } from "../constants.ts";
 import { cellAt, otherStone } from "../engine.ts";
 import { undoMove } from "../rules/record.ts";
-import { GAME_STATUS } from "../constants.ts";
 import type { Cell, GameState, Point } from "../types.ts";
 
 /**

@@ -2,14 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   DEFAULT_SETTINGS,
-  DRAW_LIMITS,
-  VARIANT_SPECS,
   DRAW_LIMIT_LIST,
   DRAW_LIMIT_SHARE,
+  DRAW_LIMITS,
   GAME_STATUS,
   RULE_VARIANTS,
+  VARIANT_SPECS,
 } from "../constants.ts";
-import type { DrawLimit, GameSettings, GameState } from "../types.ts";
 import {
   createGame,
   emptyPoints,
@@ -24,6 +23,7 @@ import {
   playMove,
   twistBoard,
 } from "../engine.ts";
+import type { DrawLimit, GameSettings, GameState } from "../types.ts";
 import {
   bigEnoughForLength,
   canBeDrawn,

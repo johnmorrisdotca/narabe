@@ -1,14 +1,14 @@
 import { expect } from "vitest";
-import { checkFlipMove, isFlipping } from "./flips.ts";
-import { cellAt, forbiddenPoints, indexOf, isStone, otherStone } from "../engine.ts";
-import { undoMove } from "../rules/record.ts";
-import { rulesFor } from "../rules/handicap.ts";
-import { checkConnectionMove, isConnection } from "./connections.ts";
-import { checkGoMove, isGo } from "./go.ts";
-import { stonesPlacedThisTurn } from "../rules/turns.ts";
-import { bruteForceWinner, longestRunThrough, runWinsIndependently } from "./scan.ts";
 import { GAME_STATUS } from "../constants.ts";
+import { cellAt, forbiddenPoints, indexOf, isStone, otherStone } from "../engine.ts";
+import { rulesFor } from "../rules/handicap.ts";
+import { undoMove } from "../rules/record.ts";
+import { stonesPlacedThisTurn } from "../rules/turns.ts";
 import type { Cell, GameState, Point, Stone } from "../types.ts";
+import { checkConnectionMove, isConnection } from "./connections.ts";
+import { checkFlipMove, isFlipping } from "./flips.ts";
+import { checkGoMove, isGo } from "./go.ts";
+import { bruteForceWinner, longestRunThrough, runWinsIndependently } from "./scan.ts";
 
 /**
  * The invariants the simulator checks after every kind of move, and the
@@ -410,15 +410,15 @@ function checkPass(before: GameState, after: GameState, seed: number) {
 
 export {
   bruteForceWinner,
-  ranOutOfLength,
   checkMove,
   checkPass,
-  checkRaceMove,
-  isRace,
   checkPiece,
+  checkRaceMove,
   checkSlide,
   checkTwist,
+  isRace,
   longestRunThrough,
+  ranOutOfLength,
   runWinsIndependently,
   SLIDE_CAP,
 };

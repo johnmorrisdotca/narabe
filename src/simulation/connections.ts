@@ -1,10 +1,9 @@
 import { expect } from "vitest";
-
-import { cellAt } from "../engine.ts";
-import { undoMove } from "../rules/record.ts";
 import { GAME_STATUS } from "../constants.ts";
-import type { Cell, GameState, Point, Stone } from "../types.ts";
+import { cellAt } from "../engine.ts";
 import { otherStone } from "../rules/board.ts";
+import { undoMove } from "../rules/record.ts";
+import type { Cell, GameState, Point, Stone } from "../types.ts";
 
 /**
  * The connection game, restated by hand.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-
+import { GAME_STATUS, MOVE_KINDS, NO_HEAD_START, OPENING_RULES, RULE_VARIANTS, STONES } from "../constants.ts";
 import {
   cellAt,
   createGame,
@@ -13,15 +13,15 @@ import {
   stonesLeft,
   twistBoard,
 } from "../engine.ts";
-import { GAME_STATUS, MOVE_KINDS, NO_HEAD_START, OPENING_RULES, RULE_VARIANTS, STONES } from "../constants.ts";
 import type { GameState, HeadStart, Point, Stone } from "../types.ts";
 import { fixedOpener } from "./creation.ts";
 import { passesOwed } from "./forcedPass.ts";
+import { KOMI } from "./go.ts";
 import { handicapKind, hasHandicap } from "./handicap.ts";
 import {
-  HEAD_START_KOMI,
   cornerPoints,
   freeTurnsOffered,
+  HEAD_START_KOMI,
   handicapStonePoints,
   headStartTurnTaken,
   komiFor,
@@ -29,7 +29,6 @@ import {
   owesHeadStart,
   traditionalCounts,
 } from "./headStart.ts";
-import { KOMI } from "./go.ts";
 import { replayMoves, undoMove } from "./record.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });

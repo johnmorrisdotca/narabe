@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { forbiddenPoints, isLegalMove, playMove } from "../engine.ts";
 import { FORBIDDEN_PATTERNS, GAME_STATUS, RULE_VARIANTS, STONES } from "../constants.ts";
-import { fromDiagram, show, type DiagramOptions } from "../test-support.ts";
+import { forbiddenPoints, isLegalMove, playMove } from "../engine.ts";
+import { type DiagramOptions, fromDiagram, show } from "../test-support.ts";
 import type { Point, Stone } from "../types.ts";
 import { forbiddenAt } from "./forbidden.ts";
 

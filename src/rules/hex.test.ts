@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, playMove } from "../engine.ts";
 import { GAME_STATUS, STONES, WIN_REASONS } from "../constants.ts";
+import { createGame, playMove } from "../engine.ts";
 import type { Cell } from "../types.ts";
 import { hexConnection, hexNeighbours } from "./hex.ts";
 

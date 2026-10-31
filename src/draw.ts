@@ -1,5 +1,5 @@
 import { BLOCKED, GAME_STATUS, HOT, STAR_POINTS, STONES, VARIANT_SPECS, WORM } from "./constants.ts";
-import { STAR_RADIUS, campOf, forbiddenPoints, indexOf, isDarkSquare, pieceMoves, starCampOf } from "./engine.ts";
+import { campOf, forbiddenPoints, indexOf, isDarkSquare, pieceMoves, STAR_RADIUS, starCampOf } from "./engine.ts";
 import { turnChoices } from "./rules/choices.ts";
 import { lastMove } from "./rules/record.ts";
 import type { GameState, Point } from "./types.ts";

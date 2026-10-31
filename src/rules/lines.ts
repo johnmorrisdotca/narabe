@@ -1,4 +1,4 @@
-import { BLOCKED, HOT, LINE_RULES, VARIANT_SPECS, WORM, lineDirectionsFor } from "../constants.ts";
+import { BLOCKED, HOT, LINE_RULES, lineDirectionsFor, VARIANT_SPECS, WORM } from "../constants.ts";
 import { wormholeLinks } from "../obstacles.ts";
 import type { Cell, GameSettings, LineRule, Point, Stone, WrapMode } from "../types.ts";
 import { cellAtPoint, indexOf, isOnBoard, isStone, negate, stepFrom } from "./board.ts";
@@ -125,6 +125,7 @@ export function lineWorld(settings: GameSettings): LineWorld {
  */
 export function runWins(rule: LineRule, run: Run, winLength: number, stone: Stone): boolean {
   const length = run.cells.length;
+  // biome-ignore lint/nursery/useExhaustiveSwitchCases: LINE_RULES names every LineRule, so these three cases cover the union
   switch (rule) {
     case LINE_RULES.atLeast:
       return length >= winLength;

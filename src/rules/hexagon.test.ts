@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
+import { BLOCKED, boardSizesFor, defaultBoardFor, GAME_STATUS, STONES } from "../constants.ts";
 import { createGame, discCount, isLegalMove, legalPoints, playMove } from "../engine.ts";
-import { BLOCKED, GAME_STATUS, STONES } from "../constants.ts";
 import {
   hexagonCells,
   hexagonCorners,
@@ -11,7 +10,6 @@ import {
   honeycombStartingDiscs,
   inHexagon,
 } from "./hexagon.ts";
-import { boardSizesFor, defaultBoardFor } from "../constants.ts";
 
 const p = (row: number, col: number) => ({ row, col });
 const key = (point: { row: number; col: number }) => `${point.row},${point.col}`;

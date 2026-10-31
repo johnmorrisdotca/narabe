@@ -1,16 +1,16 @@
 import { ENGLISH_CHECKERS_RULES, MOVE_NARROWINGS, VARIANT_SPECS } from "../constants.ts";
 import type { Cell, CheckersRules, GameSettings, GameState, MoveNarrowing, Point, Stone } from "../types.ts";
 import { indexOf, isOnBoard, otherStone, samePoint } from "./board.ts";
+import type { CaptureGround, CheckersMoveResult, Jump } from "./checkers.types.ts";
 import {
-  DIAGONALS,
   afterLanding,
+  DIAGONALS,
   farRow,
   forwardDiagonals,
   jumpsFrom,
   takesMaximum,
   weighedJumps,
 } from "./checkersCaptures.ts";
-import type { CaptureGround, CheckersMoveResult, Jump } from "./checkers.types.ts";
 
 export type { CheckersMoveResult } from "./checkers.types.ts";
 

@@ -1,6 +1,6 @@
-import type { Cell, GameSettings, Handicap, Point, Stone } from "../types.ts";
 import { indexOf, isStone } from "../engine.ts";
 import { rulesFor } from "../rules/handicap.ts";
+import type { Cell, GameSettings, Handicap, Point, Stone } from "../types.ts";
 
 /**
  * A second, independent reading of the board for the simulator: a plain scan
@@ -109,6 +109,7 @@ export function runWinsIndependently(
     case "rockfall":
     case "ninuki":
     case "freestyle":
+      return length >= winLength;
     default:
       return length >= winLength;
   }

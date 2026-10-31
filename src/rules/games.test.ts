@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { GAME_STATUS, RULE_VARIANTS, STONES, WIN_REASONS } from "../constants.ts";
 import {
   canGrowBoard,
   canTwist,
@@ -13,10 +14,9 @@ import {
   resolvePlacement,
   twistBoard,
 } from "../engine.ts";
-import { replayMoves, undoMove } from "./record.ts";
-import { GAME_STATUS, RULE_VARIANTS, STONES, WIN_REASONS } from "../constants.ts";
 import { fromDiagram, show } from "../test-support.ts";
 import type { GameState, Point } from "../types.ts";
+import { replayMoves, undoMove } from "./record.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
 

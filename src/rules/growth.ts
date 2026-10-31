@@ -1,7 +1,6 @@
-import { BOARD_SIZES, GAME_STATUS, OBSTACLE_LAYOUTS } from "../constants.ts";
-import { VARIANT_SPECS } from "../constants.ts";
-import type { Cell, GameState, Move, Point } from "../types.ts";
+import { BOARD_SIZES, GAME_STATUS, OBSTACLE_LAYOUTS, VARIANT_SPECS } from "../constants.ts";
 import { emptyBoard } from "../obstacles.ts";
+import type { Cell, GameState, Move, Point } from "../types.ts";
 import { leavesNoStone } from "./stoneless.ts";
 
 /**
@@ -174,7 +173,7 @@ export function ringHoldsMoves(state: GameState, margin: number): boolean {
     (move) =>
       (!leavesNoStone(move.kind) && outside(move)) ||
       (move.from !== undefined && outside(move.from)) ||
-      (move.cells !== undefined && move.cells.some(outside)),
+      (move.cells?.some(outside) ?? false),
   );
 }
 

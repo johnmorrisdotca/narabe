@@ -1,15 +1,15 @@
 import { expect } from "vitest";
+import { GAME_STATUS } from "../constants.ts";
 import { cellAt, otherStone } from "../engine.ts";
 import { undoMove } from "../rules/record.ts";
-import { GAME_STATUS } from "../constants.ts";
 import type { GameState, Point } from "../types.ts";
 import {
-  HAND_RULES,
   anyMoveByHand,
   bestAnywhereByHand,
   bestByHand,
   drawReasonByHand,
   farRowByHand,
+  HAND_RULES,
   hopsByHand,
   isKingByHand,
 } from "./checkersByHand.ts";
@@ -23,7 +23,7 @@ import {
  */
 
 export function isCheckers(variant: string): boolean {
-  return Object.prototype.hasOwnProperty.call(HAND_RULES, variant);
+  return Object.hasOwn(HAND_RULES, variant);
 }
 
 /**

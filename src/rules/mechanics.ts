@@ -1,14 +1,14 @@
 import { DIRECTIONS, GAME_STATUS, MOVE_KINDS, PLACEMENTS, STONES, VARIANT_SPECS, WIN_REASONS } from "../constants.ts";
 import type { Cell, GameState, Move, Point, Stone } from "../types.ts";
-import { settleDraw } from "./drawLimit.ts";
 import { cellAtPoint, indexOf, isOnBoard, isStone, otherStone, stepFrom } from "./board.ts";
 import { campFilled, campMoves, campSquares } from "./camps.ts";
 import { applyCheckersMove, checkersHasAnyMove, checkersMoves, checkersRulesFor } from "./checkers.ts";
 import { STAR_RADIUS, starCampSquares, starFilled, starMoves } from "./chineseCheckers.ts";
+import { settleDraw } from "./drawLimit.ts";
 import { dropTarget } from "./drop.ts";
-import { hexConnection } from "./hex.ts";
 import { rulesFor } from "./handicap.ts";
 import { owesHeadStart } from "./headStart.ts";
+import { hexConnection } from "./hex.ts";
 import { findWinningLine, runThrough, winningLineFor } from "./lines.ts";
 import { countStones, pieceDestinations, squareThrough } from "./pieces.ts";
 import { findAllWins, rotateQuadrant } from "./twist.ts";

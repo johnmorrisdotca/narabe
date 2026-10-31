@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-
+import { GAME_STATUS } from "../constants.ts";
 import { createGame, growBoard, isStone, legalPoints, playMove } from "../engine.ts";
 import { replayMoves } from "../rules/record.ts";
-import { GAME_STATUS } from "../constants.ts";
 import { rng } from "./support.ts";
 
 describe("games that grow mid-play", () => {

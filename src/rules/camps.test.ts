@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, inMovePhase, isLegalMove, legalPoints, movePiece, pieceMoves } from "../engine.ts";
-import { undoMove } from "./record.ts";
 import { GAME_STATUS, STONES, WIN_REASONS } from "../constants.ts";
+import { createGame, inMovePhase, isLegalMove, legalPoints, movePiece, pieceMoves } from "../engine.ts";
 import type { Cell } from "../types.ts";
 import { campFilled, campMoves, campOf, campSize, campSquares, piecesHome } from "./camps.ts";
+import { undoMove } from "./record.ts";
 
 const p = (row: number, col: number) => ({ row, col });
 const key = (point: { row: number; col: number }) => `${point.row},${point.col}`;

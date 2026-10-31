@@ -97,9 +97,9 @@ for (const [row, col] of [[7, 7], [7, 8], [8, 8], [8, 9]]) game = playMove(game,
 if (game.moves.length !== 4 || game.toPlay !== "black" || game.status !== GAME_STATUS.playing) throw new Error("four moves of renju came out differently");
 if (pointName(15, { row: 7, col: 7 }) !== "H8") throw new Error("pointName");
 if (replayMoves(createGame(game.settings), game.moves.map(({ row, col, kind }) => ({ row, col, kind }))).at(-1).board.join() !== game.board.join()) throw new Error("the record did not replay to the same board");
-if (typeof all[names.indexOf(${JSON.stringify(pkg.name + "/react")})].useNarabe !== "function") throw new Error("the React entry lacks its hook");
+if (typeof all[names.indexOf(${JSON.stringify(`${pkg.name}/react`)})].useNarabe !== "function") throw new Error("the React entry lacks its hook");
 for (const deep of ${JSON.stringify(deep)}) { const m = await import(deep); if (Object.keys(m).length === 0) throw new Error(deep + " exports nothing"); }
-if ((await import(${JSON.stringify(pkg.name + "/version")})).NARABE_VERSION !== ${JSON.stringify(pkg.version)}) throw new Error("NARABE_VERSION is not package.json's");
+if ((await import(${JSON.stringify(`${pkg.name}/version`)})).NARABE_VERSION !== ${JSON.stringify(pkg.version)}) throw new Error("NARABE_VERSION is not package.json's");
 console.log(names.concat(${JSON.stringify(deep)}).join(" "));
 `,
 );

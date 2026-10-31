@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { canSwapSeats, cellAt, createGame, forbiddenPoints, isLegalMove, playMove, stonesLeft } from "../engine.ts";
 import {
   FORBIDDEN_PATTERNS,
   GAME_STATUS,
@@ -9,6 +8,7 @@ import {
   RULE_VARIANTS,
   STONES,
 } from "../constants.ts";
+import { canSwapSeats, cellAt, createGame, forbiddenPoints, isLegalMove, playMove, stonesLeft } from "../engine.ts";
 import { fromDiagram, show } from "../test-support.ts";
 import type { GameSettings, GameState, Handicap, Point } from "../types.ts";
 import { hasHandicap, rulesFor } from "./handicap.ts";

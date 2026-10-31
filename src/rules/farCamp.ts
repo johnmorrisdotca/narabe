@@ -1,6 +1,6 @@
-import { STAR_RADIUS, starCampSquares, starSize } from "./chineseCheckers.ts";
-import { campSquares } from "./camps.ts";
 import type { Point, Stone, VariantSpec } from "../types.ts";
+import { campSquares } from "./camps.ts";
+import { STAR_RADIUS, starCampSquares, starSize } from "./chineseCheckers.ts";
 
 /**
  * Whether this game is a race to fill the camp opposite: Halma on its square

@@ -1,9 +1,6 @@
-import { startingPieces } from "./camps.ts";
-import { checkersRulesFor, checkersStartingPieces } from "./checkers.ts";
-import { STAR_RADIUS, starStartingPieces } from "./chineseCheckers.ts";
-import { startingDiscs } from "./flips.ts";
 import {
   DEFAULT_SETTINGS,
+  defaultBoardFor,
   FIRST_PLAYERS,
   GAME_STATUS,
   OPENING_RULES,
@@ -11,11 +8,14 @@ import {
   SEED_RANGE,
   STONES,
   VARIANT_SPECS,
-  defaultBoardFor,
 } from "../constants.ts";
 import { emptyBoard } from "../obstacles.ts";
 import type { Cell, GameSettings, GameState, HeadStart, OpeningRule, Point, Seat, Stone } from "../types.ts";
 import { otherStone } from "./board.ts";
+import { startingPieces } from "./camps.ts";
+import { checkersRulesFor, checkersStartingPieces } from "./checkers.ts";
+import { STAR_RADIUS, starStartingPieces } from "./chineseCheckers.ts";
+import { startingDiscs } from "./flips.ts";
 import { hasHandicap } from "./handicap.ts";
 import { hasHeadStart, headStartOdds, headStartOpener, headStartPieces, normaliseHeadStart } from "./headStart.ts";
 import { initialOpening } from "./opening.ts";

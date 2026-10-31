@@ -1,6 +1,6 @@
+import { DRAW_LIMITS, NO_HANDICAP, NO_HEAD_START } from "./constants.ts";
 import { createGame } from "./engine.ts";
 import { replayMoves } from "./rules/record.ts";
-import { DRAW_LIMITS, NO_HANDICAP, NO_HEAD_START } from "./constants.ts";
 import type { GameState, Handicap, HeadStart, MoveInput, Stone } from "./types.ts";
 
 /** The stored shape of a game, as both the API and the pages see it.

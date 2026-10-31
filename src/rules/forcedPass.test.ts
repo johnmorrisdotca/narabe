@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { createGame, passTurn, piecePlacements, placePiece, playMove } from "../engine.ts";
 import { BLOCKED, GAME_STATUS, MOVE_KINDS, RULE_VARIANTS, STONES } from "../constants.ts";
+import { createGame, passTurn, piecePlacements, placePiece, playMove } from "../engine.ts";
 import type { Cell, GameState, Move, MoveInput, Point, RuleVariant, Stone } from "../types.ts";
 import { endedWithNoMoves, passesOwed, turnPassedBy } from "./forcedPass.ts";
 import { replayMoves } from "./record.ts";

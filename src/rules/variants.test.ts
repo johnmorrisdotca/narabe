@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { createGame, playMove, stonesLeft } from "../engine.ts";
-import { undoMove } from "./record.ts";
 import { GAME_STATUS, OPENING_RULES, RULE_VARIANTS, STONES } from "../constants.ts";
+import { createGame, playMove, stonesLeft } from "../engine.ts";
 import { fromDiagram } from "../test-support.ts";
 import type { GameState, Point } from "../types.ts";
+import { undoMove } from "./record.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
 

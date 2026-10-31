@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { canPass, createGame, emptyPoints, legalPoints, mustPass, passTurn, playMove } from "./engine.ts";
 import { GAME_STATUS, NO_HANDICAP } from "./constants.ts";
+import { canPass, createGame, emptyPoints, legalPoints, mustPass, passTurn, playMove } from "./engine.ts";
 import { seededRandom } from "./rules/random.ts";
 import type { GameState, RuleVariant } from "./types.ts";
 

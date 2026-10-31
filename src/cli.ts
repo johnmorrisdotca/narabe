@@ -1,7 +1,4 @@
-import { canChooseColour, chooseColour } from "./rules/opening.ts";
-import { columnLetter, rowNumber } from "./notation.ts";
-import { seededRandom } from "./rules/random.ts";
-import { GAME_STATUS, RULE_VARIANT_LIST, VARIANT_SPECS, boardSizesFor } from "./constants.ts";
+import { boardSizesFor, GAME_STATUS, RULE_VARIANT_LIST, VARIANT_SPECS } from "./constants.ts";
 import {
   canPass,
   createGame,
@@ -10,13 +7,16 @@ import {
   movePiece,
   mustPass,
   passTurn,
-  piecePlacements,
   pieceMoves,
+  piecePlacements,
   placePiece,
   playMove,
   singlesLeft,
   twistBoard,
 } from "./engine.ts";
+import { columnLetter, rowNumber } from "./notation.ts";
+import { canChooseColour, chooseColour } from "./rules/opening.ts";
+import { seededRandom } from "./rules/random.ts";
 import { replayMoves } from "./rules/record.ts";
 import type { GameSettings, GameState, MoveInput, Point, RuleVariant } from "./types.ts";
 import { NARABE_VERSION } from "./version.ts";

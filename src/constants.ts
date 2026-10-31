@@ -1,19 +1,13 @@
+import { ROCK_PLACEMENTS } from "./rules/rocks.constants.ts";
 import type {
-  WrapMode,
   Blocked,
   BoardGrid,
   CaptureChoice,
   CheckersRules,
   CrownMidCapture,
-  EndgameCountKind,
-  MoveNarrowing,
-  PieceTally,
-  TurnChoiceKind,
   DrawLimit,
+  EndgameCountKind,
   FirstPlayer,
-  Hot,
-  PieceQueue,
-  Worm,
   ForbiddenPattern,
   GameSettings,
   GameStatus,
@@ -21,21 +15,27 @@ import type {
   HandicapRule,
   HeadStart,
   HeadStartTurns,
+  Hot,
   LineRule,
   MoveKind,
+  MoveNarrowing,
   ObstacleLayout,
   OpeningRule,
   OpeningStage,
+  PieceQueue,
+  PieceTally,
   Placement,
   Point,
   RuleVariant,
   Seat,
   Stone,
   TraditionalHeadStart,
+  TurnChoiceKind,
   VariantSpec,
   WinReason,
+  Worm,
+  WrapMode,
 } from "./types.ts";
-import { ROCK_PLACEMENTS } from "./rules/rocks.constants.ts";
 
 /** The black and white stone labels.
  *
@@ -1683,4 +1683,4 @@ export const DEFAULT_SETTINGS: GameSettings = {
  */
 export const FIRST_STONE: Stone = STONES.black;
 
-export { COLUMN_LETTERS, DIRECTIONS, HEX_LINE_DIRECTIONS, STAR_POINTS, lineDirectionsFor } from "./board.constants.ts";
+export { COLUMN_LETTERS, DIRECTIONS, HEX_LINE_DIRECTIONS, lineDirectionsFor, STAR_POINTS } from "./board.constants.ts";

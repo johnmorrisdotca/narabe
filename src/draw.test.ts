@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-
-import { boardSvg } from "./draw.ts";
-import { RULE_VARIANT_LIST, VARIANT_SPECS } from "./constants.ts";
-import { createGame, playMove } from "./engine.ts";
 import { runCli } from "./cli.ts";
+import { RULE_VARIANT_LIST, VARIANT_SPECS } from "./constants.ts";
+import { boardSvg } from "./draw.ts";
+import { createGame, playMove } from "./engine.ts";
 import { replayMoves } from "./rules/record.ts";
 import type { GameSettings, MoveInput } from "./types.ts";
 

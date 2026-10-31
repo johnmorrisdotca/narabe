@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { canChooseColour, canPass, createGame, extendOpening, forfeitOnRecord, mustPass, playMove } from "../engine.ts";
 import { MOVE_KINDS, OPENING_RULES, OPENING_STAGES, SEATS, STONES } from "../constants.ts";
+import { canChooseColour, canPass, createGame, extendOpening, forfeitOnRecord, mustPass, playMove } from "../engine.ts";
 import type { GameState, MoveInput, Point } from "../types.ts";
 import { passesOwed } from "./forcedPass.ts";
 import { replayMoves } from "./record.ts";

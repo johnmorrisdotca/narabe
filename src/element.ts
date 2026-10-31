@@ -1,8 +1,9 @@
+import { ALL_BOARD_SIZES, RULE_VARIANT_LIST, SEED_RANGE } from "./constants.ts";
+import { boardSvg, type DrawBoardOptions } from "./draw.ts";
 import { createGame } from "./engine.ts";
 import { replayMoves } from "./rules/record.ts";
-import { boardSvg, type DrawBoardOptions } from "./draw.ts";
-import { RULE_VARIANT_LIST, ALL_BOARD_SIZES, SEED_RANGE } from "./constants.ts";
 import type { GameSettings, GameState, MoveInput, OpeningChoice } from "./types.ts";
+
 const ElementBase = typeof HTMLElement === "undefined" ? (class {} as typeof HTMLElement) : HTMLElement;
 const isOn = (value: string | null, fallback = true): boolean =>
   value === null ? fallback : !["off", "false", "no", "0"].includes(value.trim().toLowerCase());
@@ -341,8 +342,8 @@ export class NarabeBoard extends ElementBase {
   #frame(): void {
     this.style.display = "block";
     this.style.maxWidth = "100%";
-    const width = Number(this.getAttribute("width")),
-      size = this.getAttribute("size");
+    const width = Number(this.getAttribute("width"));
+    const size = this.getAttribute("size");
     const pixels =
       this.hasAttribute("width") && width > 0 && Number.isFinite(width)
         ? Math.min(width, 2000)
@@ -364,9 +365,9 @@ export class NarabeBoard extends ElementBase {
     const theme = this.getAttribute("theme");
     this.style.colorScheme = theme === "light" || theme === "dark" ? theme : "light dark";
     this.setAttribute("data-narabe-embed", "");
-    const root = this.getRootNode(),
-      target: ParentNode =
-        typeof ShadowRoot !== "undefined" && root instanceof ShadowRoot ? root : this.ownerDocument.head;
+    const root = this.getRootNode();
+    const target: ParentNode =
+      typeof ShadowRoot !== "undefined" && root instanceof ShadowRoot ? root : this.ownerDocument.head;
     if (target.querySelector("style[data-narabe-embed-style]") === null) {
       const style = this.ownerDocument.createElement("style");
       style.setAttribute("data-narabe-embed-style", "");
@@ -438,15 +439,15 @@ export class NarabeBoard extends ElementBase {
             : [this.#options.state];
         this.#cache = key;
       }
-      const at = this.#at(),
-        state = this.#timeline[at];
+      const at = this.#at();
+      const state = this.#timeline[at];
       if (state === undefined) throw new RangeError("No position is available.");
       this.#state = state;
-      const ja = (this.getAttribute("lang") ?? this.ownerDocument.documentElement.lang) === "ja",
-        title =
-          this.getAttribute("label") ??
-          this.#options.draw?.title ??
-          (ja ? `盤面、${at}手目` : `Board position, step ${at}`);
+      const ja = (this.getAttribute("lang") ?? this.ownerDocument.documentElement.lang) === "ja";
+      const title =
+        this.getAttribute("label") ??
+        this.#options.draw?.title ??
+        (ja ? `盤面、${at}手目` : `Board position, step ${at}`);
       const svgText = boardSvg(state, {
         ...this.#options.draw,
         title,
@@ -457,16 +458,16 @@ export class NarabeBoard extends ElementBase {
       });
       // Only the package's escaped SVG writer supplies markup.
       const svg = new DOMParser().parseFromString(svgText, "image/svg+xml").documentElement;
-      const doc = this.ownerDocument,
-        view = doc.createElement("div");
+      const doc = this.ownerDocument;
+      const view = doc.createElement("div");
       view.append(doc.importNode(svg, true));
       this.replaceChildren(view);
       if (isOn(this.getAttribute("controls"))) {
         const controls = doc.createElement("div");
         controls.className = "nb-replay";
-        const previous = doc.createElement("button"),
-          next = doc.createElement("button"),
-          slider = doc.createElement("input");
+        const previous = doc.createElement("button");
+        const next = doc.createElement("button");
+        const slider = doc.createElement("input");
         previous.type = next.type = "button";
         previous.textContent = "←";
         next.textContent = "→";
@@ -509,8 +510,8 @@ export class NarabeBoard extends ElementBase {
     } catch (error) {
       this.#state = null;
       this.#cache = "";
-      const message = error instanceof Error ? error.message : String(error),
-        status = this.ownerDocument.createElement("p");
+      const message = error instanceof Error ? error.message : String(error);
+      const status = this.ownerDocument.createElement("p");
       status.setAttribute("role", "status");
       status.textContent = message;
       this.replaceChildren(status);

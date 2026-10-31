@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { GAME_STATUS, RULE_VARIANTS, STONES } from "../constants.ts";
 import {
   canShrinkBoard,
   cellAt,
@@ -11,19 +12,18 @@ import {
   playMove,
   singlesLeft,
 } from "../engine.ts";
-import { replayMoves, undoMove } from "./record.ts";
-import { GAME_STATUS, RULE_VARIANTS, STONES } from "../constants.ts";
 import { fromDiagram } from "../test-support.ts";
 import type { GameState, Piece, PieceCell, Point } from "../types.ts";
 import {
   footprintAt,
   isPieceInHand,
   orientations,
-  pieceQueue,
   piecePlacements,
+  pieceQueue,
   queuedPiece,
   upcomingPieces,
 } from "./queue.ts";
+import { replayMoves, undoMove } from "./record.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
 const domino = { variant: RULE_VARIANTS.dominoFive, seed: 11 } as const;
@@ -156,7 +156,7 @@ describe("laying a piece", () => {
     for (seed = 1; seed < 500 && forced === null; seed += 1) {
       const candidate = { ...state, settings: { ...state.settings, seed } };
       const inHand = queuedPiece(candidate);
-      if (inHand !== null && inHand.cells.every((cell) => cell.stone === STONES.white)) forced = candidate;
+      if (inHand?.cells.every((cell) => cell.stone === STONES.white) === true) forced = candidate;
     }
     expect(forced).not.toBeNull();
     const next = placePiece(forced!, footprintAt(ww, p(6, 4)));

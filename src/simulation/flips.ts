@@ -4,8 +4,8 @@ import { GAME_STATUS } from "../constants.ts";
 import { cellAt, indexOf, isStone, otherStone } from "../engine.ts";
 import { undoMove } from "../rules/record.ts";
 import type { GameState, Point } from "../types.ts";
-import { canFlipAnywhereByHand, countByHand, flipDirectionsByHand, flipsByHand } from "./scan.ts";
 import { ranOutOfLength } from "./checks.ts";
+import { canFlipAnywhereByHand, countByHand, flipDirectionsByHand, flipsByHand } from "./scan.ts";
 
 /**
  * The flipping games, restated by hand.

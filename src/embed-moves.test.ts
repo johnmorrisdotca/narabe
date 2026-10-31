@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseEmbedMoves } from "./element.ts";
+
 describe("embed record validation", () => {
   it("keeps complete piece, slide, twist and pass data, dropping unrelated fields", () => {
     const moves = [
