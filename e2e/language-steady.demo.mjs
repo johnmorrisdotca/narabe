@@ -71,9 +71,8 @@ for (const width of [390, 828, 1280])
       for (const side of ["x", "y", "width", "height"])
         expect(Math.abs(one.board[side] - english.board[side]), `${name}: the board's ${side}`).toBeLessThanOrEqual(1);
       expect(one.controls.length).toBe(english.controls.length);
-      one.controls.forEach((y, at) =>
-        expect(Math.abs(y - english.controls[at]), `${name}: control ${at}`).toBeLessThanOrEqual(1),
-      );
+      for (const [at, y] of one.controls.entries())
+        expect(Math.abs(y - english.controls[at]), `${name}: control ${at}`).toBeLessThanOrEqual(1);
     }
     expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth)).toBe(true);
   });

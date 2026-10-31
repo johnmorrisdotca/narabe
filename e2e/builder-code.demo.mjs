@@ -51,23 +51,23 @@ test("changing an option rewrites the code, and the preview follows it", async (
   let changed = null;
   for (let at = 0; at < count && changed === null; at += 1) {
     const group = groups.nth(at);
-    const pressed = group.locator('button[aria-pressed="true"]').first();
-    const was = (await pressed.count()) > 0 ? pressed : null;
-    const other = group.locator('button[aria-pressed="false"]').last();
+    const pressed = group.locator('button[aria-pressed="true"]');
+    const was = (await pressed.count()) > 0 ? await pressed.first().getAttribute("data-value") : null;
+    const value = await group.locator('button[aria-pressed="false"]').last().getAttribute("data-value");
     const previewBefore = await preview(page);
-    await other.click();
-    const value = await other.getAttribute("data-value");
+    await group.locator(`button[data-value="${value}"]`).click();
     if ((await code(page)) !== before) changed = { group, was, value, previewBefore };
   }
   expect(changed, "pressing a choice changes the code").not.toBeNull();
-  const after = await code(page);
-  if (changed.value) expect(after).toContain(changed.value);
-  // The address carries the choice too, so a copied link opens the same page.
-  await expect.poll(() => page.url()).toContain(encodeURIComponent(changed.value ?? ""));
+  // A choice with a value is written as that value, and the address carries it too, so a copied link opens the same page.
+  if (changed.value) {
+    expect(await code(page)).toContain(changed.value);
+    await expect.poll(() => page.url()).toContain(`=${encodeURIComponent(changed.value).replaceAll("%20", "+")}`);
+  }
 
   // The way back: pressing what was pressed returns the code to what it said.
   if (changed.was !== null) {
-    await changed.was.click();
+    await changed.group.locator(`button[data-value="${changed.was}"]`).click();
     expect(await code(page)).toBe(before);
   }
   expect(errors).toEqual([]);
