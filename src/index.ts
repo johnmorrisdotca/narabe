@@ -16,6 +16,7 @@ export type * from "./types.ts";
 export * from "./notation.ts";
 export * from "./replay.ts";
 export * from "./length.ts";
+export { type Cloth, clothVars, isCloth, NARABE_CLOTHS } from "./cloth.ts";
 export { canSkip, canUndo, lastMove, replayMoves, skipMove, skipTarget, undoMove } from "./rules/record.ts";
 export { turnChoices } from "./rules/choices.ts";
 export { endedWithNoMoves, passesOwed, turnPassedBy } from "./rules/forcedPass.ts";

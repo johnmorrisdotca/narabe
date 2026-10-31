@@ -788,6 +788,8 @@ restyles a board from outside: `--nb-wood`, `--nb-wood-deep`, `--nb-line`,
 or on any ancestor. The engine and the React hook draw nothing, so have no
 theme.
 
+`<narabe-board cloth="blue">` lays the board in one of the family's five cloths, `green`, `blue`, `red`, `black` or `wood`, the same set as the boards on itsutsu.com, by setting those variables on the element; with no `cloth` it keeps its own wood. For a board drawn with `boardSvg`, `clothVars("blue")` returns the variables to set, and `NARABE_CLOTHS` lists the colours.
+
 ## Limits
 
 | Limit | Value | Constant |
@@ -875,6 +877,7 @@ src/
 ├── element-define.ts            # default tag registration
 ├── board.constants.ts    the board's geometry: line directions, star points and column letters
 ├── cli.ts                the command line as a pure function, with its words in English and Japanese
+├── cloth.ts              the five cloths a board may be laid in
 ├── constants.ts          the table of variants, the choices they are made from, and every number the rules use
 ├── draw.ts               the "/draw" entry: a position as one SVG string, drawn the way its game is traditionally drawn
 ├── engine.ts             the engine: create a game, ask what is legal, play a move, pass, forfeit

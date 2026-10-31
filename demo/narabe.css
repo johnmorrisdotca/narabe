@@ -1,6 +1,6 @@
 /* Narabe's own: the setup, the board and its record, and the API reference. Everything shared is in family.css, loaded before this. */
 :root {
-  --intro-room: 9.5rem; --intro-room-wide: 5.5rem;
+  --intro-room: 11.5rem; --intro-room-wide: 7rem;
   --wood: #dcb67a; --wood-deep: #b88a4a; --line: #3b2f22; --cell-dark: #7a5a36; --cell-light: #e9d3a8;
   --black: #1d1b19; --white: #fbfaf6; --hot: #e07b24; --worm: #7a4bb3;
   /* The marks drawn on a stone or a cell, each named once: the ring of a king, the edge of a stone, and what a touched cell is lit with. */
@@ -10,6 +10,12 @@
   :root:not([data-theme="light"]) { --wood: #b98d4f; --wood-deep: #8a6330; --line: #2a1f13; }
 }
 :root[data-theme="dark"] { --wood: #b98d4f; --wood-deep: #8a6330; --line: #2a1f13; }
+
+/* Room kept for the longer of the two languages, so that switching moves nothing below: one line height for both alphabets, and the header's pills their tallest wrap. */
+body { line-height: 1.35; }
+nav { min-height: 50px; align-content: flex-start; }
+@media (max-width: 1023px) { nav { min-height: 104px; } }
+@media (max-width: 480px) { nav { min-height: 210px; } }
 
 .narabe-layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
 .narabe-layout > * { min-width: 0; }

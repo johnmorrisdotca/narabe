@@ -16,6 +16,7 @@ row("step","number",["Replay step","A position index; leave blank for the last p
 row("size","choice",["Display size","Small, medium or large."],["表示の大きさ","小・中・大を選びます。"],{default:"medium",choices:["small","medium","large"]}),
 row("width","number",["Width","Pixels, fitting a narrower parent."],["幅","ピクセルで指定します。狭い表示枠にも収まります。"],{range:{min:200,max:1000,step:10}}),
 row("theme","choice",["Theme","Light, dark or the device's preference."],["配色","明るい配色・暗い配色、または端末の設定に合わせます。"],{default:"auto",choices:["auto","light","dark"]}),
+row("cloth","choice",["Cloth","The board's cloth. Unless said, the board keeps its own wood."],["テーブルの色","盤の色です。指定がなければ、盤本来の木目のままです。"],{choices:["green","blue","red","black","wood"],choiceLabels:{en:{green:"Green",blue:"Blue",red:"Red",black:"Black",wood:"Wood"},ja:{green:"緑",blue:"青",red:"赤",black:"黒",wood:"木目"}}}),
 row("lang","choice",["Language","Controls and spoken board positions."],["読み上げる言語","操作ボタンと局面の読み上げに使います。"],{choices:["en","ja"]}),
 row("label","text",["Spoken label","An optional screen-reader label."],["読み上げる名前","スクリーンリーダー用の名前です。指定は任意です。"]),
 ];

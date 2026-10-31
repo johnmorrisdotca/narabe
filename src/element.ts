@@ -2,6 +2,7 @@ import { createGame } from "./engine.ts";
 import { replayMoves } from "./rules/record.ts";
 import { boardSvg, type DrawBoardOptions } from "./draw.ts";
 import { RULE_VARIANT_LIST, ALL_BOARD_SIZES, SEED_RANGE } from "./constants.ts";
+import { clothVars } from "./cloth.ts";
 import type { GameSettings, GameState, MoveInput, OpeningChoice } from "./types.ts";
 const ElementBase = typeof HTMLElement === "undefined" ? class {} as typeof HTMLElement : HTMLElement;
 const isOn = (value: string | null, fallback = true): boolean => value === null ? fallback : !["off", "false", "no", "0"].includes(value.trim().toLowerCase());
@@ -96,7 +97,7 @@ export const NARABE_DRAW_OPTION_KEYS = Object.keys({ width: true, title: true, l
  *
  */
 export class NarabeBoard extends ElementBase {
-  static observedAttributes = ["game", "grid", "seed", "moves", "step", "last-move", "winning-line", "forbidden", "legal", "controls", "lang", "size", "width", "theme", "label"];
+  static observedAttributes = ["game", "grid", "seed", "moves", "step", "last-move", "winning-line", "forbidden", "legal", "controls", "lang", "size", "width", "theme", "label", "cloth"];
   #state: GameState | null = null;
   #options: NarabeElementOptions = {};
   #timeline: GameState[] = [];
@@ -160,6 +161,9 @@ export class NarabeBoard extends ElementBase {
   /** The `label` attribute, reflected. */
   get label(): string | null { return this.getAttribute("label"); }
   set label(value: string | number | boolean | null | undefined) { this.#write("label", value); }
+  /** The `cloth` attribute, reflected: green, blue, red, black or wood. */
+  get cloth(): string | null { return this.getAttribute("cloth"); }
+  set cloth(value: string | number | boolean | null | undefined) { this.#write("cloth", value); }
   /** The moves attribute, reflected. Assign an array to serialize a host record. */
   get moves(): string | null { return this.getAttribute("moves"); }
   set moves(value: string | readonly MoveInput[] | null) { this.#write("moves", Array.isArray(value) ? JSON.stringify(value) : value); }
@@ -171,6 +175,8 @@ export class NarabeBoard extends ElementBase {
     else if (this.#widthOwned) { this.style.width = this.#widthBefore ?? ""; this.#widthOwned = false; }
     const theme = this.getAttribute("theme"); this.style.colorScheme = theme === "light" || theme === "dark" ? theme : "light dark";
     this.setAttribute("data-narabe-embed", "");
+    const cloth = clothVars(this.getAttribute("cloth"));
+    for (const name of Object.keys(clothVars("wood"))) { const value = cloth[name as keyof typeof cloth]; if (value === undefined) this.style.removeProperty(name); else this.style.setProperty(name, value); }
     const root = this.getRootNode(), target: ParentNode = typeof ShadowRoot !== "undefined" && root instanceof ShadowRoot ? root : this.ownerDocument.head;
     if (target.querySelector("style[data-narabe-embed-style]") === null) {
       const style = this.ownerDocument.createElement("style"); style.setAttribute("data-narabe-embed-style", "");

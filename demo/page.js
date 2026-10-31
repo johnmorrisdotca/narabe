@@ -562,3 +562,17 @@ document.documentElement.dataset.ready = "true";
 
 function docsLink() { document.querySelector('[data-say="pageDocs"]')?.setAttribute("href", page.lang === "ja" ? "docs/ja/index.html" : "docs/index.html"); }
 docsLink();
+
+// The board's cloth, as the embed's `cloth` attribute gives it: the header's patches lay it. Until a reader has chosen one
+// the board keeps its own wood, the way a board with no `cloth` attribute does.
+function wearCloth(name) {
+  const board = document.getElementById("board");
+  const cloth = N.NARABE_CLOTHS[name];
+  if (cloth === undefined) return;
+  for (const [property, value] of Object.entries({ "--wood": cloth.felt, "--wood-deep": cloth.deep, "--line": cloth.ink, "--cell-light": cloth.felt, "--cell-dark": cloth.deep })) board.style.setProperty(property, value);
+  board.dataset.cloth = name;
+}
+let clothKept = new URLSearchParams(location.search).has("cloth");
+try { clothKept ||= localStorage.getItem("johnmorrisdotca.cloth") !== null; } catch { /* A browser that keeps nothing has chosen nothing. */ }
+if (clothKept) wearCloth(document.documentElement.dataset.cloth);
+document.addEventListener("family-cloth", (event) => wearCloth(event.detail.cloth));

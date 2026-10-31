@@ -8,6 +8,7 @@ All notable changes to this project are written here. The format follows
 
 ### Added
 
+- A board can be laid in the family's five cloths: `<narabe-board cloth="blue">`, the `cloth` embed parameter and Builder option, the header's patches on the demo, and `NARABE_CLOTHS`, `isCloth` and `clothVars`.
 - `pnpm test:frameworks` (`scripts/check-frameworks.mjs`) builds the README's React, Vue, Svelte, Angular and plain-page examples from the packed tarball and plays them in Chromium and WebKit, in CI too.
 
 ### Added
