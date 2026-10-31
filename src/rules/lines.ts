@@ -1,6 +1,7 @@
-import { BLOCKED, HOT, LINE_RULES, lineDirectionsFor, VARIANT_SPECS, WORM } from "../constants.ts";
+import { BLOCKED, HOT, LINE_RULES, lineDirectionsFor, WORM } from "../constants.ts";
 import { wormholeLinks } from "../obstacles.ts";
 import type { Cell, GameSettings, LineRule, Point, Stone, WrapMode } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { cellAtPoint, indexOf, isOnBoard, isStone, negate, stepFrom } from "./board.ts";
 import { rulesFor } from "./handicap.ts";
 

@@ -1,4 +1,4 @@
-import { GAME_STATUS, MOVE_KINDS, OPENING_STAGES, STONES, VARIANT_SPECS } from "../constants.ts";
+import { GAME_STATUS, MOVE_KINDS, OPENING_STAGES, STONES } from "../constants.ts";
 import {
   canForfeit,
   emptyPoints,
@@ -11,6 +11,7 @@ import {
   playMove,
 } from "../engine.ts";
 import type { GameState, MoveInput, OpeningChoice, Point, ReplayFacts } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { indexOf, otherStone, samePoint } from "./board.ts";
 import { stonesIn } from "./captures.ts";
 import { createGame } from "./creation.ts";

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { BLOCKED, boardSizesFor, defaultBoardFor, GAME_STATUS, STONES } from "../constants.ts";
+import { BLOCKED, GAME_STATUS, STONES } from "../constants.ts";
 import { createGame, discCount, isLegalMove, legalPoints, playMove } from "../engine.ts";
+import { boardSizesFor, defaultBoardFor } from "../variantSpecs.ts";
 import {
   hexagonCells,
   hexagonCorners,

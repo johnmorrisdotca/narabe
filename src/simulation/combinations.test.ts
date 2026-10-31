@@ -1,19 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  boardSizesFor,
-  GAME_STATUS,
-  NO_HANDICAP,
-  NO_HEAD_START,
-  OPENING_RULES,
-  RULE_VARIANTS,
-  STONES,
-  VARIANT_SPECS,
-} from "../constants.ts";
+import { GAME_STATUS, NO_HANDICAP, NO_HEAD_START, OPENING_RULES, RULE_VARIANTS, STONES } from "../constants.ts";
 import { createGame } from "../engine.ts";
 import { traditionalCounts } from "../rules/headStart.ts";
 import { replayMoves } from "../rules/record.ts";
 import type { Handicap, RuleVariant } from "../types.ts";
+import { boardSizesFor, VARIANT_SPECS } from "../variantSpecs.ts";
 import { checkHeadStartRecord, checkHeadStartStart } from "./headStart.ts";
 import { playOut } from "./support.ts";
 

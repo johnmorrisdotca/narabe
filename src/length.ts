@@ -1,6 +1,6 @@
-import { VARIANT_SPECS } from "./constants.ts";
 import { emptyBoard } from "./obstacles.ts";
 import type { GameSettings } from "./types.ts";
+import { VARIANT_SPECS } from "./variantSpecs.ts";
 
 /**
  * How long a game can get, and whether anything stops it.

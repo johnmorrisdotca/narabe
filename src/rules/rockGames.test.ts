@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { BLOCKED, GAME_STATUS, HOT, MOVE_KINDS, RULE_VARIANTS, STONES, VARIANT_SPECS } from "../constants.ts";
+import { BLOCKED, GAME_STATUS, HOT, MOVE_KINDS, RULE_VARIANTS, STONES } from "../constants.ts";
 import { createGame, isLegalMove, legalPoints, playMove } from "../engine.ts";
 import type { GameState, Point, RuleVariant } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { replayMoves, undoMove } from "./record.ts";
 import { stonesPlayed } from "./rockfall.ts";
 import { rockLayoutFor } from "./rocks.ts";

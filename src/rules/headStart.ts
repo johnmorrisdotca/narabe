@@ -1,11 +1,4 @@
-import {
-  GAME_STATUS,
-  NO_HEAD_START,
-  STAR_POINTS,
-  STONES,
-  TRADITIONAL_HEAD_STARTS,
-  VARIANT_SPECS,
-} from "../constants.ts";
+import { GAME_STATUS, NO_HEAD_START, STAR_POINTS, STONES, TRADITIONAL_HEAD_STARTS } from "../constants.ts";
 import type {
   Cell,
   GameSettings,
@@ -18,6 +11,7 @@ import type {
   TraditionalHeadStart,
   VariantSpec,
 } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { otherStone, samePoint } from "./board.ts";
 import { isDarkSquare } from "./checkers.ts";
 import { KOMI } from "./go.ts";

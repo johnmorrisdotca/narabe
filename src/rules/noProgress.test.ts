@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { boardSizesFor, GAME_STATUS, RULE_VARIANTS, STONES, VARIANT_SPECS } from "../constants.ts";
+import { GAME_STATUS, RULE_VARIANTS, STONES } from "../constants.ts";
 import { createGame, movePiece, pieceMoves } from "../engine.ts";
 import type { GameState, Move, Point, RuleVariant } from "../types.ts";
+import { boardSizesFor, VARIANT_SPECS } from "../variantSpecs.ts";
 import { STAR_RADIUS, starCampSquares } from "./chineseCheckers.ts";
 import {
   canStall,

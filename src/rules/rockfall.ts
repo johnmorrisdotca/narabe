@@ -1,6 +1,7 @@
-import { BLOCKED, GAME_STATUS, HOT, STONES, VARIANT_SPECS } from "../constants.ts";
+import { BLOCKED, GAME_STATUS, HOT, STONES } from "../constants.ts";
 import { emptyBoard } from "../obstacles.ts";
 import type { Cell, GameSettings, GameState, Move } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { indexOf } from "./board.ts";
 import { winningLineFor } from "./lines.ts";
 import { landRocks, rockLayoutFor } from "./rocks.ts";

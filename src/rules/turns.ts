@@ -1,5 +1,5 @@
-import { VARIANT_SPECS } from "../constants.ts";
 import type { GameSettings, Move, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { rulesFor } from "./handicap.ts";
 
 /**

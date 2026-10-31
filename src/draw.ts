@@ -1,8 +1,9 @@
-import { BLOCKED, GAME_STATUS, HOT, STAR_POINTS, STONES, VARIANT_SPECS, WORM } from "./constants.ts";
+import { BLOCKED, GAME_STATUS, HOT, STAR_POINTS, STONES, WORM } from "./constants.ts";
 import { campOf, forbiddenPoints, indexOf, isDarkSquare, pieceMoves, STAR_RADIUS, starCampOf } from "./engine.ts";
 import { turnChoices } from "./rules/choices.ts";
 import { lastMove } from "./rules/record.ts";
 import type { GameState, Point } from "./types.ts";
+import { VARIANT_SPECS } from "./variantSpecs.ts";
 
 /**
  * A POSITION DRAWN AS SVG, as a string: the board in the way its game is

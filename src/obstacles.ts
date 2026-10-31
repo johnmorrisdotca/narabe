@@ -1,9 +1,10 @@
-import { BLOCKED, HOT, OBSTACLE_LAYOUTS, STAR_POINTS, VARIANT_SPECS, WORM } from "./constants.ts";
+import { BLOCKED, HOT, OBSTACLE_LAYOUTS, STAR_POINTS, WORM } from "./constants.ts";
 import { inStar, STAR_RADIUS } from "./rules/chineseCheckers.ts";
 import { hexagonSealed, inHexagon } from "./rules/hexagon.ts";
 import { drawDistinct, seededRandom } from "./rules/random.ts";
 import { landRocks, rockLayoutFor } from "./rules/rocks.ts";
 import type { Cell, GameSettings, Point } from "./types.ts";
+import { VARIANT_SPECS } from "./variantSpecs.ts";
 
 /** The centre intersection — tengen (天元) — which never carries an obstacle. */
 export function tengen(size: number): Point {

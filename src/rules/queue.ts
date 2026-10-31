@@ -1,5 +1,6 @@
-import { MOVE_KINDS, PIECE_QUEUES, STONES, VARIANT_SPECS } from "../constants.ts";
+import { MOVE_KINDS, PIECE_QUEUES, STONES } from "../constants.ts";
 import type { Cell, GameSettings, GameState, Move, Piece, PieceCell, PieceQueue, Point, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { indexOf, isOnBoard } from "./board.ts";
 import { seededRandom } from "./random.ts";
 

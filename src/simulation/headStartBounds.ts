@@ -1,4 +1,4 @@
-import { BLOCKED, HOT, PLACEMENTS, STONES, VARIANT_SPECS, WRAP_MODES } from "../constants.ts";
+import { BLOCKED, HOT, PLACEMENTS, STONES, WRAP_MODES } from "../constants.ts";
 import { rulesFor, stonesLeft } from "../engine.ts";
 import { otherStone } from "../rules/board.ts";
 import { campSize, piecesHome } from "../rules/camps.ts";
@@ -6,6 +6,7 @@ import { STAR_RADIUS, starCampSize, starPiecesHome } from "../rules/chineseCheck
 import { headStartOf, headStartTurnsGiven } from "../rules/headStart.ts";
 import { leavesNoStone } from "../rules/stoneless.ts";
 import type { Cell, GameState, Point, Stone, VariantSpec, WrapMode } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 
 /*
  * WHAT A HEAD START COULD STILL DECIDE, BOUNDED — for `simulation.headStartDecides.ts`.

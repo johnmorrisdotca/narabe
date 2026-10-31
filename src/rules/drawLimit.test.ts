@@ -7,7 +7,6 @@ import {
   DRAW_LIMITS,
   GAME_STATUS,
   RULE_VARIANTS,
-  VARIANT_SPECS,
 } from "../constants.ts";
 import {
   createGame,
@@ -24,6 +23,7 @@ import {
   twistBoard,
 } from "../engine.ts";
 import type { DrawLimit, GameSettings, GameState } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import {
   bigEnoughForLength,
   canBeDrawn,

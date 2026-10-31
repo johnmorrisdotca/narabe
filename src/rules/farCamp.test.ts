@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { boardSizesFor, RULE_VARIANT_LIST, RULE_VARIANTS, STONES, VARIANT_SPECS } from "../constants.ts";
+import { RULE_VARIANT_LIST, RULE_VARIANTS, STONES } from "../constants.ts";
+import { boardSizesFor, VARIANT_SPECS } from "../variantSpecs.ts";
 import { campSquares } from "./camps.ts";
 import { STAR_RADIUS, starCampSquares } from "./chineseCheckers.ts";
 import { farCampSquares, racesForCamp } from "./farCamp.ts";

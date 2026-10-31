@@ -1,5 +1,6 @@
-import { DIRECTIONS, VARIANT_SPECS } from "../constants.ts";
+import { DIRECTIONS } from "../constants.ts";
 import type { Cell, GameSettings, Point, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { cellAtPoint, indexOf, isStone, stepFrom } from "./board.ts";
 import { rulesFor } from "./handicap.ts";
 

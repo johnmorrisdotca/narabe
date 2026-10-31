@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_SETTINGS, RULE_VARIANT_LIST, VARIANT_SPECS } from "./constants.ts";
+import { DEFAULT_SETTINGS, RULE_VARIANT_LIST } from "./constants.ts";
 import { endsOnItsOwn, longestPossibleGame, noBoundReason } from "./length.ts";
 import type { GameSettings } from "./types.ts";
+import { VARIANT_SPECS } from "./variantSpecs.ts";
 
 /**
  * How long a game can get, checked against what the games actually did.

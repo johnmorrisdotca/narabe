@@ -2,7 +2,7 @@ import { settleDraw } from "./rules/drawLimit.ts";
 
 export { canBeDrawn, drawnByLength, movesBeforeDraw } from "./rules/drawLimit.ts";
 
-import { GAME_STATUS, MOVE_KINDS, NO_POINT, PLACEMENTS, STONES, VARIANT_SPECS, WIN_REASONS } from "./constants.ts";
+import { GAME_STATUS, MOVE_KINDS, NO_POINT, PLACEMENTS, STONES, WIN_REASONS } from "./constants.ts";
 import { indexOf, isOnBoard, otherStone, pointOf } from "./rules/board.ts";
 import { capturesFrom, removeStones, stonesIn } from "./rules/captures.ts";
 import { flipLegal, playFlip } from "./rules/flips.ts";
@@ -26,6 +26,7 @@ import { fallRocks } from "./rules/rockfall.ts";
 import { forfeitTurn } from "./rules/seats.ts";
 import { stonesLeftInTurn } from "./rules/turns.ts";
 import type { Cell, ForbiddenPattern, GameState, Move, PieceCell, Point, Stone } from "./types.ts";
+import { VARIANT_SPECS } from "./variantSpecs.ts";
 
 /*
  * The rules of the game. Every function here takes a `GameState` and returns

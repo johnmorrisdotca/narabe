@@ -1,16 +1,15 @@
 import {
   DEFAULT_SETTINGS,
-  defaultBoardFor,
   FIRST_PLAYERS,
   GAME_STATUS,
   OPENING_RULES,
   SEATS,
   SEED_RANGE,
   STONES,
-  VARIANT_SPECS,
 } from "../constants.ts";
 import { emptyBoard } from "../obstacles.ts";
 import type { Cell, GameSettings, GameState, HeadStart, OpeningRule, Point, Seat, Stone } from "../types.ts";
+import { defaultBoardFor, VARIANT_SPECS } from "../variantSpecs.ts";
 import { otherStone } from "./board.ts";
 import { startingPieces } from "./camps.ts";
 import { checkersRulesFor, checkersStartingPieces } from "./checkers.ts";

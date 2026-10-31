@@ -1,5 +1,6 @@
-import { BLOCKED, HOT, VARIANT_SPECS } from "../constants.ts";
+import { BLOCKED, HOT } from "../constants.ts";
 import type { Cell, GameSettings, Point, VariantSpec } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { drawDistinct, seededRandom } from "./random.ts";
 import { ROCK_PLACEMENTS } from "./rocks.constants.ts";
 import type { RockLayout, RockRules } from "./rocks.types.ts";

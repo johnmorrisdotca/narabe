@@ -1,6 +1,7 @@
-import { BOARD_SIZES, GAME_STATUS, OBSTACLE_LAYOUTS, VARIANT_SPECS } from "../constants.ts";
+import { BOARD_SIZES, GAME_STATUS, OBSTACLE_LAYOUTS } from "../constants.ts";
 import { emptyBoard } from "../obstacles.ts";
 import type { Cell, GameState, Move, Point } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { leavesNoStone } from "./stoneless.ts";
 
 /**

@@ -107,7 +107,7 @@ it is, and says so in its changelog line.
   `Math.random`: anything a game decides by chance comes from the seed stored
   in its settings, so a replay always comes out the same.
 - **A game is a row, not a branch.** A variant is one entry in `VARIANT_SPECS`
-  (`src/constants.ts`). The engine reads the spec's fields and never switches
+  (`src/variantSpecs.ts`). The engine reads the spec's fields and never switches
   on a game's name. A new mechanism is a new field and a module in
   `src/rules/`; a new game that combines existing mechanisms is only a row.
 - **Ask "may this colour…" through `rulesFor(settings, stone)`**, which lays

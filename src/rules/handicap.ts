@@ -1,5 +1,6 @@
-import { FORBIDDEN_PATTERNS, LINE_RULES, VARIANT_SPECS } from "../constants.ts";
+import { FORBIDDEN_PATTERNS, LINE_RULES } from "../constants.ts";
 import type { ColourRules, ForbiddenPattern, GameSettings, Handicap, HandicapTerms, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { hasHeadStart } from "./headStart.ts";
 
 /**

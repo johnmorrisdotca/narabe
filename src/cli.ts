@@ -1,4 +1,4 @@
-import { boardSizesFor, GAME_STATUS, RULE_VARIANT_LIST, VARIANT_SPECS } from "./constants.ts";
+import { GAME_STATUS, RULE_VARIANT_LIST } from "./constants.ts";
 import {
   canPass,
   createGame,
@@ -19,6 +19,7 @@ import { canChooseColour, chooseColour } from "./rules/opening.ts";
 import { seededRandom } from "./rules/random.ts";
 import { replayMoves } from "./rules/record.ts";
 import type { GameSettings, GameState, MoveInput, Point, RuleVariant } from "./types.ts";
+import { boardSizesFor, VARIANT_SPECS } from "./variantSpecs.ts";
 import { NARABE_VERSION } from "./version.ts";
 
 /**

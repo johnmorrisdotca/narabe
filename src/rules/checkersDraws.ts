@@ -1,5 +1,6 @@
-import { ENDGAME_COUNT_KINDS, STONES, VARIANT_SPECS } from "../constants.ts";
+import { ENDGAME_COUNT_KINDS, STONES } from "../constants.ts";
 import type { EndgameCount, GameState, Move, PieceTally, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { otherStone } from "./board.ts";
 
 /**

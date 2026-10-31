@@ -22,3 +22,4 @@ export { seededRandom } from "./rules/random.ts";
 export { canSkip, canUndo, lastMove, replayMoves, skipMove, skipTarget, undoMove } from "./rules/record.ts";
 export { leavesNoStone, stonelessWord } from "./rules/stoneless.ts";
 export type * from "./types.ts";
+export * from "./variantSpecs.ts";

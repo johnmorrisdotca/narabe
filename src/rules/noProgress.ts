@@ -1,5 +1,6 @@
-import { GAME_STATUS, RULE_VARIANTS, VARIANT_SPECS } from "../constants.ts";
+import { GAME_STATUS, RULE_VARIANTS } from "../constants.ts";
 import type { GameState, Move, Point, RuleVariant, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { farCampSquares } from "./farCamp.ts";
 
 /**

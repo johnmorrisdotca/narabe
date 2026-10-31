@@ -1,5 +1,6 @@
-import { GAME_STATUS, STARTING_DISCS, STONES, VARIANT_SPECS, WIN_REASONS } from "../constants.ts";
+import { GAME_STATUS, STARTING_DISCS, STONES, WIN_REASONS } from "../constants.ts";
 import type { Cell, GameSettings, GameState, Move, Point, StartingDiscs, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { HEX_DIRECTIONS, honeycombStartingDiscs } from "./hexagon.ts";
 import { won } from "./mechanics.ts";
 import { leavesNoStone } from "./stoneless.ts";

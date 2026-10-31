@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { BLOCKED, boardSizesFor, defaultBoardFor, GAME_STATUS, STONES } from "../constants.ts";
+import { BLOCKED, GAME_STATUS, STONES } from "../constants.ts";
 import { createGame, findWinningLine, playMove } from "../engine.ts";
 import type { Cell, GameState, Point, Stone } from "../types.ts";
+import { boardSizesFor, defaultBoardFor } from "../variantSpecs.ts";
 import { hexagonCells } from "./hexagon.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });

@@ -1,5 +1,6 @@
-import { DIRECTIONS, GAME_STATUS, MOVE_KINDS, PLACEMENTS, STONES, VARIANT_SPECS, WIN_REASONS } from "../constants.ts";
+import { DIRECTIONS, GAME_STATUS, MOVE_KINDS, PLACEMENTS, STONES, WIN_REASONS } from "../constants.ts";
 import type { Cell, GameState, Move, Point, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { cellAtPoint, indexOf, isOnBoard, isStone, otherStone, stepFrom } from "./board.ts";
 import { campFilled, campMoves, campSquares } from "./camps.ts";
 import { applyCheckersMove, checkersHasAnyMove, checkersMoves, checkersRulesFor } from "./checkers.ts";

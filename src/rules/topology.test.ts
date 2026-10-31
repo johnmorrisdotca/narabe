@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { GAME_STATUS, HOT, RULE_VARIANTS, STONES, VARIANT_SPECS, WRAP_MODES } from "../constants.ts";
+import { GAME_STATUS, HOT, RULE_VARIANTS, STONES, WRAP_MODES } from "../constants.ts";
 import { cellAt, createGame, playMove } from "../engine.ts";
 import { randomSquares } from "../obstacles.ts";
 import type { Cell, GameState, Point, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 
 const p = (row: number, col: number): Point => ({ row, col });
 

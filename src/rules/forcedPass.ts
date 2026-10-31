@@ -1,6 +1,7 @@
-import { GAME_STATUS, MOVE_KINDS, VARIANT_SPECS } from "../constants.ts";
+import { GAME_STATUS, MOVE_KINDS } from "../constants.ts";
 import { mustPass, passTurn } from "../engine.ts";
 import type { GameState, Stone } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { otherStone } from "./board.ts";
 
 /**

@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { runCli } from "./cli.ts";
-import { RULE_VARIANT_LIST, VARIANT_SPECS } from "./constants.ts";
+import { RULE_VARIANT_LIST } from "./constants.ts";
 import { boardSvg } from "./draw.ts";
 import { createGame, playMove } from "./engine.ts";
 import { replayMoves } from "./rules/record.ts";
 import type { GameSettings, MoveInput } from "./types.ts";
+import { VARIANT_SPECS } from "./variantSpecs.ts";
 
 /** A game played at random to its end by the command line's own mover, as a state. */
 function played(game: string, seed: number) {

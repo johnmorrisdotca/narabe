@@ -827,7 +827,7 @@ src/
 ├── element-define.ts            # default tag registration
 ├── board.constants.ts    the board's geometry: line directions, star points and column letters
 ├── cli.ts                the command line as a pure function, with its words in English and Japanese
-├── constants.ts          the table of variants, the choices they are made from, and every number the rules use
+├── constants.ts          the choices a game is made from, and every number the rules use
 ├── draw.ts               the "/draw" entry: a position as one SVG string, drawn the way its game is traditionally drawn
 ├── engine.ts             the engine: create a game, ask what is legal, play a move, pass, forfeit
 ├── index.ts              the main entry: the engine, the variants table, notation, replay and everything the rules modules export
@@ -840,6 +840,7 @@ src/
 ├── test-support.ts       helpers the tests share, such as drawing a position from a diagram
 ├── types.ts              the engine's domain types: stones, points, settings, and the game state
 ├── variantSpec.types.ts  one rule set as data, a row of the table the engine consults
+├── variantSpecs.ts       the table of variants, one row per game, which the engine reads instead of the game's name
 ├── version.ts            the version, held to package.json by a test
 ├── rules/  the rules, one module per mechanic, each delegated to by the engine
 │   ├── board.ts             board geometry shared by the engine and the rules, kept apart so a rule need not import the engine
