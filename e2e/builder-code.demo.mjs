@@ -51,12 +51,15 @@ test("changing an option rewrites the code, and the preview follows it", async (
   let changed = null;
   for (let at = 0; at < count && changed === null; at += 1) {
     const group = groups.nth(at);
-    const pressed = group.locator('button[aria-pressed="true"]');
-    const was = (await pressed.count()) > 0 ? await pressed.first().getAttribute("data-value") : null;
-    const value = await group.locator('button[aria-pressed="false"]').last().getAttribute("data-value");
+    // Which button of the group is pressed, by its place: a locator for "the pressed one" would find the new one after the press.
+    const wasPlace = await group.locator("button").evaluateAll((buttons) => buttons.findIndex((button) => button.getAttribute("aria-pressed") === "true"));
+    const was = wasPlace < 0 ? null : await group.locator("button").nth(wasPlace).getAttribute("data-value");
+    // The button itself is pressed, not found again by its value: a choice such as "none" may carry no value at all.
+    const target = group.locator('button[aria-pressed="false"]').last();
+    const value = await target.getAttribute("data-value");
     const previewBefore = await preview(page);
-    await group.locator(`button[data-value="${value}"]`).click();
-    if ((await code(page)) !== before) changed = { group, was, value, previewBefore };
+    await target.click();
+    if ((await code(page)) !== before) changed = { group, was, wasPlace, value, previewBefore };
   }
   expect(changed, "pressing a choice changes the code").not.toBeNull();
   // A choice with a value is written as that value, and the address carries it too, so a copied link opens the same page.
@@ -66,8 +69,8 @@ test("changing an option rewrites the code, and the preview follows it", async (
   }
 
   // The way back: pressing what was pressed returns the code to what it said.
-  if (changed.was !== null) {
-    await changed.group.locator(`button[data-value="${changed.was}"]`).click();
+  if (changed.wasPlace >= 0) {
+    await changed.group.locator("button").nth(changed.wasPlace).click();
     expect(await code(page)).toBe(before);
   }
   expect(errors).toEqual([]);
