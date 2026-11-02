@@ -62,19 +62,19 @@ const says = (code) => expect(readme, code).toContain(code);
 
 describe("how many games", () => {
   it("is what the README, its badge and the package description say", () => {
-    expect(RULE_VARIANT_LIST).toHaveLength(48);
-    expect(Object.keys(VARIANT_SPECS)).toHaveLength(48);
-    expect(readme).toContain("One rules engine for forty-eight abstract board games.");
-    expect(readme).toContain('<img alt="48 games" src="https://img.shields.io/badge/games-48-2f5d4a">');
-    expect(pkg.description).toContain("forty-eight");
-    expect(readme).toContain("| Games | 48 | `RULE_VARIANT_LIST` |");
+    expect(RULE_VARIANT_LIST).toHaveLength(52);
+    expect(Object.keys(VARIANT_SPECS)).toHaveLength(52);
+    expect(readme).toContain("One rules engine for fifty-two abstract board games.");
+    expect(readme).toContain('<img alt="52 games" src="https://img.shields.io/badge/games-52-2f5d4a">');
+    expect(pkg.description).toContain("fifty-two");
+    expect(readme).toContain("| Games | 52 | `RULE_VARIANT_LIST` |");
   });
 
   it("the table of games names every game once, by its key, and nothing else", () => {
     const rows = table("| Family | Games |");
     const keys = rows.flatMap((row) => [...row[1].matchAll(/\(`(\w+)`\)/g)].map((match) => match[1]));
     expect(keys.sort()).toEqual([...RULE_VARIANT_LIST].sort());
-    expect(new Set(keys).size).toBe(48);
+    expect(new Set(keys).size).toBe(52);
   });
 
   it("the hand-typed counts of the features are the engine's own", () => {

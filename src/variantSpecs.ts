@@ -122,6 +122,8 @@ function plain(overrides: SpecOverrides): VariantSpec {
     quadrantSize: null,
     pieces: null,
     squareWins: false,
+    mills: false,
+    movers: null,
     boardSizes: null,
     defaultBoard: null,
     analysis: true,
@@ -434,6 +436,47 @@ export const VARIANT_SPECS: Record<RuleVariant, VariantSpec> = {
     pieces: 4,
     squareWins: true,
     boardSizes: [5],
+    analysis: false,
+  }),
+  /*
+   * Nine Men's Morris: three squares joined at their sides. Nine men each to lay and then to move
+   * along the lines, three in a line taking one of the other side's, and a player brought down to two, or with no move, losing.
+   * No line is read as a win (`winLength` is never asked), and no reading of threats fits it.
+   */
+  nineMensMorris: small({
+    grid: BOARD_GRIDS.lines,
+    headStartTurns: 0,
+    winLength: 3,
+    pieces: 9,
+    mills: true,
+    boardSizes: [7],
+    analysis: false,
+  }),
+  // The moving games, each decided by something other than a line (`rules/movers.ts`): on no reading of threats, drawn in the squares.
+  breakthrough: small({
+    grid: BOARD_GRIDS.cells,
+    headStartTurns: 0,
+    movers: "breakthrough",
+    allowFirstPlayerChoice: false,
+    boardSizes: [8],
+    analysis: false,
+  }),
+  linesOfAction: small({
+    grid: BOARD_GRIDS.cells,
+    headStartTurns: 0,
+    movers: "linesOfAction",
+    allowFirstPlayerChoice: false,
+    boardSizes: [8],
+    analysis: false,
+  }),
+  // White moves first, as the game's own rules have it.
+  amazons: small({
+    grid: BOARD_GRIDS.cells,
+    headStartTurns: 0,
+    movers: "amazons",
+    allowFirstPlayerChoice: false,
+    firstStone: STONES.white,
+    boardSizes: [10],
     analysis: false,
   }),
   /*

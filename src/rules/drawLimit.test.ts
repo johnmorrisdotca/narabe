@@ -243,6 +243,8 @@ describe("a game that cannot be drawn is given no length", () => {
   it("every other game can be given one", () => {
     for (const variant of VARIANTS) {
       if (VARIANT_SPECS[variant].connects) continue;
+      // Breakthrough's men only go forward and an Amazons arrow never comes back: neither can be drawn.
+      if (variant === "breakthrough" || variant === "amazons") continue;
       expect(canBeDrawn(settings({ variant })), `${variant} cannot be drawn`).toBe(true);
     }
   });

@@ -87,7 +87,7 @@ export const WORM: Worm = "worm";
  */
 export const SEED_RANGE = 2 ** 31;
 
-/** The stable identifiers for all forty-eight rule variants.
+/** The stable identifiers for all fifty-two rule variants.
  *
  * @example
  * ```ts
@@ -109,6 +109,10 @@ export const RULE_VARIANTS = {
   twistFive: "twistFive",
   twistFour: "twistFour",
   squareFour: "squareFour",
+  nineMensMorris: "nineMensMorris",
+  breakthrough: "breakthrough",
+  linesOfAction: "linesOfAction",
+  amazons: "amazons",
   ringDrop: "ringDrop",
   holeDrop: "holeDrop",
   hotDrop: "hotDrop",
@@ -230,6 +234,10 @@ export const RULE_VARIANT_LIST = [
   RULE_VARIANTS.twistFour,
   RULE_VARIANTS.trapThree,
   RULE_VARIANTS.squareFour,
+  RULE_VARIANTS.nineMensMorris,
+  RULE_VARIANTS.breakthrough,
+  RULE_VARIANTS.linesOfAction,
+  RULE_VARIANTS.amazons,
   RULE_VARIANTS.tictactoe,
   RULE_VARIANTS.wildTicTacToe,
   RULE_VARIANTS.notakto,
@@ -380,6 +388,9 @@ export const WIN_REASONS = {
   connection: "connection",
   blocked: "blocked",
   territory: "territory",
+  reduced: "reduced",
+  reached: "reached",
+  joined: "joined",
 } as const satisfies Record<WinReason, WinReason>;
 
 /** The stages of the opening protocol.
@@ -858,6 +869,10 @@ export const MOVE_KINDS = {
   pass: "pass",
   // Written by a claimed timeout alone. See MoveKind.
   forfeit: "forfeit",
+  // A man taken after a mill: the second half of the turn that made it, in the state's own record. See `rules/mills.ts`.
+  remove: "remove",
+  // An Amazons arrow: the second half of the queen's turn, in the state's own record. See `rules/movers.ts`.
+  shoot: "shoot",
 } as const satisfies Record<MoveKind, MoveKind>;
 
 /** How a written move list says the two moves that have no point.

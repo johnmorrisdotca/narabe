@@ -18,6 +18,7 @@ import {
 } from "../engine.ts";
 import { canChooseColour, canExtendOpening, chooseColour, extendOpening } from "../rules/opening.ts";
 import type { GameSettings, GameState, Point } from "../types.ts";
+import { VARIANT_SPECS } from "../variantSpecs.ts";
 import { checkCheckersMove, isCheckers } from "./checkers.ts";
 import {
   bruteForceWinner,
@@ -34,6 +35,7 @@ import {
 import { checkStarMove, isChineseCheckers } from "./chineseCheckers.ts";
 import { checkGoPass, isGo } from "./go.ts";
 import { checkHeadStartPass, checkHeadStartStart, headStartDueByHand } from "./headStart.ts";
+import { checkMoverMove } from "./movers.ts";
 
 /**
  * The whole-game simulation harness, shared by the simulation specs.
@@ -147,6 +149,14 @@ function playOut(settings: Partial<GameSettings>, seed: number, slideCap: number
       if (isRace(state.settings.variant)) checkRaceMove(before, after, from, to, seed);
       else if (isCheckers(state.settings.variant)) checkCheckersMove(before, after, from, to, seed);
       else if (isChineseCheckers(state.settings.variant)) checkStarMove(before, after, from, to, seed);
+      else if (VARIANT_SPECS[state.settings.variant].movers !== null)
+        checkMoverMove(
+          before,
+          after,
+          from,
+          to,
+          `${state.settings.variant} seed ${seed}, ${from.row},${from.col} to ${to.row},${to.col}`,
+        );
       else checkSlide(before, after, from, to, seed);
       state = after;
       // A capture chain keeps the same player on move, so it must not count

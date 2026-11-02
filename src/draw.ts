@@ -1,6 +1,7 @@
 import { BLOCKED, GAME_STATUS, HOT, STAR_POINTS, STONES, WORM } from "./constants.ts";
 import { campOf, forbiddenPoints, indexOf, isDarkSquare, pieceMoves, STAR_RADIUS, starCampOf } from "./engine.ts";
 import { turnChoices } from "./rules/choices.ts";
+import { MILLS } from "./rules/mills.ts";
 import { lastMove } from "./rules/record.ts";
 import type { GameState, Point } from "./types.ts";
 import { VARIANT_SPECS } from "./variantSpecs.ts";
@@ -117,7 +118,7 @@ export function boardSvg(state: GameState, options: DrawBoardOptions = {}): stri
   const shown: Point[] = [];
   for (let row = 0; row < size; row += 1) {
     for (let col = 0; col < size; col += 1) {
-      if (lattice && !spec.connects && state.board[indexOf(size, { row, col })] === BLOCKED) continue;
+      if ((spec.mills || (lattice && !spec.connects)) && state.board[indexOf(size, { row, col })] === BLOCKED) continue;
       shown.push({ row, col });
     }
   }
@@ -214,6 +215,22 @@ export function boardSvg(state: GameState, options: DrawBoardOptions = {}): stri
         );
       }
     }
+  } else if (spec.mills) {
+    // The three squares and the lines that join them, drawn as the board is: every mill is a straight run of a drawn line.
+    for (const line of MILLS) {
+      const [from, , to] = line;
+      parts.push(
+        shape("line", {
+          x1: from!.col,
+          y1: from!.row,
+          x2: to!.col,
+          y2: to!.row,
+          stroke: colour("line"),
+          strokeWidth: 0.06,
+        }),
+      );
+    }
+    for (const p of shown) parts.push(shape("circle", { cx: p.col, cy: p.row, r: 0.12, fill: colour("line") }));
   } else {
     for (let k = 0; k < size; k += 1) {
       parts.push(shape("line", { x1: 0, y1: k, x2: size - 1, y2: k, stroke: colour("line"), strokeWidth: 0.035 }));

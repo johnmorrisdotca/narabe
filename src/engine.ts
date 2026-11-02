@@ -15,11 +15,15 @@ import {
   clearBottomRow,
   inMovePhase,
   noPlayLeft,
+  playMillPoint,
   resolvePlacement,
   restsOnSomething,
   settleStone,
+  shootArrow,
   won,
 } from "./rules/mechanics.ts";
+import { takeableMen } from "./rules/mills.ts";
+import { queenReach } from "./rules/movers.ts";
 import { applyOpeningChoice, canChooseColour, openingAfterMove, openingAllows } from "./rules/opening.ts";
 import { footprintFits, isPieceInHand, piecePlacements, singlesUsedBy } from "./rules/queue.ts";
 import { fallRocks } from "./rules/rockfall.ts";
@@ -130,6 +134,16 @@ export function cellAt(state: GameState, point: Point): Cell {
  */
 export function isLegalMove(state: GameState, point: Point): boolean {
   if (state.status !== GAME_STATUS.playing || state.pendingTwist) return false;
+  // A queen moved: the one thing playable is where its arrow lands.
+  if (state.pendingShot !== null)
+    return queenReach(state.board, state.settings.size, state.pendingShot).some(
+      (spot) => spot.row === point.row && spot.col === point.col,
+    );
+  // A mill made: the one thing playable is a man of the other side's that may be taken.
+  if (state.pendingRemoval)
+    return takeableMen(state.board, otherStone(state.toPlay)).some(
+      (man) => man.row === point.row && man.col === point.col,
+    );
   // A turn the other colour's head start takes has nothing on it to play: it is passed.
   if (owesHeadStart(state)) return false;
   if (!isOnBoard(state.settings.size, point) || cellAt(state, point) !== null) return false;
@@ -180,6 +194,12 @@ export function forbiddenReason(state: GameState, point: Point): ForbiddenPatter
  * ```
  */
 export function legalPoints(state: GameState): Point[] {
+  // A queen moved: what may be played is where its arrow lands.
+  if (state.pendingShot !== null && state.status === GAME_STATUS.playing)
+    return queenReach(state.board, state.settings.size, state.pendingShot);
+  // A mill made: what may be played is a man to take, not an empty point.
+  if (state.pendingRemoval && state.status === GAME_STATUS.playing)
+    return takeableMen(state.board, otherStone(state.toPlay));
   return emptyPoints(state).filter((point) => isLegalMove(state, point));
 }
 
@@ -306,6 +326,9 @@ export function placePiece(state: GameState, cells: readonly PieceCell[]): GameS
  */
 export function mustPass(state: GameState): boolean {
   if (state.status !== GAME_STATUS.playing || state.pendingTwist) return false;
+  // A mill game never passes: a player with no move has lost, which the turn before settled (`millTurnOver`).
+  if (VARIANT_SPECS[state.settings.variant].mills || VARIANT_SPECS[state.settings.variant].movers !== null)
+    return false;
   /*
    * A TURN THE HEAD START GIVES AWAY IS A PASS THE RULES FORCE, in every game —
    * Go and the sliding games included, which never pass by compulsion otherwise.
@@ -485,6 +508,10 @@ export function playMove(
 
   const { settings, toPlay } = state;
   const spec = VARIANT_SPECS[settings.variant];
+  // An Amazons arrow, the second half of its queen's turn.
+  if (state.pendingShot !== null) return shootArrow(state, point);
+  // A mill game settles its own stone: laid, or taken, and maybe a mill.
+  if (spec.mills) return playMillPoint(state, point);
   /*
    * The flipping games settle themselves — a disc that turns nothing is not a
    * legal move, and the game ends when neither colour can move — so their

@@ -1,6 +1,7 @@
 import { BLOCKED, HOT, OBSTACLE_LAYOUTS, STAR_POINTS, WORM } from "./constants.ts";
 import { inStar, STAR_RADIUS } from "./rules/chineseCheckers.ts";
 import { hexagonSealed, inHexagon } from "./rules/hexagon.ts";
+import { isMillPoint } from "./rules/mills.ts";
 import { drawDistinct, seededRandom } from "./rules/random.ts";
 import { landRocks, rockLayoutFor } from "./rules/rocks.ts";
 import type { Cell, GameSettings, Point } from "./types.ts";
@@ -85,6 +86,14 @@ export function emptyBoard(settings: GameSettings): Cell[] {
   const rocks = VARIANT_SPECS[settings.variant].rocks;
   const layout = rocks !== null && rocks.arriveAfter === null ? rockLayoutFor(settings) : null;
   const laid = layout === null ? board : landRocks(board, settings.size, layout);
+  // The mill board: everything that is not one of its twenty-four points is sealed off, by shape (`rules/mills.ts`).
+  if (VARIANT_SPECS[settings.variant].mills) {
+    for (let row = 0; row < settings.size; row += 1) {
+      for (let col = 0; col < settings.size; col += 1) {
+        if (!isMillPoint({ row, col })) laid[row * settings.size + col] = BLOCKED;
+      }
+    }
+  }
   // The hexagram: everything outside the star is sealed off, once, by shape — not drawn from the seed.
   if (VARIANT_SPECS[settings.variant].chineseCheckers) {
     for (let row = 0; row < settings.size; row += 1) {

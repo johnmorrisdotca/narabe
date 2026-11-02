@@ -48,7 +48,9 @@ import { stalled } from "./noProgress.ts";
  * ```
  */
 export function canBeDrawn(settings: GameSettings): boolean {
-  return !VARIANT_SPECS[settings.variant].connects;
+  const { connects, movers } = VARIANT_SPECS[settings.variant];
+  // Breakthrough's men only go forward and an Amazons arrow never comes back: both always end with a winner.
+  return !connects && movers !== "breakthrough" && movers !== "amazons";
 }
 
 /**

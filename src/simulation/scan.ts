@@ -92,6 +92,10 @@ export function runWinsIndependently(
     case "twistFive":
     case "twistFour":
     case "squareFour":
+    case "nineMensMorris":
+    case "breakthrough":
+    case "linesOfAction":
+    case "amazons":
     case "dominoFive":
     case "blockFive":
     case "sannuki":

@@ -1,5 +1,5 @@
 /**
- * Narabe 並べ: one rules engine for forty-eight abstract board games.
+ * Narabe 並べ: one rules engine for fifty-two abstract board games.
  *
  * Every game is a row of data (`VARIANT_SPECS`), and every function takes a
  * `GameState` and returns a new one. Start with `createGame`, play with

@@ -97,6 +97,11 @@ describe("which games can run away", () => {
           // The count is `moves.length - 2 * pieces`; with no `pieces` it
           // would silently count every move ever played instead.
           expect(VARIANT_SPECS[variant].pieces, `${where}: places no pieces, so nothing marks progress`).not.toBeNull();
+        } else if (rule!.measure === PROGRESS_MEASURES.milling) {
+          expect(
+            VARIANT_SPECS[variant].mills || VARIANT_SPECS[variant].movers !== null,
+            `${where}: lays and takes nothing, so nothing marks progress`,
+          ).toBe(true);
         } else {
           expect(VARIANT_SPECS[variant].checkers, `${where}: takes nothing, so nothing marks progress`).toBe(true);
         }

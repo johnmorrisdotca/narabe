@@ -6,6 +6,13 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-02
+
+### Added
+
+- **Nine Men's Morris** (`nineMensMorris`), the forty-ninth game: nine men each, laid and then moved along the lines of three squares joined at their sides, three in a line taking a man of the other side's, and a side brought down to two men, or with no move, losing; a side down to three may fly. A new mechanic, the mill: `spec.mills`, `state.pendingRemoval`, the win reason `reduced` and the move kind `remove`. While a man is owed, `isLegalMove`, `legalPoints` and `playMove` read the point played as the man to take, so a replay and a bot have one way to say it. `boardSvg` draws its board.
+- **Breakthrough** (`breakthrough`), **Lines of Action** (`linesOfAction`) and **Amazons** (`amazons`), the fiftieth to fifty-second: men set out from the start, moved by their own rules, and won by reaching the far row, by joining all your men, or by leaving the other side no move. One new spec field, `spec.movers`, the win reasons `reached` and `joined`, the move kind `shoot` and, for Amazons' arrow, `state.pendingShot`: while it is owed, `legalPoints` and `playMove` read the point played as where the arrow lands.
+
 ## [1.3.1] - 2026-10-31
 
 ### Changed
@@ -129,7 +136,8 @@ Nothing about play changed: every rule, every legal move and every result is exa
   measures whether a head start settles a game, and the source and its tests
   ship in the package beside the build.
 
-[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/narabe/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.3.1...v1.4.0
 [1.3.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.2...v1.3.0
 [1.2.1]: https://github.com/johnmorrisdotca/narabe/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/johnmorrisdotca/narabe/compare/v1.1.0...v1.2.0

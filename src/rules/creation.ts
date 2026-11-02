@@ -17,6 +17,7 @@ import { STAR_RADIUS, starStartingPieces } from "./chineseCheckers.ts";
 import { startingDiscs } from "./flips.ts";
 import { hasHandicap } from "./handicap.ts";
 import { hasHeadStart, headStartOdds, headStartOpener, headStartPieces, normaliseHeadStart } from "./headStart.ts";
+import { moverStart } from "./movers.ts";
 import { initialOpening } from "./opening.ts";
 import { seedFromRoll } from "./random.ts";
 
@@ -119,6 +120,8 @@ export function startingBoard(settings: GameSettings): Cell[] {
   if (spec.checkers) {
     for (const piece of checkersStartingPieces(settings.size, checkersRulesFor(settings).menRows)) place(piece);
   }
+  // The moving games begin with their men out, likewise.
+  if (spec.movers !== null) for (const piece of moverStart(spec.movers, settings.size)) place(piece);
   // Chinese Checkers begins with both points full, likewise.
   if (spec.chineseCheckers) for (const piece of starStartingPieces(STAR_RADIUS)) place(piece);
   // A head start's handicap stones or corners are set out too, and odds of a man take the man away first.
@@ -221,6 +224,8 @@ export function createGame(overrides: Partial<GameSettings> = {}, roll = 0): Gam
     opening: initialOpening(settings, opener, seats),
     toPlay: opener,
     pendingTwist: false,
+    pendingRemoval: false,
+    pendingShot: null,
     kings: [],
     chainAt: null,
     koPoint: null,

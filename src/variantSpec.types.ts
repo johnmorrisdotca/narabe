@@ -10,7 +10,7 @@ import type {
   TraditionalHeadStart,
   WrapMode,
 } from "./spec.types.ts";
-import type { OpeningRule, PieceQueue, Stone } from "./types.ts";
+import type { MoverRules, OpeningRule, PieceQueue, Stone } from "./types.ts";
 
 /*
  * The row a rule set is written as, on its own.
@@ -67,6 +67,12 @@ export type VariantSpec = {
   pieces: number | null;
   /** A 2×2 square of one colour also wins. */
   squareWins: boolean;
+  /**
+   * The mill games: the board is three squares joined at their sides, men move along its lines, and three in a line take one of the other side's (`rules/mills.ts`).
+   */
+  mills: boolean;
+  /** The moving games: men set out from the start, moved by these rules, and won by something other than a line (`rules/movers.ts`). */
+  movers: MoverRules | null;
   /**
    * Board sizes this game is played on, or null for the standard list.
    *
