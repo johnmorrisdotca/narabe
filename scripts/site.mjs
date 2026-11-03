@@ -13,14 +13,17 @@ import {
   familyHeader,
   familyUnreviewed,
 } from "./family-template.mjs";
+import { publishThumbnails, thumbnailHead } from "./family-thumbnail.mjs";
 
 const id = "narabe";
+const ALT =
+  "Narabe: three games in progress on its boards, Go on nine by nine, the star of Chinese Checkers and the rhombus of Hex.";
 const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23dcb67a'/%3E%3Ccircle cx='11' cy='16' r='7' fill='%231d1b19'/%3E%3Ccircle cx='22' cy='16' r='7' fill='%23fbfaf6' stroke='%231d1b19'/%3E%3C/svg%3E`;
-const frame = ({ title, description, links, body, scripts }) => `<!doctype html>
+const frame = ({ title, description, links, body, scripts, head = "" }) => `<!doctype html>
 <html lang="en">
   <head>
     ${familyHead({ id, title, description, ogTitle: "Narabe 並べ — Board game rules engine: gomoku, Reversi, Go, checkers", ogDescription: "Pick any of fifty-two abstract board games and play it on one screen, on one rules engine." })}
-    <link rel="icon" href="${icon}" />
+    ${head}<link rel="icon" href="${icon}" />
     <link rel="stylesheet" href="family.css" />
     <link rel="stylesheet" href="narabe.css" />
   </head>
@@ -53,8 +56,11 @@ writeFileSync(
     ],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
     scripts: `<script type="module" src="page.js"></script>`,
+    head: `${thumbnailHead(JSON.parse(readFileSync("package.json", "utf8")), { alt: ALT })}\n    `,
   }),
 );
+// The family's card, dark card and icon, at <site>/thumbnail.png, thumbnail-dark.png and icon.png.
+publishThumbnails(".", "site");
 
 const api = apiBody();
 writeFileSync(

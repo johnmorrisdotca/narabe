@@ -120,4 +120,41 @@ await takePictures({
     game("honeycomb", "honeycomb", 9, 12),
     game("twist-five", "twistFive", 9, 10),
   ],
+  // The family's thumbnail, dark thumbnail and icon (scripts/family-thumbnail.mjs): three games the table plays, each a
+  // game in progress (the same seeded random moves as their own pictures): Go, Chinese Checkers' star and Hex's rhombus;
+  // the icon is the middle of a Reversi board as it opens, its four discs.
+  thumbnail: {
+    url: "/?lang=en&game=go&size=9",
+    init: seeded,
+    state: { seed: 7 },
+    ready: `${BOARD} svg`,
+    target: "#thumbnail-stage",
+    icon: { target: "#thumbnail-icon" },
+    label: "Narabe 並べ",
+    async prepare(page) {
+      const boards = [];
+      for (const [key, size, moves] of [
+        ["go", 9, 30],
+        ["chineseCheckers", 13, 16],
+        ["hex", 11, 22],
+      ]) {
+        await page.goto(`http://narabe.test/?lang=en&game=${key}&size=${size}`);
+        await page.waitForSelector(`${BOARD} svg`);
+        await randomMoves(moves)(page);
+        boards.push(await page.locator(`${BOARD} svg`).evaluate((svg) => svg.outerHTML));
+      }
+      await page.goto("http://narabe.test/?lang=en&game=reversi&size=8");
+      await page.waitForSelector(`${BOARD} svg`);
+      const reversi = await page.locator(`${BOARD} svg`).evaluate((svg) => svg.outerHTML);
+      await page.evaluate(
+        ([drawn, opening]) => {
+          const stage = `<div id="thumbnail-stage" style="display:flex;gap:32px;align-items:center;padding:8px;width:max-content">${drawn.map((svg) => `<div class="board" style="height:300px;width:auto">${svg.replace("<svg ", '<svg style="height:300px;width:auto;max-height:none" ')}</div>`).join("")}</div>`;
+          const icon = `<div id="thumbnail-icon" class="board" style="width:420px;padding:8px">${opening.replace(/viewBox="[^"]*"/, 'viewBox="1.5 1.5 4 4"')}</div>`;
+          document.body.replaceChildren();
+          document.body.insertAdjacentHTML("beforeend", stage + icon);
+        },
+        [boards, reversi],
+      );
+    },
+  },
 });

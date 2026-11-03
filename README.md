@@ -1,3 +1,5 @@
+<p align="center"><a href="https://johnmorrisdotca.github.io/narabe/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/narabe/main/docs/images/thumbnail-dark.png"><img src="https://raw.githubusercontent.com/johnmorrisdotca/narabe/main/docs/images/thumbnail.png" alt="Narabe: three games in progress on its boards, Go on nine by nine, the star of Chinese Checkers and the rhombus of Hex." width="1200"></picture></a></p>
+
 <h1 align="center">Narabe <sub>並べ</sub> — Board game rules engine: gomoku, Reversi, Go, checkers</h1>
 
 <p align="center"><strong>One rules engine for fifty-two abstract board games.</strong><br>
